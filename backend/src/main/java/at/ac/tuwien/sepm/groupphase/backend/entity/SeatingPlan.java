@@ -5,33 +5,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.ManyToOne;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Message {
+public class SeatingPlan {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, name = "published_at")
-  private LocalDateTime publishedAt;
+  private int rows;
 
-  @Column(nullable = false, length = 100)
-  private String title;
+  private int columns;
 
-  @Column(nullable = false, length = 500)
-  private String summary;
-
-  @Column(nullable = false, length = 10000)
-  private String text;
+  @ManyToOne
+  private Room room;
 }

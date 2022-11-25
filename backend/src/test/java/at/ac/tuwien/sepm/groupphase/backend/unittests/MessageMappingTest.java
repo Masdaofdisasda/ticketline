@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class MessageMappingTest implements TestData {
 
-  private final Message message = Message.MessageBuilder.aMessage()
-    .withId(ID)
-    .withTitle(TEST_NEWS_TITLE)
-    .withSummary(TEST_NEWS_SUMMARY)
-    .withText(TEST_NEWS_TEXT)
-    .withPublishedAt(TEST_NEWS_PUBLISHED_AT)
+  private final Message message = Message.builder()
+    .id(ID)
+    .title(TEST_NEWS_TITLE)
+    .summary(TEST_NEWS_SUMMARY)
+    .text(TEST_NEWS_TEXT)
+    .publishedAt(TEST_NEWS_PUBLISHED_AT)
     .build();
   @Autowired
   private MessageMapper messageMapper;

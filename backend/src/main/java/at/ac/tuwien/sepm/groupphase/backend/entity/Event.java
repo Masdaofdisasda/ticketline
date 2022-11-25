@@ -10,28 +10,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.OneToMany;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Message {
+public class Event {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, name = "published_at")
-  private LocalDateTime publishedAt;
+  @Column(nullable = false, length = 100)
+  private String name;
 
   @Column(nullable = false, length = 100)
-  private String title;
+  private String category;
 
-  @Column(nullable = false, length = 500)
-  private String summary;
+  private LocalDate startDate;
 
-  @Column(nullable = false, length = 10000)
-  private String text;
+  private LocalDate endDate;
+
+  @OneToMany(mappedBy = "event")
+  private List<Performance> performances;
 }

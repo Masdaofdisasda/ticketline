@@ -24,11 +24,11 @@ public class MessageRepositoryTest implements TestData {
 
   @Test
   public void givenNothing_whenSaveMessage_thenFindListWithOneElementAndFindMessageById() {
-    Message message = Message.MessageBuilder.aMessage()
-      .withTitle(TEST_NEWS_TITLE)
-      .withSummary(TEST_NEWS_SUMMARY)
-      .withText(TEST_NEWS_TEXT)
-      .withPublishedAt(TEST_NEWS_PUBLISHED_AT)
+    Message message = Message.builder()
+      .title(TEST_NEWS_TITLE)
+      .summary(TEST_NEWS_SUMMARY)
+      .text(TEST_NEWS_TEXT)
+      .publishedAt(TEST_NEWS_PUBLISHED_AT)
       .build();
 
     messageRepository.save(message);
