@@ -9,24 +9,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepository {
 
-    private final ApplicationUser user;
-    private final ApplicationUser admin;
+  private final ApplicationUser user;
+  private final ApplicationUser admin;
 
-    @Autowired
-    public UserRepository(PasswordEncoder passwordEncoder) {
-        user = new ApplicationUser("user@email.com", passwordEncoder.encode("password"), false);
-        admin = new ApplicationUser("admin@email.com", passwordEncoder.encode("password"), true);
-    }
+  @Autowired
+  public UserRepository(PasswordEncoder passwordEncoder) {
+    user = new ApplicationUser("user@email.com", passwordEncoder.encode("password"), false);
+    admin = new ApplicationUser("admin@email.com", passwordEncoder.encode("password"), true);
+  }
 
-    public ApplicationUser findUserByEmail(String email) {
-        if (email.equals(user.getEmail())) {
-            return user;
-        }
-        if (email.equals(admin.getEmail())) {
-            return admin;
-        }
-        return null; // In this case null is returned to fake Repository behavior
+  public ApplicationUser findUserByEmail(String email) {
+    if (email.equals(user.getEmail())) {
+      return user;
     }
+    if (email.equals(admin.getEmail())) {
+      return admin;
+    }
+    return null; // In this case null is returned to fake Repository behavior
+  }
 
 
 }
