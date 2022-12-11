@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,8 +35,8 @@ class EventMapperTest {
 
   Event event = Event.builder()
     .id(0L)
-    .startDate(LocalDate.MIN)
-    .endDate(LocalDate.MAX)
+    .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
+    .endDate(LocalDateTime.of(2022, 12, 12, 1, 30))
     .category("HIPHOP")
     .name("HOPHIPEVENT")
     .performances(List.of(performance))
@@ -48,8 +50,8 @@ class EventMapperTest {
 
   EventDto eventDto = EventDto.builder()
     .id(1L)
-    .startDate(LocalDate.EPOCH)
-    .endDate(LocalDate.now())
+    .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
+    .endDate(LocalDateTime.of(2022, 12, 12, 1, 30))
     .category("POP")
     .name("POPEVENT")
     .performances(List.of(performanceDto))
@@ -65,7 +67,7 @@ class EventMapperTest {
       assertThat(currentDto.getEndDate()).isEqualTo(event.getEndDate());
       assertThat(currentDto.getCategory()).isEqualTo(event.getCategory());
       assertThat(currentDto.getName()).isEqualTo(event.getName());
-      assertThat(currentDto.getPerformances()).isEqualTo(List.of(performanceDto));
+      assertThat(currentDto.getPerformances()).isEqualTo(new ArrayList<>(List.of(performanceDto)));
     });
   }
 
@@ -79,7 +81,7 @@ class EventMapperTest {
       assertThat(currentevent.getEndDate()).isEqualTo(eventDto.getEndDate());
       assertThat(currentevent.getCategory()).isEqualTo(eventDto.getCategory());
       assertThat(currentevent.getName()).isEqualTo(eventDto.getName());
-      assertThat(currentevent.getPerformances()).isEqualTo(List.of(performance));
+      assertThat(currentevent.getPerformances()).isEqualTo(new ArrayList<>(List.of(performance)));
     });
   }
 }

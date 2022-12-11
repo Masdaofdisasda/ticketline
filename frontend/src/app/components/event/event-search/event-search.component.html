@@ -1,0 +1,63 @@
+<form [formGroup]="searchFormGroup">
+  <div class="form-group">
+    <!-- artist search form -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Search Artist</h5>
+        <div class="form-group">
+          <input id="artistInput" class="form-control" placeholder="Enter artist name" formControlName="artistName">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- location search form -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Filter Location</h5>
+      <div class="form-group fourXone">
+        <input class="form-control" placeholder="Enter country" formControlName="country">
+        <input class="form-control" placeholder="Enter city" formControlName="city">
+        <input class="form-control" placeholder="Enter street" formControlName="street">
+        <input class="form-control" placeholder="Enter zip code" formControlName="zipCode">
+      </div>
+      <div class="form-group twoXone">
+        <input class="form-control" placeholder="Enter the name of the venue" formControlName="venueName">
+        <input class="form-control" placeholder="Enter the name of the event hall" formControlName="eventHall">
+      </div>
+    </div>
+  </div>
+
+  <!-- event search form -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Filter Events</h5>
+      <div class="form-group fourXone">
+        <input class="form-control" placeholder="From" formControlName="from">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="tonight" id="btnradio1" autocomplete="off"
+                 (change)="setDate(true)">
+          <label class="btn btn-outline-primary" for="btnradio1">Today</label>
+
+          <input type="radio" class="btn-check" name="tonight" id="btnradio2" autocomplete="off"
+                 formControlName="tonight" (change)="setDate(false)">
+          <label class="btn btn-outline-primary" for="btnradio2">Weekend</label>
+        </div>
+        <div class="input-group">
+          <input
+            class="form-control"
+            placeholder="Starting time yyyy-mm-dd"
+            formControlName="startTime"
+            ngbDatepicker
+            #d="ngbDatepicker"/>
+          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+        </div>
+        <input class="form-control" placeholder="Genre" formControlName="genre">
+      </div>
+      <div class="form-group" style="margin-top: 1%">
+        <input class="form-control" placeholder="Name of event" formControlName="nameOfEvent">
+      </div>
+    </div>
+    <button type="button" class="btn btn-danger" (click)="resetSearchForm()">Reset</button>
+  </div>
+</form>

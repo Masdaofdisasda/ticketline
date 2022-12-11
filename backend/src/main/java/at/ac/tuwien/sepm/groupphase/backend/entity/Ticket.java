@@ -31,4 +31,7 @@ public class Ticket {
 
   @ManyToOne
   private Performance performance;
+
+  @ManyToOne
+  private Booking booking;
 }

@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrderDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Order;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +11,7 @@ class OrderMapperTest {
 
   OrderMapper mapper = OrderMapper.INSTANCE;
 
-  Order order = Order.builder()
+  Booking order = Booking.builder()
     .id(0L)
     .build();
 
@@ -21,7 +21,7 @@ class OrderMapperTest {
 
   @Test
   void orderDtoToOrder() {
-    Order currentOrder = mapper.orderDtoToOrder(orderDto);
+    Booking currentOrder = mapper.orderDtoToOrder(orderDto);
     assertAll(()->{
       assertThat(currentOrder.getId()).isEqualTo(orderDto.getId());
     });

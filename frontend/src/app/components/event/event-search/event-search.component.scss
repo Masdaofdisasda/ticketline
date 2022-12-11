@@ -1,0 +1,18 @@
+.card {
+  margin: 2%;
+}
+
+.fourXone {
+  display: flex;
+  grid-template-columns: 25% 25% 25% 25%;
+  place-items: center;
+  gap: 10px 20px;
+}
+
+.twoXone {
+  display: flex;
+  grid-template-columns: 50% 50%;
+  place-items: center;
+  gap: 10px 20px;
+  margin-top: 1%;
+}

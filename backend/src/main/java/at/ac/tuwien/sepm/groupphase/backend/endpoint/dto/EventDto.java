@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
+@Builder(toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventDto {
-
-  private Long id;
-  private String name;
-  private String category;
-  private LocalDate startDate;
-  private LocalDate endDate;
+  Long id;
+  String name;
+  String category;
+  LocalDateTime startDate;
+  LocalDateTime endDate;
   private List<PerformanceDto> performances;
 }
