@@ -15,5 +15,9 @@
       <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">Login</a>
       <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">Logout</a>
     </ul>
+    <!--@todo: add auth-service-->
+    <ul class="navbar-nav mr-5">
+      <a class="nav-link" routerLink="/event" routerLinkActive="active">Events</a>
+    </ul>
   </div>
 </nav>

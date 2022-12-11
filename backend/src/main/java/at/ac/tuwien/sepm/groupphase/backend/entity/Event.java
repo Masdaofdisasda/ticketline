@@ -4,14 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,10 +35,18 @@ public class Event {
   @Column(nullable = false, length = 100)
   private String category;
 
-  private LocalDate startDate;
+  private LocalDateTime startDate;
 
-  private LocalDate endDate;
+  private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "event")
-  private List<Performance> performances;
+  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+  //MultipleBagFetchException: cannot simultaneously fetch multiple bags
+  @Fetch(value = FetchMode.SUBSELECT)
+  @Builder.Default
+  private List<Performance> performances = new ArrayList<>();
+
+  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER) //todo: has to be changed at a later point
+  @Fetch(value = FetchMode.SUBSELECT)
+  @Builder.Default
+  private List<News> news = new ArrayList<>();
 }

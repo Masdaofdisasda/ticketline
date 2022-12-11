@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AuthRequest} from '../dtos/auth-request';
+import {AuthRequest} from '../dto/auth-request';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';

@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-/**
- * A DTO for the {@link at.ac.tuwien.sepm.groupphase.backend.entity.Order} entity.
- */
 @Data
 @SuperBuilder
 @AllArgsConstructor
