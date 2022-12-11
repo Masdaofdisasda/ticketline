@@ -1,44 +1,56 @@
 <h1 class="display-1">Create Event</h1>
 
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <div class="row p-1">
+      <input type="text"
+             class="form-control col-sm"
+             id="eventName"
+             name="eventName"
+             [(ngModel)]="newEvent.name"
+             placeholder="Event Name">
+      <input type="text"
+             class="form-control col-sm"
+             id="eventCategory"
+             name="eventCategory"
+             [(ngModel)]="newEvent.category"
+             placeholder="Event Category">
 
-<form [formGroup]="createForm">
-  <input type="text"
-         id="eventName"
-         name="eventName"
-         placeholder="Event Name"
-         formControlName="eventName">
-  <input type="text"
-         id="eventCategory"
-         name="eventCategory"
-         placeholder="Event Category"
-         formControlName="eventCategory">
-  <div class="input-group">
-    <input
-      class="form-control"
-      placeholder="Starting date yyyy-mm-dd"
-      name="dpStart"
-      ngbDatepicker
-      #startpicker="ngbDatepicker"
-      formControlName="startDate"
-    />
-    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startpicker.toggle()" type="button"></button>
   </div>
-  <div class="input-group">
-    <input
-      class="form-control"
-      placeholder="End date yyyy-mm-dd"
-      name="dpEnd"
-      ngbDatepicker
-      #endPicker="ngbDatepicker"
-      formControlName="endDate"
-    />
-    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endPicker.toggle()" type="button"></button>
+  <div class="row p-1">
+    <div class="col-sm">
+      <div class="input-group">
+        <input
+          class="form-control"
+          placeholder="Starting date yyyy-mm-dd"
+          name="dpStart"
+          [(ngModel)]="startDateNew"
+          ngbDatepicker
+          #startpicker="ngbDatepicker"/>
+        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startpicker.toggle()" type="button"></button>
+      </div>
+      <ngb-timepicker name="startTime" [(ngModel)]="startTimeNew"></ngb-timepicker>
+    </div>
+
+    <div class="col-sm">
+      <div class="input-group">
+        <input
+          class="form-control"
+          placeholder="End date yyyy-mm-dd"
+          name="dpEnd"
+          ngbDatepicker
+          [(ngModel)]="endDateNew"
+          #endPicker="ngbDatepicker"/>
+        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endPicker.toggle()" type="button"></button>
+      </div>
+      <ngb-timepicker name="startTime" [(ngModel)]="endTimeNew"></ngb-timepicker>
+    </div>
   </div>
+
   <button type="submit"
-          class="btn btn-primary"
-          [disabled]="createForm.invalid"
-          type="submit"
-          (click)="onSubmit()">
+          class="btn btn-primary float-end"
+          [disabled]="!form.valid"
+          type="submit">
     Create
   </button>
+
 </form>

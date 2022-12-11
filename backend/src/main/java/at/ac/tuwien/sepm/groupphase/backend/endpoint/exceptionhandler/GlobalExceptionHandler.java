@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.lang.invoke.MethodHandles;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Register all your Java exceptions here to map them into meaningful HTTP exceptions If you have
@@ -51,13 +58,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       e.getClass().getSimpleName(),
       e.getMessage());
     return new ValidationErrorRestDto(e.summary(), e.errors());
-  }
-
-  @ExceptionHandler(value = {DateParseException.class})
-  protected ResponseEntity<Object> handleDateParseException(RuntimeException ex, WebRequest request) {
-    LOGGER.warn(ex.getMessage());
-    System.out.println("Exception catched");
-    return handleExceptionInternal(ex, "The given date could not be parsed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(value = {DateParseException.class})

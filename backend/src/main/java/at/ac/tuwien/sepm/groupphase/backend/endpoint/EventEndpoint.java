@@ -76,13 +76,13 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
+  @PermitAll
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
   public EventDto create(@RequestBody EventDto event) {
-    LOGGER.info("POST /api/v1/events");
+    LOGGER.info("POST /api/v1/events/create");
     return eventMapper.eventToEventDto(eventService.create(event));
   }
-
 
   private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {
     return new PageDtoResponse<>(pageIndex, pageSize, hits, pagesTotal, data);

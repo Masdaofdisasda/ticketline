@@ -29,14 +29,14 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const authReq = req.clone({
-      headers: req.headers.set(
-        'Authorization',
-        'Bearer ' + this.authService.getToken()
-      ),
-    });
+  //  const authReq = req.clone({
+  //    headers: req.headers.set(
+  //      'Authorization',
+  //      'Bearer ' + this.authService.getToken()
+  //    ),
+  //  });
 
-    return next.handle(this.authService.getToken() ? authReq : req).pipe(
+    return next.handle(this.authService.getToken() ? req : req).pipe(
       catchError((error: any) => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {

@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -65,7 +64,6 @@ public class DefaultEventService implements EventService {
 
   @Override
   public Event create(EventDto event) {
-    Event result = eventRepository.save(eventMapper.eventDtoToEvent(event));
-    return result;
+    return eventRepository.save(eventMapper.eventDtoToEvent(event));
   }
 }
