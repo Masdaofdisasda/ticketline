@@ -46,6 +46,7 @@ import { OrderCompleteComponent } from './components/order/order-complete/order-
     TicketItemComponent,
     CheckoutComponent,
     OrderCompleteComponent,
+    EventCreateComponent,
   ],
   imports: [
     BrowserModule,

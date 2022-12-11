@@ -14,8 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
@@ -46,6 +50,7 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
+  //@Secured("ROLE_USER")
   @PermitAll
   @GetMapping("/filter")
   @Operation(summary = "Get list of events")
@@ -71,6 +76,14 @@ public class EventEndpoint {
     return buildResponseDto(pageDto.pageIndex(), page.getSize(), page.getTotalElements(), page.getTotalPages(),
       eventMapper.eventToEventDto(page.getContent()));
   }
+
+  @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
+  public EventDto create(@RequestBody EventDto event) {
+    LOGGER.info("POST /api/v1/events");
+    return eventMapper.eventToEventDto(eventService.create(event));
+  }
+
 
   private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {
     return new PageDtoResponse<>(pageIndex, pageSize, hits, pagesTotal, data);

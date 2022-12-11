@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
@@ -19,9 +21,11 @@ public class DefaultEventService implements EventService {
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   private final EventRepository eventRepository;
+  private final EventMapper eventMapper;
 
-  public DefaultEventService(EventRepository eventRepository) {
+  public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper) {
     this.eventRepository = eventRepository;
+    this.eventMapper = eventMapper;
   }
 
   /**
@@ -56,5 +60,11 @@ public class DefaultEventService implements EventService {
   @Override
   public Page<Event> topOfMonth(PageDto pageDto) {
     return eventRepository.findTopOfMonth(PageRequest.of(pageDto.pageIndex(), pageDto.pageSize()));
+  }
+
+  @Override
+  public Event create(EventDto event) {
+    Event result = eventRepository.save(eventMapper.eventDtoToEvent(event));
+    return result;
   }
 }
