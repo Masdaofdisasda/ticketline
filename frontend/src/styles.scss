@@ -1,5 +1,10 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
 body {
-  background-color: whitesmoke;
+  background-color: var(--bs-light);
 }
+html {
+  margin: 0;
+  padding: 0;
+}
+

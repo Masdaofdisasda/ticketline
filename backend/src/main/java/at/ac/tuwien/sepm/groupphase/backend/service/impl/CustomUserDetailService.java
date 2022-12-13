@@ -1,11 +1,17 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+
+import java.lang.invoke.MethodHandles;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +24,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.invoke.MethodHandles;
-import java.util.List;
-
 @Service
 public class CustomUserDetailService implements UserService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  private static final Logger LOGGER =
+    LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenizer jwtTokenizer;
+  private final CustomUserValidator customUserValidator;
 
   @Autowired
-  public CustomUserDetailService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenizer jwtTokenizer) {
+  public CustomUserDetailService(
+    UserRepository userRepository,
+    PasswordEncoder passwordEncoder,
+    JwtTokenizer jwtTokenizer,
+    CustomUserValidator customUserValidator) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtTokenizer = jwtTokenizer;
+    this.customUserValidator = customUserValidator;
   }
 
   @Override
@@ -62,7 +72,8 @@ public class CustomUserDetailService implements UserService {
     if (applicationUser != null) {
       return applicationUser;
     }
-    throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
+    throw new NotFoundException(
+      String.format("Could not find the user with the email address %s", email));
   }
 
   @Override
@@ -72,14 +83,22 @@ public class CustomUserDetailService implements UserService {
       && userDetails.isAccountNonExpired()
       && userDetails.isAccountNonLocked()
       && userDetails.isCredentialsNonExpired()
-      && passwordEncoder.matches(userLoginDto.getPassword(), userDetails.getPassword())
-    ) {
-      List<String> roles = userDetails.getAuthorities()
-        .stream()
-        .map(GrantedAuthority::getAuthority)
-        .toList();
+      && passwordEncoder.matches(userLoginDto.getPassword(), userDetails.getPassword())) {
+      List<String> roles =
+        userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
       return jwtTokenizer.getAuthToken(userDetails.getUsername(), roles);
     }
     throw new BadCredentialsException("Username or password is incorrect or account is locked");
+  }
+
+  @Override
+  public void register(UserRegistrationDto userRegistrationDto) throws ValidationException {
+    customUserValidator.validateForCreate(userRegistrationDto);
+    ApplicationUser applicationUser =
+      new ApplicationUser(
+        userRegistrationDto.getEmail(),
+        passwordEncoder.encode(userRegistrationDto.getPassword()),
+        userRegistrationDto.getFirstName(), userRegistrationDto.getLastName(), false);
+    userRepository.save(applicationUser);
   }
 }
