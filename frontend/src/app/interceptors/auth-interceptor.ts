@@ -1,17 +1,27 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {AuthService} from '../services/auth.service';
-import {catchError, Observable, throwError} from 'rxjs';
-import {Globals} from '../global/globals';
-import {ToastrService} from 'ngx-toastr';
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Globals } from '../global/globals';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  constructor(
+    private authService: AuthService,
+    private globals: Globals,
+    private toastr: ToastrService
+  ) { }
 
-  constructor(private authService: AuthService, private globals: Globals, private toastr: ToastrService) {
-  }
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     const authUri = this.globals.backendUri + '/authentication';
 
     // Do not intercept authentication requests
@@ -20,10 +30,13 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     const authReq = req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + this.authService.getToken())
+      headers: req.headers.set(
+        'Authorization',
+        'Bearer ' + this.authService.getToken()
+      ),
     });
 
-    return next.handle(authReq).pipe(
+    return next.handle(this.authService.getToken() ? authReq : req).pipe(
       catchError((error: any) => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {

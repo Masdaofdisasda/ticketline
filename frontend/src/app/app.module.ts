@@ -1,8 +1,7 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
@@ -17,7 +16,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import {EventSearchComponent} from './components/event/event-search/event-search.component';
 import {EventSearchResultComponent} from './components/event/event-search-result/event-search-result.component';
-
+import { RegistrationComponent } from './components/registration/registration.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +25,7 @@ import {EventSearchResultComponent} from './components/event/event-search-result
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    RegistrationComponent,
     EventComponent,
     EventSearchComponent,
     EventSearchResultComponent,

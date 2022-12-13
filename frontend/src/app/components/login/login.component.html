@@ -21,9 +21,10 @@
             <div class="form-group">
               <label for="inputUsername">Username</label>
               <input type="text" name="username" formControlName="username" class="form-control" id="inputUsername"
-                     aria-describedby="usernameHelp" placeholder="Enter username">
+                aria-describedby="usernameHelp" placeholder="Enter username">
               <div *ngIf="submitted && loginForm.controls.username.errors" class="error">
-                <small class="form-text text-warning" *ngIf="loginForm.controls.username.errors.required">Your username is
+                <small class="form-text text-warning" *ngIf="loginForm.controls.username.errors.required">Your username
+                  is
                   required!
                 </small>
               </div>
@@ -32,7 +33,7 @@
             <div class="form-group">
               <label for="password">Password</label>
               <input type="password" name="password" formControlName="password" class="form-control" id="password"
-                     placeholder="Password">
+                placeholder="Password">
               <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
                 <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.required">Your password
                   is
@@ -45,7 +46,7 @@
             </div>
 
             <button type="button" (click)="loginUser()" class="btn btn-success float-right">Login</button>
-
+            <a [routerLink]="['/registration']">sign up</a>
           </form>
         </div>
 
