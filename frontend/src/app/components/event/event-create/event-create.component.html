@@ -1,1 +1,44 @@
-<p>works</p>
+<h1 class="display-1">Create Event</h1>
+
+
+<form [formGroup]="createForm">
+  <input type="text"
+         id="eventName"
+         name="eventName"
+         placeholder="Event Name"
+         formControlName="eventName">
+  <input type="text"
+         id="eventCategory"
+         name="eventCategory"
+         placeholder="Event Category"
+         formControlName="eventCategory">
+  <div class="input-group">
+    <input
+      class="form-control"
+      placeholder="Starting date yyyy-mm-dd"
+      name="dpStart"
+      ngbDatepicker
+      #startpicker="ngbDatepicker"
+      formControlName="startDate"
+    />
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startpicker.toggle()" type="button"></button>
+  </div>
+  <div class="input-group">
+    <input
+      class="form-control"
+      placeholder="End date yyyy-mm-dd"
+      name="dpEnd"
+      ngbDatepicker
+      #endPicker="ngbDatepicker"
+      formControlName="endDate"
+    />
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endPicker.toggle()" type="button"></button>
+  </div>
+  <button type="submit"
+          class="btn btn-primary"
+          [disabled]="createForm.invalid"
+          type="submit"
+          (click)="onSubmit()">
+    Create
+  </button>
+</form>
