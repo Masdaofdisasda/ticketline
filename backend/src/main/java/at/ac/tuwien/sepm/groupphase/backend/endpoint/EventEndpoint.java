@@ -50,7 +50,6 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
-  //@Secured("ROLE_USER")
   @PermitAll
   @GetMapping("/filter")
   @Operation(summary = "Get list of events")

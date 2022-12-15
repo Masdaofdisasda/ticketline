@@ -32,5 +32,11 @@ public interface EventService {
    */
   Page<Event> topOfMonth(PageDto pageDto);
 
-  Event create(EventDto event);
+  /**
+   * saves Event to database.
+   *
+   * @param event event to be created
+   * @return created event
+   */
+  public Event create(EventDto event);
 }

@@ -66,6 +66,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, "The given date could not be parsed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
+  @ExceptionHandler(value = {DateParseException.class})
+  protected ResponseEntity<Object> handleDateParseException(RuntimeException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
+    System.out.println("Exception catched");
+    return handleExceptionInternal(ex, "The given date could not be parsed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
   /**
    * Override methods from ResponseEntityExceptionHandler to send a customized HTTP response for a
    * know exception from e.g. Spring

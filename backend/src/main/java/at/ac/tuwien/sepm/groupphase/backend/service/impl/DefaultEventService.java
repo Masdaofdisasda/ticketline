@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
