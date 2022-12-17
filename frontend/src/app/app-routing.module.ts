@@ -1,10 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login/login.component';
-import {RegistrationComponent} from './components/registration/registration.component';
+
 import {AuthGuard} from './guards/auth.guard';
 import {MessageComponent} from './components/message/message.component';
 import {EventComponent} from './components/event/event.component';
+import {RegistrationComponent} from './components/registration/registration.component';
+import {EventCreateComponent} from './components/event/event-create/event-create.component';
 import {LockedUsersComponent} from './components/locked-users/locked-users.component';
 
 import {SeatSelectionComponent} from './components/order/seat-selection/seat-selection.component';
@@ -21,6 +23,8 @@ const routes: Routes = [
     component: LockedUsersComponent,
   },
   {path: 'message', component: MessageComponent},
+  {path: 'event', component: EventComponent},
+  {path: 'event/create', component: EventCreateComponent},
   {path: 'event', component: EventComponent,},
   {
     path: 'order', children: [

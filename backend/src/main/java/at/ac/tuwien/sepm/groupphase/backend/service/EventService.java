@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -30,4 +31,12 @@ public interface EventService {
    * @return page with events returned from repo
    */
   Page<Event> topOfMonth(PageDto pageDto);
+
+  /**
+   * saves Event to database.
+   *
+   * @param event event to be created
+   * @return created event
+   */
+  public Event create(EventDto event);
 }

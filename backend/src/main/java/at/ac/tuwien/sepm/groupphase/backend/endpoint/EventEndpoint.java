@@ -14,8 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
@@ -70,6 +74,14 @@ public class EventEndpoint {
     Page<Event> page = eventService.topOfMonth(pageDto);
     return buildResponseDto(pageDto.pageIndex(), page.getSize(), page.getTotalElements(), page.getTotalPages(),
       eventMapper.eventToEventDto(page.getContent()));
+  }
+
+  @PermitAll
+  @PostMapping("create")
+  @ResponseStatus(code = HttpStatus.CREATED)
+  public EventDto create(@RequestBody EventDto event) {
+    LOGGER.info("POST /api/v1/events/create");
+    return eventMapper.eventToEventDto(eventService.create(event));
   }
 
   private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {

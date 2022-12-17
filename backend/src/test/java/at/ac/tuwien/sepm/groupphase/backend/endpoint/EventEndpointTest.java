@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -87,22 +89,22 @@ class EventEndpointTest implements TestData {
   }
 
   @Test
-  void filter_withQueryParams_shouldReturnOneHit()throws Exception {
+  void filter_withQueryParams_shouldReturnOneHit() throws Exception {
     // prerequisite two event entities
     eventRepository.save(Event.builder()
-        .id(1L)
-        .category("HipHop")
-        .name("Test Event")
-        .startDate(LocalDateTime.of(2022,12,11,19,0))
-        .startDate(LocalDateTime.of(2022,12,12, 1,30))
+      .id(1L)
+      .category("HipHop")
+      .name("Test Event")
+      .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
+      .startDate(LocalDateTime.of(2022, 12, 12, 1, 30))
       .build());
 
     eventRepository.save(Event.builder()
       .id(2L)
       .category("Klassik")
       .name("Test Event 2")
-      .startDate(LocalDateTime.of(2022,12,11,19,0))
-      .startDate(LocalDateTime.of(2022,12,12, 1,30))
+      .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
+      .startDate(LocalDateTime.of(2022, 12, 12, 1, 30))
       .build());
 
     assertThat(eventRepository.findAll().size()).isEqualTo(2);
@@ -123,7 +125,7 @@ class EventEndpointTest implements TestData {
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
 
-    MvcResult mvcResult = this.mockMvc.perform(get(EVENT_BASE_URI+"/filter")
+    MvcResult mvcResult = this.mockMvc.perform(get(EVENT_BASE_URI + "/filter")
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
         .params(requestParams))
       .andDo(print())
@@ -143,7 +145,32 @@ class EventEndpointTest implements TestData {
   }
 
   @Test
+  public void createEvent() throws Exception {
+    EventDto eventDto1 = new EventDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(3), null);
+    EventDto eventDto2 = new EventDto(2L, "NewEvent2", "newCategory2", LocalDateTime.now(), LocalDateTime.now().plusHours(3), null);
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isCreated())
+      .andReturn().getResponse().getContentAsByteArray();
+
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto2)
+        )).andExpect(status().isCreated())
+      .andReturn().getResponse().getContentAsByteArray();
+
+    assertThat(eventRepository.findAll().size()).isEqualTo(2);
+  }
+
+  @Test
   void findTopOfMonth() {
-     // TODO: 11.12.22 add your testcase here
+    // TODO: 11.12.22 add your testcase here
   }
 }

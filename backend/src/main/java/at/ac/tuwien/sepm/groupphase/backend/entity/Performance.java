@@ -38,7 +38,7 @@ public class Performance {
   @Builder.Default
   private List<Ticket> tickets = new ArrayList<>();
 
-  @ManyToOne
+  @ManyToOne()
   private Event event;
 
   @ManyToOne

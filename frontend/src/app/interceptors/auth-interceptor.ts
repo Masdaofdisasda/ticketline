@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
-import { catchError, Observable, throwError } from 'rxjs';
-import { Globals } from '../global/globals';
-import { ToastrService } from 'ngx-toastr';
+import {AuthService} from '../services/auth.service';
+import {catchError, Observable, throwError} from 'rxjs';
+import {Globals} from '../global/globals';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -16,7 +16,8 @@ export class AuthInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private globals: Globals,
     private toastr: ToastrService
-  ) { }
+  ) {
+  }
 
   intercept(
     req: HttpRequest<any>,
@@ -36,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
       ),
     });
 
-    return next.handle(this.authService.getToken() ? authReq : req).pipe(
+    return next.handle(this.authService.getToken() ? req : req).pipe(
       catchError((error: any) => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {

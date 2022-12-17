@@ -40,4 +40,5 @@ export class EventComponent {
   sendPagedTopOfTheMonthEventRequest($event: PageDto) {
     this.eventsTopOfTheMonth = this.eventService.getTopEventsOfMonth($event);
   }
+
 }

@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,7 +29,7 @@ class EventRepositoryTest {
 
   @Test
   void findForFilter_withQueryParams_shouldReturnOneHit() {
-    for (int i = 0; i <= 10; i++) {
+    for (int i = 1; i <= 10; i++) {
       eventRepository.save(Event.builder()
         .id((long) i)
         .name("Test Event" + i)
@@ -56,6 +58,29 @@ class EventRepositoryTest {
       () -> assertEquals(result.getTotalPages(), 2),
       () -> assertEquals(result.getNumberOfElements(), 5)
     );
+  }
+
+  @Test
+  void saveEvent() {
+    List<Event> eventList = new ArrayList<>();
+    for (int i = 1; i <= 3; i++) {
+      Event event = Event.builder()
+        .id((long) i)
+        .name("Test Event" + i)
+        .category("Category " + i)
+        .startDate(LocalDateTime.now())
+        .endDate(LocalDateTime.now().plusHours(3))
+        .build();
+      eventList.add(event);
+      eventRepository.save(event);
+      System.out.println("here");
+    }
+
+    assertThat(eventRepository.findAll().size()).isEqualTo(3);
+    for (long i = 1; i <= 3; i++) {
+      assertThat(eventRepository.findById(i).equals(eventList.get((int) i - 1)));
+    }
+
   }
 
   void findTopOfMonth() {

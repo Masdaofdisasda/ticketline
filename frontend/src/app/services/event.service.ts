@@ -54,4 +54,8 @@ export class EventService {
 
     return this.httpClient.get<PageResponseDto<EventDto>>(this.eventBaseUri + '/top-of-month', {params});
   }
+
+  create(event: EventDto): Observable<EventDto> {
+    return this.httpClient.post<EventDto>(this.eventBaseUri + '/create', event);
+  }
 }

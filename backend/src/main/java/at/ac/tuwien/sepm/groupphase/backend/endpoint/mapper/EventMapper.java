@@ -18,7 +18,7 @@ public interface EventMapper {
   EventDto eventToEventDto(Event event);
 
   @IterableMapping(qualifiedByName = "eventToEventDto")
-  List<EventDto> eventToEventDto(List<Event> message);
+  List<EventDto> eventToEventDto(List<Event> events);
 
   Event eventDtoToEvent(EventDto eventDto);
 }
