@@ -17,6 +17,7 @@ public interface TestData {
   String MESSAGE_BASE_URI = BASE_URI + "/messages";
   String USER_BASE_URI = BASE_URI + "/user";
   String EVENT_BASE_URI = BASE_URI + "/events";
+  String AUTH_BASE_URI = BASE_URI + "/authentication";
 
   String ADMIN_USER = "admin@email.com";
   List<String> ADMIN_ROLES = new ArrayList<>() {
@@ -25,7 +26,7 @@ public interface TestData {
       add("ROLE_USER");
     }
   };
-  String DEFAULT_USER = "admin@email.com";
+  String DEFAULT_USER = "user@email.com";
   List<String> USER_ROLES = new ArrayList<>() {
     {
       add("ROLE_USER");

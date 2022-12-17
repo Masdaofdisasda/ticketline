@@ -1,6 +1,6 @@
-package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
+package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,7 +57,10 @@ public class UserRegistrationEndpointTest implements TestData {
   @Autowired
   private SecurityProperties securityProperties;
 
-  private ApplicationUser user = new ApplicationUser("test@test.com", "12345678", "Max", "Mustermann", false);
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  private ApplicationUser user;
 
   private UserRegistrationDto userDto = UserRegistrationDto.builder()
     .email("test@test.com")
@@ -68,6 +72,14 @@ public class UserRegistrationEndpointTest implements TestData {
   @BeforeEach
   public void beforeEach() {
     userRepository.deleteAll();
+    user = ApplicationUser.builder()
+      .email("test@test.com")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .admin(false)
+      .password(
+        passwordEncoder.encode("12345678")
+      ).build();
   }
 
   @Test

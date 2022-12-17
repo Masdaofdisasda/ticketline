@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.lang.invoke.MethodHandles;
+import java.util.Date;
 
 @Profile("generateData")
 @Component
@@ -20,6 +21,11 @@ public class UserDataGenerator {
   private static final String TEST_ADMIN_PSW = "password";
   private static final String TEST_ADMIN_FIRST_NAME = "Max";
   private static final String TEST_ADMIN_LAST_NAME = "Mustermann";
+
+  private static final String TEST_LOCKED_EMAIL = "viktor@email.com";
+  private static final String TEST_LOCKED_PSW = "password";
+  private static final String TEST_LOCKED_FIRST_NAME = "Viktor";
+  private static final String TEST_LOCKED_LAST_NAME = "Vergesslich";
 
   private final PasswordEncoder passwordEncoder;
 
@@ -36,16 +42,33 @@ public class UserDataGenerator {
       LOGGER.debug("user already generated");
     } else {
       LOGGER.debug("generating admin user entry");
-      ApplicationUser admin = new ApplicationUser(
-        TEST_ADMIN_EMAIL,
-        passwordEncoder.encode(TEST_ADMIN_PSW),
-        TEST_ADMIN_FIRST_NAME,
-        TEST_ADMIN_LAST_NAME,
-        true
-      );
+      ApplicationUser admin = ApplicationUser.builder()
+        .email(TEST_ADMIN_EMAIL)
+        .password(this.passwordEncoder.encode(TEST_ADMIN_PSW))
+        .firstName(TEST_ADMIN_FIRST_NAME)
+        .lastName(TEST_ADMIN_LAST_NAME)
+        .accountNonLocked(true)
+        .admin(true)
+        .build();
       LOGGER.debug("saving user {}", admin);
       userRepository.save(admin);
     }
   }
 
+  @PostConstruct
+  private void generateLockedUser() {
+    LOGGER.debug("generating admin user entry");
+    ApplicationUser user = ApplicationUser.builder()
+      .email(TEST_LOCKED_EMAIL)
+      .password(this.passwordEncoder.encode(TEST_LOCKED_PSW))
+      .firstName(TEST_LOCKED_FIRST_NAME)
+      .lastName(TEST_LOCKED_LAST_NAME)
+      .accountNonLocked(false)
+      .lockTime(new Date())
+      .failedAttempt(5)
+      .admin(false)
+      .build();
+    LOGGER.debug("saving user {}", user);
+    userRepository.save(user);
+  }
 }

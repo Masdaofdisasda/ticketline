@@ -33,6 +33,9 @@ public class CustomUserValidator {
     if (password == null || password.isBlank()) {
       validationErrors.add("no password given");
     }
+    if (password.length() < 8) {
+      validationErrors.add("password is too short");
+    }
 
     return validationErrors;
   }

@@ -22,13 +22,17 @@
             routerLinkActive="active">Message</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" *ngIf="authService.isLoggedIn() && authService.getUserRole() === 'ADMIN'"
+            routerLink="/user/locked" routerLinkActive="active">Locked
+            Users</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" routerLink="/event" routerLinkActive="active">Events</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active">Help</a>
         </li>
       </ul>
-
     </div>
   </div>
 </nav>

@@ -42,6 +42,7 @@ import javax.annotation.security.RolesAllowed;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -130,7 +131,7 @@ public class SecurityTest implements TestData {
       .flatMap(clazz -> Arrays.stream(clazz.getDeclaredMethods()).map(method -> new ImmutablePair<Class<?>, Method>(clazz, method))) // get all class -> method pairs
       .filter(pair -> Arrays.stream(pair.getRight().getAnnotations()).anyMatch(annotation -> mappingAnnotations.contains(annotation.annotationType()))) // keep only the pairs where the method has a "mapping annotation"
       .filter(pair -> Arrays.stream(pair.getRight().getAnnotations()).noneMatch(annotation -> securityAnnotations.contains(annotation.annotationType()))) // keep only the pairs where the method does not have a "security annotation"
-      .toList();
+      .collect(Collectors.toList());
 
     assertThat(notSecured.size())
       .as("Most rest methods should be secured. If one is really intended for public use, explicitly state that with @PermitAll. "
