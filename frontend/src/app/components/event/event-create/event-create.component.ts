@@ -31,6 +31,7 @@ export class EventCreateComponent {
   constructor(private eventService: EventService, private router: Router) {
   }
 
+  //todo validate form
   public onSubmit(form: NgForm): void {
     this.newEvent.startDate = this.extractDate(this.startDateNew, this.startTimeNew);
     this.newEvent.endDate = this.extractDate(this.endDateNew, this.endTimeNew);
@@ -40,7 +41,7 @@ export class EventCreateComponent {
   }
 
   //workaround with string
-  public extractDate(d: NgbDateStruct, t: NgbTimeStruct): Date{
+  private extractDate(d: NgbDateStruct, t: NgbTimeStruct): Date{
     const month = d.month < 10 ? '0' + d.month : d.month;
     const day = d.day < 10 ? '0' + d.day : d.day;
     const hour = t.hour < 10 ? '0' + t.hour : t.hour;
