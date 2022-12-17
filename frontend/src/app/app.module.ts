@@ -9,7 +9,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { MessageComponent } from './components/message/message.component';
-import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { httpInterceptorProviders } from './interceptors';
 import { EventComponent } from './components/event/event.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,8 @@ import { EventSearchComponent } from './components/event/event-search/event-sear
 import { EventSearchResultComponent } from './components/event/event-search-result/event-search-result.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { LockedUsersComponent } from './components/locked-users/locked-users.component';
+import {DateTimePickerComponent} from './components/shared/date-time-picker/date-time-picker.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +32,7 @@ import { LockedUsersComponent } from './components/locked-users/locked-users.com
     EventComponent,
     EventSearchComponent,
     EventSearchResultComponent,
+    DateTimePickerComponent,
     RegistrationComponent,
     LockedUsersComponent,
   ],
@@ -45,8 +48,7 @@ import { LockedUsersComponent } from './components/locked-users/locked-users.com
       timeOut: 10000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    }),
-    NgbDatepickerModule,
+    })
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
