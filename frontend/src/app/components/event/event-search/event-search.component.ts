@@ -2,7 +2,6 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {EventSearchRequest} from '../../../dto/event-search-request';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
-import {NgbDate} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -53,7 +52,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
   setDate(tonight: boolean): void {
     const today = new Date();
     if (tonight) {
-      this.searchFormGroup.get('startTime').setValue(new NgbDate(today.getUTCFullYear(), today.getUTCMonth() + 1, today.getUTCDate()));
+      this.searchFormGroup.get('startTime').setValue(today.setHours(19, 0, 0));
     } else {
       const nextFriday = new Date(
         today.setDate(
@@ -61,7 +60,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
         )
       );
       this.searchFormGroup.get('startTime')
-        .setValue(new NgbDate(nextFriday.getUTCFullYear(), nextFriday.getUTCMonth() + 1, nextFriday.getUTCDate()));
+        .setValue(nextFriday);
     }
   }
 
@@ -86,10 +85,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
       venueName: this.searchFormGroup.get('venueName').value,
       eventHall: this.searchFormGroup.get('eventHall').value,
       from: this.searchFormGroup.get('from').value,
-      startTime: this.searchFormGroup.get('startTime').value ?
-        new Date(this.searchFormGroup.get('startTime').value.year,
-          this.searchFormGroup.get('startTime').value.month - 1,
-          this.searchFormGroup.get('startTime').value.day).toLocaleDateString() : '',
+      startTime: this.searchFormGroup.get('startTime').value ? this.searchFormGroup.get('startTime').value.toISOString() : '',
       genre: this.searchFormGroup.get('genre').value,
       nameOfEvent: this.searchFormGroup.get('nameOfEvent').value
     } as EventSearchRequest;

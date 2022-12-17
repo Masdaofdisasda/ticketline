@@ -9,13 +9,11 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,9 +36,9 @@ public class EventEndpoint {
     this.eventMapper = eventMapper;
   }
 
-  @Secured("ROLE_USER")
+  @PermitAll
   @GetMapping
-  @Operation(summary = "Get list of events", security = @SecurityRequirement(name = "apiKey"))
+  @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> findAll(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events");
     Page<Event> page = eventService.findAll(pageDto);
@@ -48,10 +46,9 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
-  //@Secured("ROLE_USER")
   @PermitAll
   @GetMapping("/filter")
-  @Operation(summary = "Get list of events", security = @SecurityRequirement(name = "apiKey"))
+  @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> filter(EventSearchRequest eventSearchRequest) {
     LOGGER.info("GET /api/v1/events/filter -> query parameters: {}", eventSearchRequest);
     Page<Event> page;
@@ -65,9 +62,9 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
-  @Secured("ROLE_USER")
+  @PermitAll
   @GetMapping("top-of-month")
-  @Operation(summary = "Get list of events", security = @SecurityRequirement(name = "apiKey"))
+  @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> findTopOfMonth(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events/top-of-month");
     Page<Event> page = eventService.topOfMonth(pageDto);

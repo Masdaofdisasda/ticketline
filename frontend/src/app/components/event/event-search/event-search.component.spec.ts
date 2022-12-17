@@ -3,8 +3,8 @@ import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing'
 import {EventSearchComponent} from './event-search.component';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import {EventSearchRequest} from '../../../dto/event-search-request';
+import {DateTimePickerComponent} from '../../shared/date-time-picker/date-time-picker.component';
 
 describe('EventSearchComponent', () => {
   let component: EventSearchComponent;
@@ -12,9 +12,9 @@ describe('EventSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, HttpClientModule, NgbDatepickerModule],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientModule],
       providers: [FormBuilder],
-      declarations: [EventSearchComponent]
+      declarations: [EventSearchComponent, DateTimePickerComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EventSearchComponent);

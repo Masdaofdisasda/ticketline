@@ -44,14 +44,11 @@
           <label class="btn btn-outline-primary" for="btnradio2">Weekend</label>
         </div>
         <div class="input-group">
-          <input
-            class="form-control"
-            placeholder="Starting time yyyy-mm-dd"
-            formControlName="startTime"
-            ngbDatepicker
-            #d="ngbDatepicker"/>
-          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+          <app-date-time-picker placeholder="Select DateTime" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                formControlName="startTime">
+          </app-date-time-picker>
         </div>
+
         <input class="form-control" placeholder="Genre" formControlName="genre">
       </div>
       <div class="form-group" style="margin-top: 1%">
