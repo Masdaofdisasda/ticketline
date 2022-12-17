@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 
 import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import java.lang.invoke.MethodHandles;
@@ -30,14 +31,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger LOGGER =
-      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** Use the @ExceptionHandler annotation to write handler for custom exceptions. */
   @ExceptionHandler(value = {NotFoundException.class})
   protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
     LOGGER.warn(ex.getMessage());
     return handleExceptionInternal(
-        ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+      ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+  }
+
+  @ExceptionHandler(value = {CustomLockedException.class})
+  protected ResponseEntity<Object> handleCustomLocked(RuntimeException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
+    return handleExceptionInternal(
+      ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
   }
 
   @ExceptionHandler
@@ -45,9 +53,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ResponseBody
   public ValidationErrorRestDto handleValidationException(ValidationException e) {
     LOGGER.warn(
-        "Terminating request processing with status 422 due to {}: {}",
-        e.getClass().getSimpleName(),
-        e.getMessage());
+      "Terminating request processing with status 422 due to {}: {}",
+      e.getClass().getSimpleName(),
+      e.getMessage());
     return new ValidationErrorRestDto(e.summary(), e.errors());
   }
 
@@ -64,16 +72,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    */
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+    MethodArgumentNotValidException ex,
+    HttpHeaders headers,
+    HttpStatus status,
+    WebRequest request) {
     Map<String, Object> body = new LinkedHashMap<>();
     // Get all errors
     List<String> errors =
-        ex.getBindingResult().getFieldErrors().stream()
-            .map(err -> err.getField() + " " + err.getDefaultMessage())
-            .collect(Collectors.toList());
+      ex.getBindingResult().getFieldErrors().stream()
+        .map(err -> err.getField() + " " + err.getDefaultMessage())
+        .collect(Collectors.toList());
     body.put("Validation errors", errors);
 
     return new ResponseEntity<>(body.toString(), headers, status);

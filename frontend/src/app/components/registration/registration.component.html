@@ -13,8 +13,8 @@
       <p class="text-center mb-5">
         Use Ticketline for free.
       </p>
-      <div class="card-body">
-        <form class="form" id="registrationForm" [formGroup]="registrationForm" (ngSubmit)="registerUser()">
+      <div>
+        <form class="form" [formGroup]="registrationForm" (ngSubmit)="registerUser()">
           <div class="row">
             <div class="form-group col">
               <label for="inputFirstName">First name *</label>
@@ -59,8 +59,8 @@
             <div class="col">
               <div class="form-group">
                 <label for="password">Password *</label>
-                <input type="password" name="password" formControlName="password" class="form-control" id="inputPassword"
-                  placeholder="Password">
+                <input type="password" name="password" formControlName="password" class="form-control"
+                  id="inputPassword" placeholder="Password">
                 <div *ngIf="submitted && registrationForm.controls.password.errors" class="error">
                   <small class="form-text text-warning" *ngIf="registrationForm.controls.password.errors.required">Your
                     password
@@ -76,7 +76,8 @@
             </div>
           </div>
           <div class="col d-flex justify-content-center my-5">
-            <button type="button" id="signUpButton" (click)="registerUser()" class="btn btn-primary px-5">Sign Up</button>
+            <button type="button" (click)="registerUser()" class="btn btn-primary w-75" id="signUpButton">Sign
+              Up</button>
           </div>
         </form>
       </div>
