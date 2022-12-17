@@ -41,7 +41,4 @@ export class EventComponent {
     this.eventsTopOfTheMonth = this.eventService.getTopEventsOfMonth($event);
   }
 
-  createEvent() {
-
-  }
 }

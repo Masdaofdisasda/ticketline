@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
   templateUrl: './event-create.component.html',
   styleUrls: ['./event-create.component.scss']
 })
-export class EventCreateComponent implements OnInit {
+export class EventCreateComponent {
 
 
   newEvent: EventDto = {
@@ -28,16 +28,10 @@ export class EventCreateComponent implements OnInit {
   endTimeNew: NgbTimeStruct;
 
 
-  constructor(private eventService: EventService, private fb: FormBuilder, private router: Router) {
+  constructor(private eventService: EventService, private router: Router) {
   }
-
-  ngOnInit(): void {
-
-  }
-
 
   public onSubmit(form: NgForm): void {
-
     this.newEvent.startDate = this.extractDate(this.startDateNew, this.startTimeNew);
     this.newEvent.endDate = this.extractDate(this.endDateNew, this.endTimeNew);
     console.log(this.newEvent);
@@ -45,7 +39,7 @@ export class EventCreateComponent implements OnInit {
     this.router.navigate(['/event']);
   }
 
-  //workaround mit string
+  //workaround with string
   public extractDate(d: NgbDateStruct, t: NgbTimeStruct): Date{
     const month = d.month < 10 ? '0' + d.month : d.month;
     const day = d.day < 10 ? '0' + d.day : d.day;
