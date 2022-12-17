@@ -20,6 +20,12 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { LockedUsersComponent } from './components/locked-users/locked-users.component';
 import {DateTimePickerComponent} from './components/shared/date-time-picker/date-time-picker.component';
 
+import { SeatSelectionComponent } from './components/order/seat-selection/seat-selection.component';
+import { ShoppingCartComponent } from './components/order/shopping-cart/shopping-cart.component';
+import { TicketItemComponent } from './components/order/ticket-item/ticket-item.component';
+import { CheckoutComponent } from './components/order/checkout/checkout.component';
+import { OrderCompleteComponent } from './components/order/order-complete/order-complete.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,6 +41,11 @@ import {DateTimePickerComponent} from './components/shared/date-time-picker/date
     DateTimePickerComponent,
     RegistrationComponent,
     LockedUsersComponent,
+    SeatSelectionComponent,
+    ShoppingCartComponent,
+    TicketItemComponent,
+    CheckoutComponent,
+    OrderCompleteComponent,
   ],
   imports: [
     BrowserModule,

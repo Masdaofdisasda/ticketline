@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {EventDto} from '../../../dto/event.dto';
 import {PageResponseDto} from '../../../dto/page-response.dto';
 import {PageDto} from '../../../dto/page.dto';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-event-search-result',
@@ -16,10 +17,6 @@ export class EventSearchResultComponent implements OnChanges {
   pagedEventsDefault = PageResponseDto.getPageResponseDto();
 
   constructor() {
-  }
-
-  buy() {
-    //todo: route to site
   }
 
   refreshEvents() {
