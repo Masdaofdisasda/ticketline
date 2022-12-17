@@ -1,19 +1,22 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
-
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AllArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -49,4 +52,15 @@ public class ApplicationUser {
   private Date lockTime;
 
   private Boolean admin;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(FetchMode.JOIN)
+  private List<Booking> bookings = new java.util.ArrayList<>();
+
+  public ApplicationUser(String email, String password, String firstName, String lastName, Boolean admin) {
+    this.email = email;
+    this.password = password;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.admin = admin;
+  }
 }

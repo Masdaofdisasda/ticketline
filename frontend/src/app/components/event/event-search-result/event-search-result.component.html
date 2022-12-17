@@ -16,7 +16,7 @@
     <td>{{ event.startDate | date:'short' }}</td>
     <td>{{ event.endDate | date:'short' }}</td>
     <td>
-      <button type="button" (click)="buy()" class="btn btn-success">Buy</button>
+      <button type="button" [routerLink]="['/order/seats']" class="btn btn-success">Get tickets</button>
     </td>
   </tr>
   </tbody>

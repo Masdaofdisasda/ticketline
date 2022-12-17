@@ -18,6 +18,10 @@
       </ul>
       <ul class="navbar-nav mr-auto d-flex flex-row-reverse">
         <li class="nav-item">
+          <a class="nav-link" routerLink="/order/cart"
+            routerLinkActive="active">Cart</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message"
             routerLinkActive="active">Message</a>
         </li>
