@@ -77,7 +77,7 @@ public class EventEndpoint {
   }
 
   @PermitAll
-  @PostMapping
+  @PostMapping("create")
   @ResponseStatus(code = HttpStatus.CREATED)
   public EventDto create(@RequestBody EventDto event) {
     LOGGER.info("POST /api/v1/events/create");
