@@ -11,12 +11,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationService } from 'src/app/services/registration.service';
 import { RegistrationRequest } from 'src/app/dto/registration-request';
+import {AuthService} from '../../services/auth.service';
 
 describe('RegistrationComponent', () => {
   let component: RegistrationComponent;
   let fixture: ComponentFixture<RegistrationComponent>;
   const registrationService = {
     registerUser: jasmine.createSpy('registerUser'),
+  };
+
+  const authService = {
+    loginUser: jasmine.createSpy('loginUser'),
   };
 
   beforeEach(waitForAsync(() => {
@@ -30,6 +35,10 @@ describe('RegistrationComponent', () => {
         {
           provide: RegistrationService,
           useValue: registrationService,
+        },
+        {
+          provide: AuthService,
+          useValue: authService,
         },
       ],
       declarations: [RegistrationComponent],
