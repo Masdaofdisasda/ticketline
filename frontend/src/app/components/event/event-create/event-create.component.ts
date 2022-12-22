@@ -28,15 +28,7 @@ export class EventCreateComponent implements OnInit {
     });
   }
 
-
-  //todo validate form
-  public onSubmit(formGroup: FormGroup): void {
-    console.log(formGroup.valid);
-    console.log(this.createFormGroup.get('eventName').value);
-    console.log(this.createFormGroup.get('eventCategory').value);
-    console.log(this.createFormGroup.get('startTime').value ? this.createFormGroup.get('startTime').value.toISOString() : '');
-    console.log(this.createFormGroup.get('endTime').value ? this.createFormGroup.get('endTime').value.toISOString() : '');
-
+  public onSubmit(): void {
     const observable = this.eventService.create({
       name: this.createFormGroup.get('eventName').value,
       category: this.createFormGroup.get('eventCategory').value,

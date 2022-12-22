@@ -28,7 +28,7 @@ public class EventValidator {
     }
 
     if (!validationErrors.isEmpty()) {
-      throw new ValidationException("Validation of user for create failed", validationErrors);
+      throw new ValidationException("Validation of Event for create failed", validationErrors);
     }
   }
 }
