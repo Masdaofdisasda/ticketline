@@ -1,23 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {EventService} from '../../../services/event.service';
-import {EventDto} from '../../../dto/event.dto';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { EventService } from '../../../services/event.service';
+import { EventDto } from '../../../dto/event.dto';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-event-create',
   templateUrl: './event-create.component.html',
-  styleUrls: ['./event-create.component.scss']
+  styleUrls: ['./event-create.component.scss'],
 })
 export class EventCreateComponent implements OnInit {
-
   createFormGroup: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private eventService: EventService,
-              private router: Router, private notification: ToastrService) {
-  }
-
+  constructor(
+    private formBuilder: FormBuilder,
+    private eventService: EventService,
+    private router: Router,
+    private notification: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.createFormGroup = this.formBuilder.group({
@@ -32,19 +38,25 @@ export class EventCreateComponent implements OnInit {
     const observable = this.eventService.create({
       name: this.createFormGroup.get('eventName').value,
       category: this.createFormGroup.get('eventCategory').value,
-      startDate: this.createFormGroup.get('startTime').value ? this.createFormGroup.get('startTime').value.toISOString() : '',
-      endDate: this.createFormGroup.get('endTime').value ? this.createFormGroup.get('endTime').value.toISOString() : '',
+      startDate: this.createFormGroup.get('startTime').value
+        ? this.createFormGroup.get('startTime').value.toISOString()
+        : '',
+      endDate: this.createFormGroup.get('endTime').value
+        ? this.createFormGroup.get('endTime').value.toISOString()
+        : '',
     } as EventDto);
     observable.subscribe({
-      next: data => {
-        this.notification.success(`Event: \'${data.name}\' successfully created.`);
+      next: (data) => {
+        this.notification.success(
+          `Event: \'${data.name}\' successfully created.`
+        );
         this.router.navigate(['/event']);
       },
-      error: err => {
+      error: (err) => {
         console.log('Error creating Event', err);
         console.log(err);
-        this.notification.error('Error creating horse: \n' + err.error.errors);
-      }
+        this.notification.error('Error creating event: \n' + err.error.errors);
+      },
     });
   }
 }

@@ -1,10 +1,15 @@
-import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 
-import {EventSearchComponent} from './event-search.component';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {EventSearchRequest} from '../../../dto/event-search-request';
-import {DateTimePickerComponent} from '../../shared/date-time-picker/date-time-picker.component';
+import { EventSearchComponent } from './event-search.component';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { EventSearchRequest } from '../../../dto/event-search-request';
+import { DateTimePickerComponent } from '../../shared/date-time-picker/date-time-picker.component';
 
 describe('EventSearchComponent', () => {
   let component: EventSearchComponent;
@@ -14,7 +19,7 @@ describe('EventSearchComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, HttpClientModule],
       providers: [FormBuilder],
-      declarations: [EventSearchComponent, DateTimePickerComponent]
+      declarations: [EventSearchComponent, DateTimePickerComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EventSearchComponent);
@@ -30,8 +35,9 @@ describe('EventSearchComponent', () => {
     expect(component).toBeTruthy();
     spyOn(component.searchRequest, 'emit').and.stub();
 
-
-    const input = fixture.nativeElement.querySelector('#artistInput') as HTMLInputElement;
+    const input = fixture.nativeElement.querySelector(
+      '#artistInput'
+    ) as HTMLInputElement;
     expect(input).toBeDefined();
     component.searchFormGroup.get('artistName').setValue('Test Artist');
     input.dispatchEvent(new Event('focusin'));
