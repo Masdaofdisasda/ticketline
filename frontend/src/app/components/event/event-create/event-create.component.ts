@@ -1,54 +1,58 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, NgForm} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {EventService} from '../../../services/event.service';
 import {EventDto} from '../../../dto/event.dto';
-import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-event-create',
   templateUrl: './event-create.component.html',
   styleUrls: ['./event-create.component.scss']
 })
-export class EventCreateComponent {
+export class EventCreateComponent implements OnInit {
 
+  createFormGroup: FormGroup;
 
-  newEvent: EventDto = {
-    id: undefined,
-    name: '',
-    category: '',
-    startDate: new Date(),
-    endDate: new Date()
-  };
-
-  startDateNew: NgbDateStruct;
-
-  endDateNew: NgbDateStruct;
-  startTimeNew: NgbTimeStruct;
-  endTimeNew: NgbTimeStruct;
-
-
-  constructor(private eventService: EventService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private eventService: EventService,
+              private router: Router, private notification: ToastrService) {
   }
+
+
+  ngOnInit(): void {
+    this.createFormGroup = this.formBuilder.group({
+      eventName: new FormControl('', Validators.required),
+      eventCategory: new FormControl('', Validators.required),
+      startTime: new FormControl(null, Validators.required),
+      endTime: new FormControl(null, Validators.required),
+    });
+  }
+
 
   //todo validate form
-  public onSubmit(form: NgForm): void {
-    this.newEvent.startDate = this.extractDate(this.startDateNew, this.startTimeNew);
-    this.newEvent.endDate = this.extractDate(this.endDateNew, this.endTimeNew);
-    console.log(this.newEvent);
-    this.eventService.create(this.newEvent).subscribe();
-    this.router.navigate(['/event']);
+  public onSubmit(formGroup: FormGroup): void {
+    console.log(formGroup.valid);
+    console.log(this.createFormGroup.get('eventName').value);
+    console.log(this.createFormGroup.get('eventCategory').value);
+    console.log(this.createFormGroup.get('startTime').value ? this.createFormGroup.get('startTime').value.toISOString() : '');
+    console.log(this.createFormGroup.get('endTime').value ? this.createFormGroup.get('endTime').value.toISOString() : '');
+
+    const observable = this.eventService.create({
+      name: this.createFormGroup.get('eventName').value,
+      category: this.createFormGroup.get('eventCategory').value,
+      startDate: this.createFormGroup.get('startTime').value ? this.createFormGroup.get('startTime').value.toISOString() : '',
+      endDate: this.createFormGroup.get('endTime').value ? this.createFormGroup.get('endTime').value.toISOString() : '',
+    } as EventDto);
+    observable.subscribe({
+      next: data => {
+        this.notification.success(`Event: \'${data.name}\' successfully created.`);
+        this.router.navigate(['/event']);
+      },
+      error: err => {
+        console.log('Error creating Event', err);
+        console.log(err);
+        this.notification.error('Error creating horse: \n' + err.error.errors);
+      }
+    });
   }
-
-  //workaround with string
-  private extractDate(d: NgbDateStruct, t: NgbTimeStruct): Date{
-    const month = d.month < 10 ? '0' + d.month : d.month;
-    const day = d.day < 10 ? '0' + d.day : d.day;
-    const hour = t.hour < 10 ? '0' + t.hour : t.hour;
-    const minute = t.minute < 10 ? '0' + t.minute : t.minute;
-    const dateString = this.startDateNew.year + '-' + month + '-' + day + 'T' + hour + ':' + minute;
-    return new Date(dateString);
-  }
-
-
 }

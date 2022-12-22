@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import org.springframework.data.domain.Page;
 
 public interface EventService {
@@ -37,6 +38,7 @@ public interface EventService {
    *
    * @param event event to be created
    * @return created event
+   * @throws ValidationException when validation for EventDto fails
    */
-  public Event create(EventDto event);
+  public Event create(EventDto event) throws ValidationException;
 }

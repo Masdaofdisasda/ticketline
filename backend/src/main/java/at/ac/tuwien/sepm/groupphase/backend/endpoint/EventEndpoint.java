@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class EventEndpoint {
   @PermitAll
   @PostMapping("create")
   @ResponseStatus(code = HttpStatus.CREATED)
-  public EventDto create(@RequestBody EventDto event) {
+  public EventDto create(@RequestBody EventDto event) throws ValidationException {
     LOGGER.info("POST /api/v1/events/create");
     return eventMapper.eventToEventDto(eventService.create(event));
   }

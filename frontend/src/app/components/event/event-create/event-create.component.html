@@ -1,56 +1,33 @@
-<h1 class="display-1">Create Event</h1>
+<h1 class="display-1" xmlns="http://www.w3.org/1999/html">Create Event</h1>
 
-<form #form="ngForm" (ngSubmit)="onSubmit(form)">
-  <div class="row p-1">
-      <input type="text"
-             class="form-control col-sm"
-             id="eventName"
-             name="eventName"
-             [(ngModel)]="newEvent.name"
-             placeholder="Event Name">
-      <input type="text"
-             class="form-control col-sm"
-             id="eventCategory"
-             name="eventCategory"
-             [(ngModel)]="newEvent.category"
-             placeholder="Event Category">
-
-  </div>
-  <div class="row p-1">
+<form [formGroup]="createFormGroup">
+  <div class="form-group row">
     <div class="col-sm">
-      <div class="input-group">
-        <input
-          class="form-control"
-          placeholder="Starting date yyyy-mm-dd"
-          name="dpStart"
-          [(ngModel)]="startDateNew"
-          ngbDatepicker
-          #startpicker="ngbDatepicker"/>
-        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startpicker.toggle()" type="button"></button>
-      </div>
-      <ngb-timepicker name="startTime" [(ngModel)]="startTimeNew"></ngb-timepicker>
+      <input id="eventName" class="form-control" placeholder="Enter name of event" formControlName="eventName">
     </div>
-
     <div class="col-sm">
-      <div class="input-group">
-        <input
-          class="form-control"
-          placeholder="End date yyyy-mm-dd"
-          name="dpEnd"
-          ngbDatepicker
-          [(ngModel)]="endDateNew"
-          #endPicker="ngbDatepicker"/>
-        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endPicker.toggle()" type="button"></button>
-      </div>
-      <ngb-timepicker name="startTime" [(ngModel)]="endTimeNew"></ngb-timepicker>
+      <input id="eventCategory" class="form-control" placeholder="Enter category of event"
+             formControlName="eventCategory">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm">
+      <app-date-time-picker placeholder="Select start time of event" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                            formControlName="startTime">
+      </app-date-time-picker>
+    </div>
+    <div class="col-sm">
+      <app-date-time-picker placeholder="Select end time of event" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                            formControlName="endTime">
+      </app-date-time-picker>
     </div>
   </div>
 
-  <button type="submit"
+  <button type="button"
           class="btn btn-primary float-end"
-          [disabled]="!form.valid"
-          type="submit">
+          [disabled]="createFormGroup.invalid"
+          (click)="onSubmit(createFormGroup)">
     Create
   </button>
-
 </form>
+

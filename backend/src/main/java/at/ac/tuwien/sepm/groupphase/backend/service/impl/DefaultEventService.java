@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import org.slf4j.Logger;
@@ -23,9 +24,12 @@ public class DefaultEventService implements EventService {
   private final EventRepository eventRepository;
   private final EventMapper eventMapper;
 
-  public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper) {
+  private final EventValidator eventValidator;
+
+  public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper, EventValidator eventValidator) {
     this.eventRepository = eventRepository;
     this.eventMapper = eventMapper;
+    this.eventValidator = eventValidator;
   }
 
   /**
@@ -63,7 +67,11 @@ public class DefaultEventService implements EventService {
   }
 
   @Override
-  public Event create(EventDto event) {
+  public Event create(EventDto event) throws ValidationException {
+    //correction of time
+    event.setStartDate(event.getStartDate().plusHours(1));
+    event.setEndDate(event.getEndDate().plusHours(1));
+    eventValidator.validateEvent(event);
     return eventRepository.save(eventMapper.eventDtoToEvent(event));
   }
 }
