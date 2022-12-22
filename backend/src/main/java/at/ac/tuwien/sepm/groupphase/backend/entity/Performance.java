@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +30,16 @@ public class Performance {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private LocalDate startDate;
+  private LocalDateTime startDate;
 
-  private LocalDate endDate;
+  private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "performance", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "performance", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @Fetch(value = FetchMode.SUBSELECT)
   @Builder.Default
   private List<Ticket> tickets = new ArrayList<>();
 
-  @ManyToOne()
+  @ManyToOne
   private Event event;
 
   @ManyToOne

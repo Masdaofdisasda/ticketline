@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/dto/user.dto';
-import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {User} from 'src/app/dto/user.dto';
+import {AuthService} from '../../services/auth.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-locked-users',
@@ -10,10 +10,12 @@ import { UserService } from '../../services/user.service';
 })
 export class LockedUsersComponent implements OnInit {
   lockedUsers = [];
+
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private userService: UserService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getLocked();
@@ -22,9 +24,7 @@ export class LockedUsersComponent implements OnInit {
   /**
    * Returns true if the authenticated user is an admin
    */
-  isAdmin(): boolean {
-    return this.authService.getUserRole() === 'ADMIN';
-  }
+
 
   getLocked() {
     this.userService.getLocked().subscribe({
@@ -33,6 +33,7 @@ export class LockedUsersComponent implements OnInit {
       },
     });
   }
+
   unlock(user: User) {
     this.userService.unlock(user.id).subscribe({
       next: (res) => {

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
   <a class="navbar-brand ml-lg-5 mx-4" href="">TICKETLINE</a>
   <button class="navbar-toggler ml-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -9,25 +9,25 @@
     <div class="d-flex flex-row-reverse mx-4 w-100">
       <ul class="navbar-nav mr-5">
         <a class="nav-link mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/login"
-          routerLinkActive="active">Login</a>
+           routerLinkActive="active">Login</a>
         <a class="nav-link mx-2" *ngIf="authService.isLoggedIn()" routerLink="/"
-          (click)="authService.logoutUser()">Logout</a>
+           (click)="authService.logoutUser()">Logout</a>
         <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/registration"
-          routerLinkActive="active">Sign
+           routerLinkActive="active">Sign
           Up</a>
       </ul>
       <ul class="navbar-nav mr-auto d-flex flex-row-reverse">
         <li class="nav-item">
           <a class="nav-link" routerLink="/order/cart"
-            routerLinkActive="active">Cart</a>
+             routerLinkActive="active">Cart</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message"
-            routerLinkActive="active">Message</a>
+             routerLinkActive="active">Message</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" *ngIf="authService.isLoggedIn() && authService.getUserRole() === 'ADMIN'"
-            routerLink="/user/locked" routerLinkActive="active">Locked
+          <a class="nav-link" *ngIf="authService.isAdmin"
+             routerLink="/user/locked" routerLinkActive="active">Locked
             Users</a>
         </li>
         <li class="nav-item">

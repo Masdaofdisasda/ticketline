@@ -1,20 +1,13 @@
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-  fakeAsync,
-} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, waitForAsync,} from '@angular/core/testing';
 
-import { LockedUsersComponent } from './locked-users.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Globals } from 'src/app/global/globals';
-import { UserService } from 'src/app/services/user.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/dto/user.dto';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs/internal/observable/of';
+import {LockedUsersComponent} from './locked-users.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {UserService} from 'src/app/services/user.service';
+import {AuthService} from 'src/app/services/auth.service';
+import {User} from 'src/app/dto/user.dto';
+import {of} from 'rxjs/internal/observable/of';
 
 describe('LockedUsersComponent', () => {
   let component: LockedUsersComponent;
@@ -72,7 +65,7 @@ describe('LockedUsersComponent', () => {
   it('shows list of locked users', fakeAsync(() => {
     expect(component).toBeTruthy();
     console.log();
-    expect(component.isAdmin()).toEqual(true);
+    expect(component.authService.isAdmin()).toEqual(true);
     const name = fixture.nativeElement.querySelector('.name') as HTMLElement;
     const email = fixture.nativeElement.querySelector('h6') as HTMLElement;
     expect(email).toBeDefined();
@@ -83,7 +76,7 @@ describe('LockedUsersComponent', () => {
   it('calls unlock', fakeAsync(() => {
     expect(component).toBeTruthy();
     console.log();
-    expect(component.isAdmin()).toEqual(true);
+    expect(component.authService.isAdmin()).toEqual(true);
     const button = fixture.nativeElement.querySelector(
       '.users button'
     ) as HTMLElement;

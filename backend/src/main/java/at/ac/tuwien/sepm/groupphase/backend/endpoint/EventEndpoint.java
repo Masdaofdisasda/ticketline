@@ -10,12 +10,14 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +45,7 @@ public class EventEndpoint {
 
   @PermitAll
   @GetMapping
+  @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> findAll(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events");
@@ -53,6 +56,7 @@ public class EventEndpoint {
 
   @PermitAll
   @GetMapping("/filter")
+  @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> filter(EventSearchRequest eventSearchRequest) {
     LOGGER.info("GET /api/v1/events/filter -> query parameters: {}", eventSearchRequest);
@@ -69,6 +73,7 @@ public class EventEndpoint {
 
   @PermitAll
   @GetMapping("top-of-month")
+  @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
   public PageDtoResponse<EventDto> findTopOfMonth(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events/top-of-month");
@@ -77,9 +82,10 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
-  @PermitAll
+  @Secured("ROLE_ADMIN")
   @PostMapping("create")
   @ResponseStatus(code = HttpStatus.CREATED)
+  @Operation(summary = "Create event", security = @SecurityRequirement(name = "apiKey"))
   public EventDto create(@RequestBody EventDto event) throws ValidationException {
     LOGGER.info("POST /api/v1/events/create");
     return eventMapper.eventToEventDto(eventService.create(event));

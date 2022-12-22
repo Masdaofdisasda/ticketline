@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class PerformanceDto {
   private Long id;
-  private LocalDate startDate;
-  private LocalDate endDate;
+  private LocalDateTime startDate;
+  private LocalDateTime endDate;
 
   @Builder.Default
   private List<TicketDto> tickets = new ArrayList<>();
