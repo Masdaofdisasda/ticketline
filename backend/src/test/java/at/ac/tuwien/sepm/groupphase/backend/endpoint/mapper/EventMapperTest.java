@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +26,7 @@ class EventMapperTest {
   @Autowired
   private EventMapper mapper;
 
-  Performance performance = Performance.builder()
-    .id(7L)
-    .startDate(LocalDate.now())
-    .endDate(LocalDate.MAX)
+  Performance performance = Performance.builder().id(7L).startDate(LocalDateTime.of(2022, 12, 11, 19, 0)).endDate(LocalDateTime.MAX)
     .build();
 
   Event event = Event.builder()
@@ -42,10 +38,7 @@ class EventMapperTest {
     .performances(List.of(performance))
     .build();
 
-  PerformanceDto performanceDto = PerformanceDto.builder()
-    .id(7L)
-    .startDate(LocalDate.now())
-    .endDate(LocalDate.MAX)
+  PerformanceDto performanceDto = PerformanceDto.builder().id(7L).startDate(LocalDateTime.of(2022, 12, 11, 19, 0)).endDate(LocalDateTime.MAX)
     .build();
 
   EventDto eventDto = EventDto.builder()

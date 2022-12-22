@@ -25,19 +25,12 @@ export class MessageComponent implements OnInit {
               private ngbPaginationConfig: NgbPaginationConfig,
               private formBuilder: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
-              private authService: AuthService,
+              public authService: AuthService,
               private modalService: NgbModal) {
   }
 
   ngOnInit() {
     this.loadMessage();
-  }
-
-  /**
-   * Returns true if the authenticated user is an admin
-   */
-  isAdmin(): boolean {
-    return this.authService.getUserRole() === 'ADMIN';
   }
 
   openAddModal(messageAddModal: TemplateRef<any>) {

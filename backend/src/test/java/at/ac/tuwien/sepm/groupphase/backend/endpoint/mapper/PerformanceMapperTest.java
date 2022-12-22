@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +31,8 @@ class PerformanceMapperTest {
 
   Performance performance = Performance.builder()
     .id(0L)
-    .startDate(LocalDate.MIN)
-    .endDate(LocalDate.MAX)
+    .startDate(LocalDateTime.MIN)
+    .endDate(LocalDateTime.MAX)
     .tickets(List.of(ticket))
     .build();
 
@@ -42,8 +42,8 @@ class PerformanceMapperTest {
 
   PerformanceDto performanceDto = PerformanceDto.builder()
     .id(1L)
-    .startDate(LocalDate.EPOCH)
-    .startDate(LocalDate.now())
+    .startDate(LocalDateTime.MAX)
+    .startDate(LocalDateTime.now())
     .tickets(List.of(ticketDto))
     .build();
 

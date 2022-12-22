@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {EventService} from '../../services/event.service';
 import {EventSearchRequest} from '../../dto/event-search-request';
 import {PageDto} from '../../dto/page.dto';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-event',
@@ -13,7 +14,7 @@ export class EventComponent {
   pagedEventDtos = this.eventService.getEvents();
   eventsTopOfTheMonth = this.eventService.getTopEventsOfMonth(PageDto.initialPage());
 
-  constructor(private eventService: EventService) {
+  constructor(private eventService: EventService, public auth: AuthService) {
   }
 
   search($event: EventSearchRequest) {

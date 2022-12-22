@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { AuthRequest } from '../../dto/auth-request';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {Location} from '@angular/common';
+import {AuthRequest} from '../../dto/auth-request';
 
 @Component({
   selector: 'app-login',
@@ -24,8 +21,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {
+    private router: Router,
+    private _location: Location) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -67,7 +64,7 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(authRequest).subscribe({
       next: () => {
         console.log('Successfully logged in user: ' + authRequest.email);
-        this.router.navigate(['/message']);
+        this._location.back();
       },
       error: (error) => {
         console.log('Could not log in due to:');

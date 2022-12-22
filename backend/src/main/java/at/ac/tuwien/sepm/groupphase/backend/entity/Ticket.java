@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

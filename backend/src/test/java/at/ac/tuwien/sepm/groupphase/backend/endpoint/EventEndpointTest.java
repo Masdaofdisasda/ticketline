@@ -151,6 +151,7 @@ class EventEndpointTest implements TestData {
     mockMvc
       .perform(MockMvcRequestBuilders
         .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(eventDto1)
@@ -160,6 +161,7 @@ class EventEndpointTest implements TestData {
     mockMvc
       .perform(MockMvcRequestBuilders
         .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(eventDto2)
