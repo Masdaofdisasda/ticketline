@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import org.springframework.data.domain.Page;
@@ -9,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -51,4 +52,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     + " GROUP by ev"
     + " ORDER BY count(tk.booking) desc")
   Page<Event> findTopOfMonth(Pageable pageable);
+
+  public List<Event> findEventsByName(String name);
 }
