@@ -1,11 +1,13 @@
-<span>
+<div>
   <br>
-  <h2>Events</h2>
-  <span>
+  <div class="fourXone">
+    <h2>Events</h2>
+    <span style="width: 80%"></span>
     <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">Create Event</button>
-  </span>
+  </div>
   <br>
-</span>
+</div>
+
 <ngb-accordion #ac1="ngbAccordion" activeIds="ngb-panel-0">
   <ngb-panel title="Search for Events">
     <ng-template ngbPanelContent>

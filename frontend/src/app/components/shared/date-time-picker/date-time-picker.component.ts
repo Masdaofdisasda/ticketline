@@ -1,4 +1,15 @@
-import {AfterViewInit, Component, forwardRef, Injector, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Injector,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {NgbDatepicker, NgbDateStruct, NgbPopover, NgbPopoverConfig, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
@@ -21,7 +32,7 @@ import * as moment from 'moment/moment';
     }
   ]
 })
-export class DateTimePickerComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+export class DateTimePickerComponent implements ControlValueAccessor, OnInit, OnChanges, AfterViewInit {
 
   @Input() inputDatetimeFormat = 'dd/MM/yyyy H:mm:ss';
   @Input() placeholder = '';
@@ -31,6 +42,8 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, Af
   @Input() seconds = true;
 
   @Input() disabled = false;
+
+  @Input() clear = new EventEmitter<boolean>();
 
   public ngControl: NgControl;
 
@@ -57,6 +70,14 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, Af
   ngOnInit(): void {
     // tslint:disable-next-line: deprecation
     this.ngControl = this.inj.get(NgControl);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.clear.subscribe(bool => {
+      if (bool) {
+        this.date = null;
+      }
+    });
   }
 
   ngAfterViewInit(): void {

@@ -1,15 +1,10 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick,} from '@angular/core/testing';
 
-import { EventSearchComponent } from './event-search.component';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { EventSearchRequest } from '../../../dto/event-search-request';
-import { DateTimePickerComponent } from '../../shared/date-time-picker/date-time-picker.component';
+import {EventSearchComponent} from './event-search.component';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {EventSearchRequest} from '../../../dto/event-search-request';
+import {DateTimePickerComponent} from '../../shared/date-time-picker/date-time-picker.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('EventSearchComponent', () => {
   let component: EventSearchComponent;
@@ -17,7 +12,7 @@ describe('EventSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, HttpClientModule],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
       providers: [FormBuilder],
       declarations: [EventSearchComponent, DateTimePickerComponent],
     }).compileComponents();
@@ -55,9 +50,9 @@ describe('EventSearchComponent', () => {
       zipCode: '',
       venueName: '',
       eventHall: '',
-      from: '',
+      endTime: '',
       startTime: '',
-      genre: '',
+      category: '',
       nameOfEvent: '',
     } as EventSearchRequest);
   }));

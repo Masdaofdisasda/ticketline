@@ -18,6 +18,7 @@ describe('LockedUsersComponent', () => {
   };
   const authService = {
     getUserRole: jasmine.createSpy('getUserRole'),
+    isAdmin: jasmine.createSpy('isAdmin'),
   };
   let lockedUsers: User[];
   beforeEach(waitForAsync(() => {
@@ -30,8 +31,12 @@ describe('LockedUsersComponent', () => {
       },
     ];
     userService.getLocked.and.returnValue(of(lockedUsers));
-    userService.unlock.and.returnValue({ subscribe: () => {} });
+    userService.unlock.and.returnValue({
+      subscribe: () => {
+      }
+    });
     authService.getUserRole.and.returnValue('ADMIN');
+    authService.isAdmin.and.returnValue(true);
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -64,7 +69,6 @@ describe('LockedUsersComponent', () => {
 
   it('shows list of locked users', fakeAsync(() => {
     expect(component).toBeTruthy();
-    console.log();
     expect(component.authService.isAdmin()).toEqual(true);
     const name = fixture.nativeElement.querySelector('.name') as HTMLElement;
     const email = fixture.nativeElement.querySelector('h6') as HTMLElement;

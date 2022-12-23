@@ -7,6 +7,8 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface EventService {
 
   /**
@@ -41,4 +43,11 @@ public interface EventService {
    * @throws ValidationException when validation for EventDto fails
    */
   public Event create(EventDto event) throws ValidationException;
+
+  /**
+   * get Event categories from database.
+   *
+   * @return list of event categories
+   */
+  List<String> getCategories();
 }

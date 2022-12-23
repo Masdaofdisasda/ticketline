@@ -1,20 +1,24 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th scope="col">#</th>
-    <th scope="col">Name</th>
+    <th scope="col">Artist Name</th>
+    <th scope="col">Event Name</th>
     <th scope="col">Category</th>
     <th scope="col">Start date</th>
     <th scope="col">End date</th>
+    <th scope="col">Venue Name</th>
+    <th scope="col">Event-Hall Name</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let event of pagedEvents?.data">
-    <th scope="row">{{ event.id }}</th>
+    <td>{{ event.artistName }}</td>
     <td>{{ event.name }}</td>
     <td>{{ event.category }}</td>
     <td>{{ event.startDate | date:'short' }}</td>
     <td>{{ event.endDate | date:'short' }}</td>
+    <td>{{ event.venueName }}</td>
+    <td>{{ event.eventHallName }}</td>
     <td>
       <button type="button" [routerLink]="['/order/seats']" class="btn btn-success">Get tickets</button>
     </td>

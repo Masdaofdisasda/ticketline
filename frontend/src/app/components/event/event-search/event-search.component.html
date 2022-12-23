@@ -33,28 +33,37 @@
     <div class="card-body">
       <h5 class="card-title">Filter Events</h5>
       <div class="form-group fourXone">
-        <input class="form-control" placeholder="From" formControlName="from">
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
           <input type="radio" class="btn-check" name="tonight" id="btnradio1" autocomplete="off"
                  (change)="setDate(true)">
           <label class="btn btn-outline-primary" for="btnradio1">Today</label>
 
           <input type="radio" class="btn-check" name="tonight" id="btnradio2" autocomplete="off"
-                 formControlName="tonight" (change)="setDate(false)">
+                 (change)="setDate(false)">
           <label class="btn btn-outline-primary" for="btnradio2">Weekend</label>
         </div>
         <div class="input-group">
-          <app-date-time-picker placeholder="Select DateTime" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
-                                formControlName="startTime">
+          <app-date-time-picker placeholder="Select Start DateTime" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                formControlName="startTime" [clear]="this.clearDate">
           </app-date-time-picker>
         </div>
-
-        <input class="form-control" placeholder="Genre" formControlName="genre">
+        <div class="input-group">
+          <app-date-time-picker placeholder="Select End DateTime" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                formControlName="endTime" [clear]="this.clearDate">
+          </app-date-time-picker>
+        </div>
+        <div class="input-group">
+          <select class="form-select" formControlName="category">
+            <option></option>
+            <option *ngFor="let option of categories|async">{{option}}</option>
+          </select>
+        </div>
       </div>
       <div class="form-group" style="margin-top: 1%">
         <input class="form-control" placeholder="Name of event" formControlName="nameOfEvent">
       </div>
     </div>
-    <button type="button" class="btn btn-danger" (click)="resetSearchForm()">Reset</button>
+    <button type="button" class="btn" (click)="resetSearchForm()" style="color: red">Reset Filter
+    </button>
   </div>
 </form>

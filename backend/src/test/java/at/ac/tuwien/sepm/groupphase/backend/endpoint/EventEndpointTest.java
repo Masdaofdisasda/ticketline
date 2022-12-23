@@ -95,16 +95,16 @@ class EventEndpointTest implements TestData {
       .id(1L)
       .category("HipHop")
       .name("Test Event")
-      .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
-      .startDate(LocalDateTime.of(2022, 12, 12, 1, 30))
+      .startDate(LocalDateTime.now().plusMinutes(10))
+      .endDate(LocalDateTime.now().plusDays(7))
       .build());
 
     eventRepository.save(Event.builder()
       .id(2L)
       .category("Klassik")
       .name("Test Event 2")
-      .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
-      .startDate(LocalDateTime.of(2022, 12, 12, 1, 30))
+      .startDate(LocalDateTime.now().plusMinutes(10))
+      .endDate(LocalDateTime.now().plusDays(7))
       .build());
 
     assertThat(eventRepository.findAll().size()).isEqualTo(2);
@@ -120,7 +120,7 @@ class EventEndpointTest implements TestData {
     requestParams.add("from", null);
     requestParams.add("tonight", "false");
     requestParams.add("startTime", null);
-    requestParams.add("genre", "hip");
+    requestParams.add("category", "hip");
     requestParams.add("nameOfEvent", null);
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");

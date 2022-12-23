@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {EventDto} from '../../../dto/event.dto';
 import {PageResponseDto} from '../../../dto/page-response.dto';
 import {PageDto} from '../../../dto/page.dto';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ExtendedEventDto} from '../../../dto/extended-event.dto';
 
 @Component({
   selector: 'app-event-search-result',
@@ -11,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class EventSearchResultComponent implements OnChanges {
 
-  @Input() pagedEvents: PageResponseDto<EventDto>;
+  @Input() pagedEvents: PageResponseDto<ExtendedEventDto>;
   @Output() pageChangedEvent = new EventEmitter<PageDto>();
 
   pagedEventsDefault = PageResponseDto.getPageResponseDto();

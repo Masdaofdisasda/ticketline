@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class DefaultEventService implements EventService {
@@ -73,5 +74,10 @@ public class DefaultEventService implements EventService {
     event.setEndDate(event.getEndDate().plusHours(1));
     eventValidator.validateEvent(event);
     return eventRepository.save(eventMapper.eventDtoToEvent(event));
+  }
+
+  @Override
+  public List<String> getCategories() {
+    return eventRepository.findCategories();
   }
 }
