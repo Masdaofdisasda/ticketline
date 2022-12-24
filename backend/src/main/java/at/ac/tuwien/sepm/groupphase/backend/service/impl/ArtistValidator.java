@@ -1,0 +1,28 @@
+package at.ac.tuwien.sepm.groupphase.backend.service.impl;
+
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ArtistDto;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ArtistRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+@AllArgsConstructor
+public class ArtistValidator {
+  private ArtistRepository artistRepository;
+
+  public void validateArtist(ArtistDto artist) throws ValidationException {
+    List<String> validationErrors = new ArrayList<>();
+
+    if (artistRepository.findArtistsByName(artist.getName()).size() > 0) {
+      validationErrors.add("An Artist with the name \'" + artist.getName() + "\' already exists");
+    }
+
+    if (!validationErrors.isEmpty()) {
+      throw new ValidationException("Validation of Artist for create failed", validationErrors);
+    }
+  }
+}

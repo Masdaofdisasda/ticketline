@@ -12,5 +12,5 @@ public interface ArtistMapper {
 
   Artist artistDtoToArtist(ArtistDto artistDto);
 
-  ArtistDto artistDtoToArtist(Artist artist);
+  ArtistDto artistToArtistDto(Artist artist);
 }

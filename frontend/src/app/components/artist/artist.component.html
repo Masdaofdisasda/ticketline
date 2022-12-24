@@ -1,0 +1,18 @@
+<span>
+    <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">Create Artist</button>
+</span>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Name</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let artist of artists">
+    <th scope="row">{{ artist.id }}</th>
+    <td>{{ artist.name }}</td>
+  </tr>
+  </tbody>
+</table>

@@ -68,7 +68,7 @@ public class DefaultEventService implements EventService {
 
   @Override
   public Event create(EventDto event) throws ValidationException {
-    //correction of time
+    //convert GMT to GMT+1
     event.setStartDate(event.getStartDate().plusHours(1));
     event.setEndDate(event.getEndDate().plusHours(1));
     eventValidator.validateEvent(event);

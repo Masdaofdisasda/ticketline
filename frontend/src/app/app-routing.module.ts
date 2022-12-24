@@ -12,6 +12,8 @@ import {LockedUsersComponent} from './components/locked-users/locked-users.compo
 import {SeatSelectionComponent} from './components/order/seat-selection/seat-selection.component';
 import {CheckoutComponent} from './components/order/checkout/checkout.component';
 import {OrderCompleteComponent} from './components/order/order-complete/order-complete.component';
+import {ArtistComponent} from './components/artist/artist.component';
+import {ArtistCreateComponent} from './components/artist/artist-create/artist-create.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/event', pathMatch: 'full'},
@@ -26,6 +28,8 @@ const routes: Routes = [
   {path: 'event', component: EventComponent},
   {path: 'event/create', component: EventCreateComponent},
   {path: 'event', component: EventComponent,},
+  {path: 'artist', component: ArtistComponent},
+  {path: 'artist/create', component: ArtistCreateComponent},
   {
     path: 'order', children: [
       {path: 'seats', component: SeatSelectionComponent},
@@ -39,4 +43,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
