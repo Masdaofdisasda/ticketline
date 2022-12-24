@@ -17,6 +17,7 @@ public interface TestData {
   String MESSAGE_BASE_URI = BASE_URI + "/messages";
   String USER_BASE_URI = BASE_URI + "/user";
   String EVENT_BASE_URI = BASE_URI + "/events";
+  String ARTIST_BASE_URI = BASE_URI + "/artists";
   String AUTH_BASE_URI = BASE_URI + "/authentication";
 
   String ADMIN_USER = "admin@email.com";

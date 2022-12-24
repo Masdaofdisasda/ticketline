@@ -16,6 +16,7 @@ import { of } from 'rxjs/internal/observable/of';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('EventCreateComponent', () => {
   let component: EventCreateComponent;
@@ -32,6 +33,7 @@ describe('EventCreateComponent', () => {
         ReactiveFormsModule,
         ToastrModule.forRoot(),
         NgbModule,
+        HttpClientTestingModule,
         BrowserAnimationsModule,
         RouterTestingModule.withRoutes([]),
       ],

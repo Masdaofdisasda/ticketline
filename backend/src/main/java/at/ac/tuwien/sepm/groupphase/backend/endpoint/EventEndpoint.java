@@ -82,6 +82,10 @@ public class EventEndpoint {
       eventMapper.eventToEventDto(page.getContent()));
   }
 
+  private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {
+    return new PageDtoResponse<>(pageIndex, pageSize, hits, pagesTotal, data);
+  }
+
   @Secured("ROLE_ADMIN")
   @PostMapping("create")
   @ResponseStatus(code = HttpStatus.CREATED)
@@ -89,9 +93,5 @@ public class EventEndpoint {
   public EventDto create(@RequestBody EventDto event) throws ValidationException {
     LOGGER.info("POST /api/v1/events/create");
     return eventMapper.eventToEventDto(eventService.create(event));
-  }
-
-  private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {
-    return new PageDtoResponse<>(pageIndex, pageSize, hits, pagesTotal, data);
   }
 }

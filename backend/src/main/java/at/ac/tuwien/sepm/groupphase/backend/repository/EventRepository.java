@@ -53,5 +53,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     + " ORDER BY count(tk.booking) desc")
   Page<Event> findTopOfMonth(Pageable pageable);
 
-  public List<Event> findEventsByName(String name);
+  List<Event> findEventsByName(String name);
 }

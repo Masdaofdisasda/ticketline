@@ -9,6 +9,8 @@ import { EventService } from '../../../services/event.service';
 import { EventDto } from '../../../dto/event.dto';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs/internal/observable/of';
+import { ArtistService } from '../../../services/artist.service';
 
 @Component({
   selector: 'app-event-create',
@@ -22,7 +24,8 @@ export class EventCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private eventService: EventService,
     private router: Router,
-    private notification: ToastrService
+    private notification: ToastrService,
+    private artistService: ArtistService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +37,10 @@ export class EventCreateComponent implements OnInit {
     });
   }
 
-  public onSubmit(): void {
+  artistSuggestion = (input: string) =>
+    input === '' ? of([]) : this.artistService.filterByName(input);
+
+  onSubmit(): void {
     const observable = this.eventService.create({
       name: this.createFormGroup.get('eventName').value,
       category: this.createFormGroup.get('eventCategory').value,

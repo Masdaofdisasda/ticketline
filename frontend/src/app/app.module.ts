@@ -26,6 +26,8 @@ import {ShoppingCartComponent} from './components/order/shopping-cart/shopping-c
 import {TicketItemComponent} from './components/order/ticket-item/ticket-item.component';
 import {CheckoutComponent} from './components/order/checkout/checkout.component';
 import {OrderCompleteComponent} from './components/order/order-complete/order-complete.component';
+import {ArtistComponent} from './components/artist/artist.component';
+import { ArtistCreateComponent } from './components/artist/artist-create/artist-create.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import {OrderCompleteComponent} from './components/order/order-complete/order-co
     CheckoutComponent,
     OrderCompleteComponent,
     EventCreateComponent,
+    ArtistComponent,
+    ArtistCreateComponent,
   ],
   imports: [
     BrowserModule,

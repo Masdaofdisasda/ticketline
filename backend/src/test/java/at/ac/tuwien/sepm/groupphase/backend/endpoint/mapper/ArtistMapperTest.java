@@ -31,8 +31,8 @@ class ArtistMapperTest {
   }
 
   @Test
-  void testArtistDtoToArtist() {
-    ArtistDto currentDto = mapper.artistDtoToArtist(artist);
+  void testArtistToArtistDto() {
+    ArtistDto currentDto = mapper.artistToArtistDto(artist);
     assertAll(() -> {
       assertThat(currentDto.getId()).isEqualTo(artist.getId());
       assertThat(currentDto.getName()).isEqualTo(artist.getName());
