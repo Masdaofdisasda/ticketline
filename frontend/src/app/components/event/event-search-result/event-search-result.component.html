@@ -20,7 +20,7 @@
     <td>{{ event.venueName }}</td>
     <td>{{ event.eventHallName }}</td>
     <td>
-      <button type="button" [routerLink]="['/order/seats']" class="btn btn-success">Get tickets</button>
+      <button type="button" [routerLink]="[event.id, 'seats']" class="btn btn-primary">Get tickets</button>
     </td>
   </tr>
   </tbody>

@@ -1,0 +1,54 @@
+<h1 class="display-1 py-4">Bookings</h1>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Booked on</th>
+    <th scope="col">Status</th>
+    <th scope="col">Total</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let booking of bookings">
+    <th scope="row">{{ booking.id }}</th>
+    <td>{{ booking.bookedOn | date:'short'}}</td>
+    <td class="align-middle">
+      <span *ngIf="booking.type==='RESERVATION'" class="badge badge-pill bg-warning text-dark">reserved</span>
+      <span *ngIf="booking.type==='PURCHASE'" class="badge badge-pill bg-success">purchased</span>
+    </td>
+    <td>{{ booking.orderTotal }} €</td>
+    <td>
+      <div class="btn-group" role="group">
+      <button *ngIf="booking.type==='RESERVATION'" type="button" class="btn btn-outline-primary"
+              (click)="purchaseReservation(booking.id)"
+      >
+        <i class="bi bi-wallet2 me-2"></i>Purchase</button>
+      <button type="button" [routerLink]="['seats']" class="btn btn-outline-secondary">
+        <i class="bi bi-ticket-perforated-fill me-2"></i>Tickets</button>
+      <button type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#'+'cancel-btn'+booking.id" class="btn btn-outline-danger">
+        <i class="bi bi-x-lg me-2"></i>Cancel</button>
+      </div>
+    </td>
+
+    <div class="modal fade" [id]="'cancel-btn'+booking.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cancel booking</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to cancel your Booking?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" (click)="cancelBooking(booking.id)" data-bs-dismiss="modal" class="btn btn-danger">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </tr>
+  </tbody>
+</table>

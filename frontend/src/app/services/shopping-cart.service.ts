@@ -17,19 +17,29 @@ export class ShoppingCartService {
     const tickets = this.getItems();
     tickets.push(ticket);
     this.ticketsSubject.next(tickets);
+    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
   }
 
   removeItem(ticket: Ticket) {
     const tickets = this.getItems();
     this.ticketsSubject.next(tickets.filter(ele => ele !== ticket));
+    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
   }
 
   getItems(): Ticket[] {
+    if (this.ticketsSubject.getValue()) {
+      const retrievedObject = localStorage.getItem('cart');
+      if (retrievedObject) {
+        this.ticketsSubject.next(JSON.parse(retrievedObject));
+      }
+    }
+
     return this.ticketsSubject.getValue();
   }
 
   clearCart() {
     this.ticketsSubject.next([]);
+    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
   }
 
   isEmpty(): boolean {

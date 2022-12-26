@@ -55,7 +55,7 @@ class PerformanceMapperTest {
       assertThat(currentPerformance.getId()).isEqualTo(performanceDto.getId());
       assertThat(currentPerformance.getStartDate()).isEqualTo(performanceDto.getStartDate());
       assertThat(currentPerformance.getEndDate()).isEqualTo(performanceDto.getEndDate());
-      assertThat(currentPerformance.getTickets()).isEqualTo(List.of(ticket));
+      assertThat(currentPerformance.getTickets()).hasSameSizeAs(List.of(ticket));
     });
   }
 
