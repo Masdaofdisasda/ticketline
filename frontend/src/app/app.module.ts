@@ -27,7 +27,9 @@ import {TicketItemComponent} from './components/order/ticket-item/ticket-item.co
 import {CheckoutComponent} from './components/order/checkout/checkout.component';
 import {OrderCompleteComponent} from './components/order/order-complete/order-complete.component';
 import {ArtistComponent} from './components/artist/artist.component';
-import { ArtistCreateComponent } from './components/artist/artist-create/artist-create.component';
+import {ArtistCreateComponent} from './components/artist/artist-create/artist-create.component';
+import {UserComponent} from './components/user/user/user.component';
+import {BookingsComponent} from './components/user/bookings/bookings.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { ArtistCreateComponent } from './components/artist/artist-create/artist-
     EventCreateComponent,
     ArtistComponent,
     ArtistCreateComponent,
+    UserComponent,
+    BookingsComponent,
   ],
   imports: [
     BrowserModule,

@@ -14,29 +14,32 @@ import {CheckoutComponent} from './components/order/checkout/checkout.component'
 import {OrderCompleteComponent} from './components/order/order-complete/order-complete.component';
 import {ArtistComponent} from './components/artist/artist.component';
 import {ArtistCreateComponent} from './components/artist/artist-create/artist-create.component';
+import {UserComponent} from './components/user/user/user.component';
+import {BookingsComponent} from './components/user/bookings/bookings.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/event', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'registration', component: RegistrationComponent},
+  {path: 'user', component: UserComponent},
+  {path: 'user/bookings', component: BookingsComponent},
   {
     path: 'user/locked',
     canActivate: [AuthGuard],
     component: LockedUsersComponent,
   },
   {path: 'message', component: MessageComponent},
+
   {path: 'event', component: EventComponent},
   {path: 'event/create', component: EventCreateComponent},
   {path: 'event', component: EventComponent,},
+  {path: 'event/:eventId/seats', component: SeatSelectionComponent},
+
   {path: 'artist', component: ArtistComponent},
   {path: 'artist/create', component: ArtistCreateComponent},
-  {
-    path: 'order', children: [
-      {path: 'seats', component: SeatSelectionComponent},
-      {path: 'cart', component: CheckoutComponent, pathMatch: 'full'},
-      {path: ':bookingId', component: OrderCompleteComponent}
-    ]
-  },
+
+  {path: 'order/cart', component: CheckoutComponent, pathMatch: 'full'},
+  {path: 'order/:bookingId', component: OrderCompleteComponent},
 ];
 
 @NgModule({

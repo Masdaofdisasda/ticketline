@@ -52,8 +52,10 @@ public class ApplicationUser {
   private Date lockTime;
 
   private Boolean admin;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(FetchMode.JOIN)
+  @Builder.Default
   private List<Booking> bookings = new java.util.ArrayList<>();
 
   public ApplicationUser(String email, String password, String firstName, String lastName, Boolean admin) {
@@ -62,5 +64,13 @@ public class ApplicationUser {
     this.firstName = firstName;
     this.lastName = lastName;
     this.admin = admin;
+  }
+
+  public void addBooking(Booking booking) {
+    if (bookings.contains(booking)) {
+      return;
+    }
+    bookings.add(booking);
+    booking.setUser(this);
   }
 }

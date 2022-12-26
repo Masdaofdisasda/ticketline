@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.BookingMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
@@ -29,6 +31,7 @@ import java.util.Optional;
 public class BookingServiceImpl implements BookingService {
 
   private final UserRepository userRepository;
+  private final BookingMapper bookingMapper;
 
   @Override
   @Transactional
@@ -64,12 +67,53 @@ public class BookingServiceImpl implements BookingService {
       new NotFoundException("No booking with id " + bookingId + " found for current user")
     );
 
-    return BookingDetailDto.builder()
-      .bookingId(booking.getId())
-      .boughtByEmail(getEmail())
-      .orderTotal(getTotal(booking))
-      .type(booking.getBookingType())
-      .build();
+    return bookingMapper.map(booking, getEmail());
+  }
+
+  @Override
+  public List<BookingItemDto> fetchBookings() {
+    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    List<Booking> bookings = user.getBookings();
+
+    return bookingMapper.map(bookings);
+  }
+
+  @Override
+  @Transactional
+  public void cancelBooking(Long bookingId) {
+    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    Optional<Booking> matchingBooking = user.getBookings()
+      .stream()
+      .filter(booking -> Objects.equals(booking.getId(), bookingId))
+      .findFirst();
+
+    Booking booking = matchingBooking.orElseThrow(() ->
+      new NotFoundException("No booking with id " + bookingId + " found for current user")
+    );
+
+    List<Booking> bookings = user.getBookings();
+    bookings.removeIf(b -> b.equals(booking));
+    user.setBookings(bookings);
+
+    userRepository.save(user);
+  }
+
+  @Override
+  @Transactional
+  public void purchaseReservation(Long bookingId) {
+    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    Optional<Booking> matchingBooking = user.getBookings()
+      .stream()
+      .filter(booking -> Objects.equals(booking.getId(), bookingId))
+      .findFirst();
+
+    Booking booking = matchingBooking.orElseThrow(() ->
+      new NotFoundException("No booking with id " + bookingId + " found for current user")
+    );
+
+    booking.setBookingType(BookingType.PURCHASE);
+
+    userRepository.save(user);
   }
 
   private static Long getLatestBooking(ApplicationUser user) {
@@ -87,29 +131,21 @@ public class BookingServiceImpl implements BookingService {
     return latestBooking.orElseThrow(NotFoundException::new).getId();
   }
 
-  private static Float getTotal(Booking booking) {
-    return booking.getTickets().stream()
-      .map(Ticket::getPrice)
-      .toList().stream()
-      .reduce(0f, Float::sum);
-  }
 
   private ApplicationUser attachBookingToUser(Booking booking) {
     ApplicationUser user = userRepository.findUserByEmail(getEmail());
-    List<Booking> userBookings = user.getBookings();
-    userBookings.add(booking);
-    user.setBookings(userBookings);
-    booking.setUser(user);
+    user.addBooking(booking);
     return userRepository.save(user);
   }
 
   private Booking createBookingFromTickets(Collection<TicketDto> tickets, BookingType type) {
-    var booking = new Booking();
+    Booking booking = new Booking();
     List<Ticket> ticketList = tickets
       .stream().sequential()
-      .map(ticketDto -> Ticket.builder().price(ticketDto.getPrice()).booking(booking).build()) //TODO: create mapper & extend Tickets fields
+      .map(ticketDto -> Ticket.builder().price(ticketDto.getPrice()).build()) //TODO: create mapper & extend Tickets fields
       .toList();
-    booking.setTickets(ticketList);
+
+    ticketList.forEach(booking::addTicket);
     booking.setBookingType(type);
     booking.setCreatedDate(LocalDateTime.now());
 

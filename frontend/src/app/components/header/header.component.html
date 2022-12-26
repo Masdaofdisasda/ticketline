@@ -15,6 +15,10 @@
         <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/registration"
            routerLinkActive="active">Sign
           Up</a>
+        <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="authService.isLoggedIn()" routerLink="/user"
+          routerLinkActive="active">
+          <i class="bi bi-person-circle me-2"></i>Account
+        </a>
       </ul>
       <ul class="navbar-nav mr-auto d-flex flex-row-reverse">
         <li class="nav-item">

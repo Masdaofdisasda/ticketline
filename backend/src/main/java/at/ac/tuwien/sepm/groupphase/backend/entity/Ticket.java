@@ -2,8 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 
-@Data
 @Builder(toBuilder = true)
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -25,7 +27,7 @@ public class Ticket {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false) //TODO solve floating point precision errors
+  @Column(nullable = false) //TODO use bigdecimal instead of float
   private float price;
 
   @OneToOne(mappedBy = "ticket")
