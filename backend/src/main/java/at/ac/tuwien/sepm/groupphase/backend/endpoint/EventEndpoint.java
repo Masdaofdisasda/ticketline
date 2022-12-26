@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ExtendedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
@@ -47,18 +48,18 @@ public class EventEndpoint {
   @GetMapping
   @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
-  public PageDtoResponse<EventDto> findAll(PageDto pageDto) {
+  public PageDtoResponse<ExtendedEventDto> findAll(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events");
     Page<Event> page = eventService.findAll(pageDto);
     return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
-      eventMapper.eventToEventDto(page.getContent()));
+      eventMapper.eventToExtendedEventDto(page.getContent()));
   }
 
   @PermitAll
   @GetMapping("/filter")
   @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
-  public PageDtoResponse<EventDto> filter(EventSearchRequest eventSearchRequest) {
+  public PageDtoResponse<ExtendedEventDto> filter(EventSearchRequest eventSearchRequest) {
     LOGGER.info("GET /api/v1/events/filter -> query parameters: {}", eventSearchRequest);
     Page<Event> page;
     try {
@@ -68,22 +69,18 @@ public class EventEndpoint {
     }
 
     return buildResponseDto(eventSearchRequest.pageIndex(), page.getSize(), page.getTotalElements(), page.getTotalPages(),
-      eventMapper.eventToEventDto(page.getContent()));
+      eventMapper.eventToExtendedEventDto(page.getContent()));
   }
 
   @PermitAll
   @GetMapping("top-of-month")
   @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of events")
-  public PageDtoResponse<EventDto> findTopOfMonth(PageDto pageDto) {
+  public PageDtoResponse<ExtendedEventDto> findTopOfMonth(PageDto pageDto) {
     LOGGER.info("GET /api/v1/events/top-of-month");
     Page<Event> page = eventService.topOfMonth(pageDto);
     return buildResponseDto(pageDto.pageIndex(), page.getSize(), page.getTotalElements(), page.getTotalPages(),
-      eventMapper.eventToEventDto(page.getContent()));
-  }
-
-  private PageDtoResponse<EventDto> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<EventDto> data) {
-    return new PageDtoResponse<>(pageIndex, pageSize, hits, pagesTotal, data);
+      eventMapper.eventToExtendedEventDto(page.getContent()));
   }
 
   @Secured("ROLE_ADMIN")
@@ -93,5 +90,18 @@ public class EventEndpoint {
   public EventDto create(@RequestBody EventDto event) throws ValidationException {
     LOGGER.info("POST /api/v1/events/create");
     return eventMapper.eventToEventDto(eventService.create(event));
+  }
+
+  @PermitAll
+  @GetMapping("categories")
+  @ResponseStatus(code = HttpStatus.OK)
+  @Operation(summary = "Get list of categories")
+  public List<String> getCategories() {
+    LOGGER.info("GET /api/v1/events/categories");
+    return eventService.getCategories();
+  }
+
+  private <T extends EventDto> PageDtoResponse<T> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<T> data) {
+    return new PageDtoResponse<T>(pageIndex, pageSize, hits, pagesTotal, data);
   }
 }

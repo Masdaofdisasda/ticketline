@@ -1,8 +1,14 @@
-<div *ngIf="authService.isAdmin()">
-  <div class="d-flex justify-content-between">
-    <h2 class="my-2">Locked Users</h2>
-    <button class="btn btn-secondary my-2" (click)="getLocked()">refresh</button>
+<div>
+  <br>
+  <div class="fourXone">
+    <h2>Locked Users</h2>
+    <span style="width: 80%"></span>
+    <button type="button" class="btn btn-secondary mr-1" (click)="getLocked()" *ngIf="authService.isAdmin()">refresh
+    </button>
   </div>
+  <br>
+</div>
+<div *ngIf="authService.isAdmin()">
   <div class="list-group w-auto" *ngFor="let user of lockedUsers">
     <div href="#" class="list-group-item d-flex gap-3 py-3" aria-current="true">
       <div class="d-flex w-100 justify-content-between users">

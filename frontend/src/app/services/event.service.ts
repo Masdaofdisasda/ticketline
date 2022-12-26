@@ -6,6 +6,7 @@ import {EventDto} from '../dto/event.dto';
 import {EventSearchRequest} from '../dto/event-search-request';
 import {PageResponseDto} from '../dto/page-response.dto';
 import {PageDto} from '../dto/page.dto';
+import {ExtendedEventDto} from '../dto/extended-event.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +38,9 @@ export class EventService {
       .set('zipCode', eventSearchRequest.zipCode)
       .set('venueName', eventSearchRequest.venueName)
       .set('eventHall', eventSearchRequest.eventHall)
-      .set('from', eventSearchRequest.from)
       .set('startTime', eventSearchRequest.startTime)
-      .set('genre', eventSearchRequest.genre)
+      .set('endTime', eventSearchRequest.endTime)
+      .set('category', eventSearchRequest.category)
       .set('nameOfEvent', eventSearchRequest.nameOfEvent)
       .set('pageIndex', eventSearchRequest.pageIndex)
       .set('pageSize', eventSearchRequest.pageSize);
@@ -47,17 +48,21 @@ export class EventService {
     return this.httpClient.get<PageResponseDto<EventDto>>(this.eventBaseUri + '/filter', {params});
   }
 
-  getTopEventsOfMonth(pageDto: PageDto): Observable<PageResponseDto<EventDto>> {
+  getTopEventsOfMonth(pageDto: PageDto): Observable<PageResponseDto<ExtendedEventDto>> {
     const params = new HttpParams()
       .set('pageIndex', pageDto.pageIndex)
       .set('pageSize', pageDto.pageSize);
 
-    return this.httpClient.get<PageResponseDto<EventDto>>(this.eventBaseUri + '/top-of-month', {params});
+    return this.httpClient.get<PageResponseDto<ExtendedEventDto>>(this.eventBaseUri + '/top-of-month', {params});
   }
 
   create(event: EventDto): Observable<EventDto> {
     console.log('Sending to : ' + this.eventBaseUri + '/create');
     console.log(event);
     return this.httpClient.post<EventDto>(this.eventBaseUri + '/create', event);
+  }
+
+  getCategories(): Observable<string[]> {
+    return this.httpClient.get<string[]>(this.eventBaseUri + '/categories');
   }
 }

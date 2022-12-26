@@ -6,9 +6,9 @@ export class EventSearchRequest {
   zipCode: string;
   venueName: string;
   eventHall: string;
-  from: string;
   startTime: string;
-  genre: string;
+  endTime: string;
+  category: string;
   nameOfEvent: string;
   pageIndex: number;
   pageSize: number;
@@ -22,9 +22,9 @@ export class EventSearchRequest {
       zipCode: '',
       venueName: '',
       eventHall: '',
-      from: '',
       startTime: '',
-      genre: '',
+      endTime: '',
+      category: '',
       nameOfEvent: '',
       pageIndex: 0,
       pageSize: 10

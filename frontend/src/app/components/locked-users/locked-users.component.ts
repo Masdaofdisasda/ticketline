@@ -24,8 +24,6 @@ export class LockedUsersComponent implements OnInit {
   /**
    * Returns true if the authenticated user is an admin
    */
-
-
   getLocked() {
     this.userService.getLocked().subscribe({
       next: (res) => {

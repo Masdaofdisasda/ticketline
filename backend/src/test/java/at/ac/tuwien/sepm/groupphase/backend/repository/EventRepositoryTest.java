@@ -28,13 +28,13 @@ class EventRepositoryTest {
   private EventRepository eventRepository;
 
   @Test
-  void findForFilter_withQueryParams_shouldReturnOneHit() {
+  void findForFilter_withQueryParams_shouldReturnFiveHits() {
     for (int i = 1; i <= 10; i++) {
       eventRepository.save(Event.builder()
         .id((long) i)
         .name("Test Event" + i)
         .category("Category " + i)
-        .startDate(LocalDateTime.now())
+        .startDate(LocalDateTime.now().plusMinutes(10))
         .endDate(LocalDateTime.now().plusHours(3))
         .build());
     }

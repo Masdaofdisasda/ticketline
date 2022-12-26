@@ -5,18 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDto {
-  Long id;
-  String name;
-  String category;
-  LocalDateTime startDate;
-  LocalDateTime endDate;
-  private List<PerformanceDto> performances;
+public class ExtendedEventDto extends EventDto {
+  private String artistName;
+  private String venueName;
+  private String eventHallName;
 }
