@@ -11,9 +11,9 @@ import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.Artist
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventFixture.buildEvent1;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventFixture.buildEvent2;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventFixture.buildEvent3;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.LocationFixture.buildLocation1;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.LocationFixture.buildLocation2;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.LocationFixture.buildLocation3;
+import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue1;
+import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue2;
+import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue3;
 
 public class PerformanceFixture {
 
@@ -22,7 +22,7 @@ public class PerformanceFixture {
       .id(1L)
       .startDate(LocalDateTime.now())
       .endDate(LocalDateTime.now().plusDays(7))
-      .location(buildLocation1())
+      .venue(buildVenue1())
       .artist(buildArtist1())
       .tickets(new ArrayList<>())
       .event(buildEvent1())
@@ -34,7 +34,7 @@ public class PerformanceFixture {
       .id(2L)
       .startDate(LocalDateTime.now().plusDays(1))
       .endDate(LocalDateTime.now().plusDays(7))
-      .location(buildLocation2())
+      .venue(buildVenue2())
       .artist(buildArtist2())
       .tickets(new ArrayList<>())
       .event(buildEvent2())
@@ -47,7 +47,7 @@ public class PerformanceFixture {
       .startDate(LocalDateTime.now().plusDays(2))
       .endDate(LocalDateTime.now().plusDays(7))
       .artist(buildArtist3())
-      .location(buildLocation3())
+      .venue(buildVenue3())
       .tickets(new ArrayList<>())
       .event(buildEvent3())
       .build();

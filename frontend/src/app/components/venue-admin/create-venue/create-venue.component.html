@@ -1,0 +1,78 @@
+<h1>Create a new venue:</h1>
+<h2>General Information:</h2>
+<form #createVenueForm="ngForm" class="form-group">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-lg-4 col-lg-4 labeled-input">
+      <label for="name">Name:</label>
+      <input class="form-control" name="name" label="Name:" type="text" placeholder="" [(ngModel)]="venue.name" required
+             #nameInput/>
+      <p *ngIf="nameInput.touched && !nameInput.valid" class="text-danger">Name is required</p>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+      <label for="city">City:</label>
+      <input class="form-control" name="city" label="City:" type="text" placeholder="" [(ngModel)]="venue.city" required
+             #cityInput/>
+      <p *ngIf="cityInput.touched && !cityInput.valid" class="text-danger">City is required</p>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4 d-flex address">
+      <div class="street d-inline-block">
+        <label for="street">Street:</label>
+        <input class="form-control" name="street" label="Street:" type="text" placeholder="" [(ngModel)]="venue.street"
+               required #streetInput/>
+      </div>
+      <div class="houseNumber d-inline-block">
+        <label for="houseNumber">Number:</label>
+        <input class="form-control" name="houseNumber" label="House number: " type="text" placeholder=""
+               [(ngModel)]="venue.houseNumber" required #houseNumberInput/>
+      </div>
+      <p *ngIf="(streetInput.touched && !streetInput.valid) || (houseNumberInput.dirty && houseNumberInput.invalid)"
+         class="text-danger">Street and house number are required</p>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+            <label for="zipCode">ZIP code:</label>
+      <input class="form-control" name="zipCode" type="text" placeholder="" [(ngModel)]="venue.zipCode" required
+             #zipCodeInput/>
+            <p *ngIf="zipCodeInput.touched && !zipCodeInput.valid" class="text-danger">ZIP-Code is required</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+            <label for="country">Country:</label>
+          <input class="form-control" name="country" type="text" placeholder="" [(ngModel)]="venue.country"
+                 #countryInput/>
+            <p *ngIf="countryInput.touched && !countryInput.valid" class="text-danger">Country is required</p>
+        </div>
+    </div>
+</form>
+<h2>{{confirmText + ' rooms'}}:</h2>
+<button name="button" class="btn btn-outline-primary dropdown-toggle mt-2 mb-2 text-right" type="button" id="addRoomDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="bi bi-plus"></i>Add room…
+    </button>
+
+<div class="dropdown-menu" aria-labelledby="addRoomDropdown">
+  <form #addRoomForm="ngForm" class="form-group">
+    <h5>Input size:</h5>
+    <label for="name">Name:</label>
+    <input class="form-control" type="text" name="name" [(ngModel)]="roomToAdd.name" #createRoomNameInput required>
+    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Name is required</p>
+    <label for="rows">Rows:</label>
+    <input class="form-control" type="number" name="rows" [(ngModel)]="roomToAdd.rowSize" #createRoomRowsInput required>
+    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of rows are required!</p>
+    <label for="columns">Columns:</label>
+    <input class="form-control" type="number" name="columns" [(ngModel)]="roomToAdd.columnSize" #createRoomColumnsInput
+           required>
+    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of columns are required!</p>
+        <button class="btn btn-secondary float-start" type="">Cancel</button>
+        <button class="btn btn-primary float-end" type="submit" (click)="addRoom($event)">Create</button>
+    </form>
+</div>
+
+<ngb-accordion>
+    <ngb-panel *ngFor="let room of venue.rooms" [title]="room.name">
+        <ng-template ngbPanelContent>
+            <app-room-element [room]="room"></app-room-element>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>
+
+<div>
+    <button class="btn confirm btn-primary mt-2" (click)="onCreateVenueClick()" [disabled]="!createVenueForm.valid || !this.venue.rooms || this.venue.rooms?.length === 0">{{confirmText}}</button>
+</div>

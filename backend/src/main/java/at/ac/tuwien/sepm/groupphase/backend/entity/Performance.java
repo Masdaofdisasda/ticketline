@@ -39,14 +39,20 @@ public class Performance {
   @Builder.Default
   private List<Ticket> tickets = new ArrayList<>();
 
+  @OneToMany
+  private List<PriceCategory> priceCategories;
+
   @ManyToOne
   private Event event;
+
+  @ManyToOne
+  private Room room;
 
   @ManyToOne
   private Artist artist;
 
   @ManyToOne
-  private Location location;
+  private Venue venue;
 
   @Override
   public String toString() {

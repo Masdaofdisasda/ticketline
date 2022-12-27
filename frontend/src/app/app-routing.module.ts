@@ -4,6 +4,9 @@ import {LoginComponent} from './components/login/login.component';
 
 import {AuthGuard} from './guards/auth.guard';
 import {MessageComponent} from './components/message/message.component';
+import {CreateVenueComponent} from './components/venue-admin/create-venue/create-venue.component';
+import {VenueAdminComponent} from './components/venue-admin/venue-admin.component';
+import {ShowVenueComponent} from './components/venue-admin/show-venue/show-venue.component';
 import {EventComponent} from './components/event/event.component';
 import {RegistrationComponent} from './components/registration/registration.component';
 import {EventCreateComponent} from './components/event/event-create/event-create.component';
@@ -28,11 +31,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: LockedUsersComponent,
   },
-  {path: 'message', component: MessageComponent},
-
   {path: 'event', component: EventComponent},
   {path: 'event/create', component: EventCreateComponent},
-  {path: 'event', component: EventComponent,},
+  {path: 'event', component: EventComponent},
   {path: 'event/:eventId/seats', component: SeatSelectionComponent},
 
   {path: 'artist', component: ArtistComponent},
@@ -40,6 +41,17 @@ const routes: Routes = [
 
   {path: 'order/cart', component: CheckoutComponent, pathMatch: 'full'},
   {path: 'order/:bookingId', component: OrderCompleteComponent},
+  {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
+  {
+    path: 'venue', children: [
+      {path: 'create', component: CreateVenueComponent, data: {edit: false}},
+    { path: 'edit', component: CreateVenueComponent, data: {edit: true}}
+  ]},
+  {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
+  {path: 'admin/venue/create', component: CreateVenueComponent, data: {edit: false}},
+  {path: 'admin/venue/edit/:id', component: CreateVenueComponent, data: {edit: true}},
+  {path: 'admin/venue/show/:id', component: ShowVenueComponent},
+  {path: 'admin/venue', component: VenueAdminComponent, pathMatch: 'full'}
 ];
 
 @NgModule({

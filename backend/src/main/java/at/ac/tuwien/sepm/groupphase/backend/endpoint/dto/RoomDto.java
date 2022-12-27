@@ -16,9 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomDto {
   private Long id;
-
-  private List<SeatingPlanDto> seatingPlans;
-
+  private String name;
+  private Integer columnSize;
+  private Integer rowSize;
   private List<SectorDto> sectors;
-
 }

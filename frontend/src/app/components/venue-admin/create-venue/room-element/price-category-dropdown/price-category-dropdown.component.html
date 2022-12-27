@@ -1,0 +1,38 @@
+<div class="dropdown">
+    <label for="button" class="d-block">Price category:</label>
+    <button name="button" class="btn btn-outline-secondary dropdown-toggle" type="button" id="priceCategoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #dropdownButton>
+        <ng-container *ngIf="selected">
+            <i class="bi bi-square-fill" [ngStyle]="{color: '#' + selected.color}"></i> {{selected.name}}
+        </ng-container>
+        <ng-container *ngIf="!selected">
+            Price category:
+        </ng-container>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="priceCategoryDropdown">
+        <div class="options" *ngIf="currentMode === 'default'">
+            <ng-container *ngIf="priceCategories && priceCategories.length > 0">
+                <button *ngFor="let category of priceCategories" class="dropdown-item" (click)="selectOption($event, category)">
+                    <i class="bi bi-square-fill" [ngStyle]="{color: '#' + category.color}"></i> {{category.name}}
+                 </button>
+                <div class="dropdown-divider"></div>
+            </ng-container>
+            <div class="text-right mr-1">
+                <button class="btn btn-primary" (click)="openCreateView($event)"><i class="bi bi-plus"></i>Create new</button>
+            </div>
+        </div>
+        <div class="createNew" *ngIf="currentMode === 'createNew'">
+            <form #addForm="ngForm">
+                <label for="name">Name:</label>
+                <input class="form-control" name="name" type="text" required [(ngModel)]="priceCategoryAdd.name"
+                       #priceCategoryName="ngModel">
+                <p *ngIf="priceCategoryName.touched && priceCategoryName.invalid" class="text-danger">Name is required</p>
+                <label for="name">Color:</label>
+                <app-color-input-field [(color)]="priceCategoryAdd.color" (contentChange)="checkSimilarity()" #colorInput></app-color-input-field>
+                <p *ngIf="colorInput.touched && colorInput.valid && colorSimilarTo" class="text-warning"><i class="bi bi-exclamation-triangle"></i>The selected color is similar to {{colorSimilarTo}}</p>
+                <p *ngIf="! colorInput.valid && colorInput.touched" class="text-danger"><i class="bi bi-exclamation-triangle"></i>The selected color not valid</p>
+                <button class="btn btn-secondary float-start" type="">Cancel</button>
+                <button class="btn btn-primary float-end" type="submit" (click)="addPriceCategory($event, addForm, colorInput)">Add</button>
+            </form>
+        </div>
+    </div>
+</div>

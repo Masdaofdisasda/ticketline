@@ -9,31 +9,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 
+@Entity
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Location {
+public class PriceCategory {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @OneToMany
+  private List<Sector> sectorList;
+
+  @ManyToOne
+  private Performance performance;
+
+  @Size(min = 1, max = 255)
   private String name;
-
-  private String street;
-
-  private String city;
-
-  private String country;
-
-  private Integer zip;
-
-  @OneToMany(mappedBy = "location")
-  private List<Performance> performances = new ArrayList<>();
+  private BigDecimal pricing;
+  @Size(min = 3, max = 8)
+  private String color;
 }

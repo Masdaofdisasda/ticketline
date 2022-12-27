@@ -11,6 +11,18 @@ import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
+import {CreateVenueComponent} from './components/venue-admin/create-venue/create-venue.component';
+import {ColorInputFieldComponent} from './components/color-input-field/color-input-field.component';
+import {ColorPickerModule} from 'ngx-color-picker';
+import {RoomElementComponent} from './components/venue-admin/create-venue/room-element/room-element.component';
+import {
+  PriceCategoryDropdownComponent
+} from './components/venue-admin/create-venue/room-element/price-category-dropdown/price-category-dropdown.component';
+import {AttributesDirective} from './directives/attributes.directive';
+import {RoomPlanComponent} from './components/room-plan/room-plan.component';
+import {ConfirmDeleteDialogComponent} from './components/confirm-delete-dialog/confirm-delete-dialog.component';
+import {VenueAdminComponent} from './components/venue-admin/venue-admin.component';
+import {ShowVenueComponent} from './components/venue-admin/show-venue/show-venue.component';
 import {EventComponent} from './components/event/event.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
@@ -39,6 +51,9 @@ import {BookingsComponent} from './components/user/bookings/bookings.component';
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    CreateVenueComponent,
+    CreateVenueComponent,
+    ColorInputFieldComponent,
     RegistrationComponent,
     EventComponent,
     EventSearchComponent,
@@ -56,6 +71,13 @@ import {BookingsComponent} from './components/user/bookings/bookings.component';
     ArtistCreateComponent,
     UserComponent,
     BookingsComponent,
+    RoomElementComponent,
+    PriceCategoryDropdownComponent,
+    AttributesDirective,
+    RoomPlanComponent,
+    ConfirmDeleteDialogComponent,
+    VenueAdminComponent,
+    ShowVenueComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +86,7 @@ import {BookingsComponent} from './components/user/bookings/bookings.component';
     HttpClientModule,
     NgbModule,
     FormsModule,
+    ColorPickerModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 10000,

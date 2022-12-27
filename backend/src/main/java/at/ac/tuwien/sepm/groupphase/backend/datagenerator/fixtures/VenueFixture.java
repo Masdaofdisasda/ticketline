@@ -1,53 +1,53 @@
 package at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Location;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 
 import java.util.ArrayList;
 
-public class LocationFixture {
+public class VenueFixture {
 
-  public static Location getBuildLocation(int i) {
+  public static Venue getBuildVenue(int i) {
     switch (i % 3) {
       case 0 -> {
-        return buildLocation1();
+        return buildVenue1();
       }
       case 1 -> {
-        return buildLocation2();
+        return buildVenue2();
       }
       default -> {
-        return buildLocation3();
+        return buildVenue3();
       }
     }
   }
 
-  public static Location buildLocation1() {
-    return Location.builder()
+  public static Venue buildVenue1() {
+    return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(1L)
       .city("Vienna")
       .country("Austria")
-      .zip(1220)
+      .zipCode("1220")
       .street("Belongs to the Street")
       .performances(new ArrayList<>())
       .build();
   }
 
-  public static Location buildLocation2() {
-    return Location.builder()
+  public static Venue buildVenue2() {
+    return Venue.builder()
       .id(2L)
       .city("Salzburg")
       .country("Austria")
-      .zip(3312)
+      .zipCode("3312")
       .street("Belongs to the Street")
       .performances(new ArrayList<>())
       .build();
   }
 
-  public static Location buildLocation3() {
-    return Location.builder()
+  public static Venue buildVenue3() {
+    return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(3L)
       .city("Berlin")
       .country("Germany")
-      .zip(8492)
+      .zipCode("8492")
       .street("Belongs to the Street")
       .performances(new ArrayList<>())
       .build();

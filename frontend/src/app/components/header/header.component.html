@@ -7,7 +7,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <div class="d-flex flex-row-reverse mx-4 w-100">
-      <ul class="navbar-nav mr-5">
+      <ul class="navbar-nav">
         <a class="nav-link mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/login"
            routerLinkActive="active">Login</a>
         <a class="nav-link mx-2" *ngIf="authService.isLoggedIn()" routerLink="/"
@@ -16,11 +16,11 @@
            routerLinkActive="active">Sign
           Up</a>
         <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="authService.isLoggedIn()" routerLink="/user"
-          routerLinkActive="active">
+           routerLinkActive="active">
           <i class="bi bi-person-circle me-2"></i>Account
         </a>
       </ul>
-      <ul class="navbar-nav mr-auto d-flex flex-row-reverse">
+      <ul class="navbar-nav d-flex flex-row-reverse">
         <li class="nav-item">
           <a class="nav-link" routerLink="/order/cart"
              routerLinkActive="active">Cart</a>
@@ -47,3 +47,4 @@
     </div>
   </div>
 </nav>
+
