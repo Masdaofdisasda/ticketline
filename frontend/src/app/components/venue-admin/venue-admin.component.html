@@ -1,0 +1,14 @@
+<h1>Manage venues</h1>
+
+<button class="btn btn-primary" routerLink="/admin/venue/create"><i class="bi bi-plus"></i>Create Venue</button>
+<div class="venue-list">
+  <div class="venue-item d-flex" *ngFor="let venue of venues">
+    <p>{{venue.name}}</p>
+    <div class="btn-group">
+      <button class="btn btn-outline-primary" [routerLink]="['/admin/venue/show', venue.id]"><i class="bi bi-info"></i>
+      </button>
+      <button class="btn btn-outline-warning" [routerLink]="['/admin/venue/edit', venue.id]"><i
+        class="bi bi-pencil"></i></button>
+    </div>
+  </div>
+</div>

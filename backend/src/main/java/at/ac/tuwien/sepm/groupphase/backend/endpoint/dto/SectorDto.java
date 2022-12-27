@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -12,6 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SectorDto {
+  @NotNull
   private Long id;
+  @NotNull
+  private String name;
+  @NotNull
+  private PriceCategoryDto priceCategory;
+  @NotNull
   private List<SeatDto> seats;
 }

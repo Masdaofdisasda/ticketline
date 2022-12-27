@@ -4,8 +4,8 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ExtendedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Location;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,9 +47,9 @@ public interface EventMapper {
 
   @Named("getEventHallName")
   default String getEventHallName(List<Performance> performances) {
-    List<String> eventHallNames = performances.stream().map(Performance::getLocation)
+    List<String> eventHallNames = performances.stream().map(Performance::getVenue)
       .filter(Objects::nonNull)
-      .distinct().map(Location::getName).toList();
+      .distinct().map(Venue::getName).toList();
 
     return String.join(",", eventHallNames);
   }

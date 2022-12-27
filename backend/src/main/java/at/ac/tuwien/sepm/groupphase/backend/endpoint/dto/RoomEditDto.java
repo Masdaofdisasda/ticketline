@@ -5,20 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
-@AllArgsConstructor
+@Builder(toBuilder = true)
 @NoArgsConstructor
-public class LocationDto {
-  private Long id;
+@AllArgsConstructor
+public class RoomEditDto {
 
   private String name;
+  private Integer rowSize;
+  private Integer columnSize;
 
-  private String street;
-
-  private String city;
-
-  private String country;
-
-  private Integer zip;
+  private List<SectorAddDto> sectors;
 }

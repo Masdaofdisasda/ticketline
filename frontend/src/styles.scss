@@ -4,11 +4,6 @@ body {
   background-color: whitesmoke;
 }
 
-html {
-  margin: 0;
-  padding: 0;
-}
-
 .fourXone {
   display: flex;
   grid-template-columns: 25% 25% 25% 25%;
@@ -22,4 +17,16 @@ html {
   place-items: center;
   gap: 10px 20px;
   margin-top: 1%;
+  margin-left: .3rem;
 }
+
+.hidden {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        // --bs-body-bg: rgb(18, 26, 27);
+    }
+}
+

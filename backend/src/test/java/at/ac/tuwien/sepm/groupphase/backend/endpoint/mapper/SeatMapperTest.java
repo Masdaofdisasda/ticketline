@@ -19,8 +19,8 @@ class SeatMapperTest {
 
   SeatDto seatDto = SeatDto.builder()
     .id(1L)
-    .colNumber(1)
-    .rowNumber(1)
+    .colNumber(0)
+    .rowNumber(2)
     .build();
 
 

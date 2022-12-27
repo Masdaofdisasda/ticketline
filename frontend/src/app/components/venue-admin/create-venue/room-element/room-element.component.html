@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="room-view-wrapper col-12 col-md-9">
+        <app-room-plan [drawAllPossible]="true" [width]="300" [height]="150" [room]="room"
+                       (seatClicked)="onSeatClick($event)" (multiSelectChange)="multiSelectChange($event)"
+                       (multiSelectEnd)="multiSelectEnd($event)" (hoverEnd)="hoverEnd($event)"
+                       (hover)="hover($event)"></app-room-plan>
+    </div>
+    <div class="sidebar col-12 col-md-3 mt-3 mt-md-0">
+        <div class="sector-list list-group">
+          <div class="sector-heading mb-1 d-md-flex">
+            <h5>Sectors:</h5>
+            <button class="btn btn-sm btn-outline-primary" (click)="addSector()"><i class="bi bi-plus"></i>Add sector
+            </button>
+          </div>
+            <div #sectorList>
+                <div *ngFor="let sector of room.sectors; index as index" class="list-group-item list-group-item-action" (click)="selectSector($event.target, sector, index)">
+                    <i class="bi bi-square-fill" [ngStyle]="{ color: '#' + sector.priceCategory.color }"></i> {{ sector.name }}
+                </div>
+            </div>
+        </div>
+        <div class="sector-edit form-group">
+            <h5>Sector information:</h5>
+            <label for="name">Name:</label>
+          <input name="name" class="input form-control" type="text" [(ngModel)]="selectedSector.getValue().name"
+                 #nameInput/>
+            <app-price-category-dropdown [selected]="selectedSector.getValue().priceCategory" (selectedChange)="priceCategorySelected($event)"></app-price-category-dropdown>
+        </div>
+    </div>
+</div>

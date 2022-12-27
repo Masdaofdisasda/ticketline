@@ -60,7 +60,7 @@ public class MessageEndpointTest implements TestData {
   @Autowired
   private SecurityProperties securityProperties;
 
-  private Message message = Message.builder()
+  private final Message message = Message.builder()
     .title(TEST_NEWS_TITLE)
     .summary(TEST_NEWS_SUMMARY)
     .text(TEST_NEWS_TEXT)

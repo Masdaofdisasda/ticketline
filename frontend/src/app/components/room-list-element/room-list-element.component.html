@@ -1,0 +1,59 @@
+<div class="room-list-element card">
+    <div class="head">
+        <h5>{{room.name}}</h5>
+        <p>{{room.sectors.length}} sectors</p>
+        <p>{{seatAmount()}} seats</p>
+        <div class="btn-group">
+            <button class="btn  btn-outline-warning edit" (click)="_parent.toggle()"><i class="bi bi-pencil-fill"></i></button>
+            <button class="btn btn-outline-danger remove"><i class="bi bi-trash-fill"></i></button>
+        </div>
+    </div>
+    <div *ngIf="isExpanded" class="content">
+        <div class="plan">
+
+        </div>
+        <div class="aside">
+            <div class="treeWrapper">
+                <div class="tree">
+                    <app-tree-view (selected)="select($event)" [data]="treeData"></app-tree-view>
+                </div>
+            </div>
+            <div class="form ">
+                <form>
+                    <h5 *ngIf="!(selectedSeat || selectedSector)">
+                        Nothing selected!
+                    </h5>
+                    <div *ngIf="selectedSeat ">
+                        <div class="row ">
+                            <div class="col ">
+                                <label for="input-1 ">Row:</label>
+                                <input type="text " name="input-1 " [(ngModel)]="selectedSeat.rowNumber" />
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col ">
+                                <label for="input-2 ">Column:</label>
+                                <input type="text " name="input-2 " [(ngModel)]="selectedSeat.colNumber" />
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedSector ">
+                        <div class="row ">
+                            <div class="col ">
+                                <label for="input-1 ">Row:</label>
+                                <input type="text " name="input-1 " [(ngModel)]="selectedSector.name" />
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col ">
+                                <label for="input-2 ">Column:</label>
+                                <input type="text " name="input-2 " [(ngModel)]="selectedSector.pricing" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

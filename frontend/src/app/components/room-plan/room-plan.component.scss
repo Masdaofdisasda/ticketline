@@ -1,0 +1,20 @@
+#panzoom {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.seat {
+    color: #359d;
+    fill: #359d;
+}
+
+.seat:hover {
+    color: #d5de78;
+    fill: #e9eaec;
+}
+
+svg {
+    shape-rendering: optimizeSpeed;
+}

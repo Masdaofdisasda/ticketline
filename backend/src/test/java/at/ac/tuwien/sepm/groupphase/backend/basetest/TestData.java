@@ -20,6 +20,8 @@ public interface TestData {
   String ARTIST_BASE_URI = BASE_URI + "/artists";
   String AUTH_BASE_URI = BASE_URI + "/authentication";
 
+  String VENUE_BASE_URI = BASE_URI + "/venue";
+
   String ADMIN_USER = "admin@email.com";
   List<String> ADMIN_ROLES = new ArrayList<>() {
     {
