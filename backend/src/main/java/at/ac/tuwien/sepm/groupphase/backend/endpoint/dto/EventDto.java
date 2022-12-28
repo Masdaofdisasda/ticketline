@@ -18,5 +18,5 @@ public class EventDto {
   String category;
   LocalDateTime startDate;
   LocalDateTime endDate;
-  private List<PerformanceDto> performances;
+  List<PerformanceDto> performances;
 }

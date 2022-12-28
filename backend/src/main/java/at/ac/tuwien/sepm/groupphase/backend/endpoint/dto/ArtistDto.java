@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArtistDto {
-  private Long id;
-
-  private String name;
+  Long id;
+  String name;
 }

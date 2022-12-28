@@ -31,6 +31,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: LockedUsersComponent,
   },
+  {path: 'message', component: MessageComponent},
+  {path: 'artist', component: ArtistComponent},
+  {path: 'artist/create', component: ArtistCreateComponent},
+
   {path: 'event', component: EventComponent},
   {path: 'event/create', component: EventCreateComponent},
   {path: 'event', component: EventComponent},

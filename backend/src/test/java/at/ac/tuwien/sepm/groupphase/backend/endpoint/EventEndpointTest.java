@@ -2,10 +2,15 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ArtistDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ArtistMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ArtistRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +57,12 @@ class EventEndpointTest implements TestData {
 
   @Autowired
   private EventMapper eventMapper;
+
+  @Autowired
+  private ArtistRepository artistRepository;
+
+  @Autowired
+  private ArtistMapper artistMapper;
 
   @Autowired
   private JwtTokenizer jwtTokenizer;
@@ -146,8 +158,17 @@ class EventEndpointTest implements TestData {
 
   @Test
   public void createEvent() throws Exception {
-    EventDto eventDto1 = new EventDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(3), null);
-    EventDto eventDto2 = new EventDto(2L, "NewEvent2", "newCategory2", LocalDateTime.now(), LocalDateTime.now().plusHours(3), null);
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+    ArtistDto artistDto2 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(2L, "Artist2", null)));
+
+    PerformanceDto performanceDto1 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto1, null);
+    PerformanceDto performanceDto2 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto1, null);
+    PerformanceDto performanceDto3 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto2, null);
+    PerformanceDto performanceDto4 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto2, null);
+    EventDto eventDto1 =
+      new EventDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1, performanceDto2));
+    EventDto eventDto2 =
+      new EventDto(2L, "NewEvent2", "newCategory2", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto3, performanceDto4));
     mockMvc
       .perform(MockMvcRequestBuilders
         .post(EVENT_BASE_URI + "/create")
@@ -168,7 +189,11 @@ class EventEndpointTest implements TestData {
         )).andExpect(status().isCreated())
       .andReturn().getResponse().getContentAsByteArray();
 
-    assertThat(eventRepository.findAll().size()).isEqualTo(2);
+    List<Event> events = eventRepository.findAll();
+    assertThat(events.size()).isEqualTo(2);
+    assertThat(events.get(0).getName().equals("NewEvent"));
+    assertThat(events.get(0).getPerformances().size()).isEqualTo(2);
+    assertThat(events.get(0).getPerformances().get(0).getArtist().getName().equals("Artist1"));
   }
 
   @Test
