@@ -1,0 +1,40 @@
+<h1 class="display-6">add Performances</h1>
+<form [formGroup]="performanceForm" (submit)="onFormSubmit()">
+  <div formArrayName="performances">
+    <div *ngFor="let performance of performances; let i = index;" [formGroupName]="i">
+      <div class="form-group row">
+        <div class="col-sm-5">
+          <select class="form-control dropdown-toggle" formControlName="artist">
+            <option *ngFor="let artist of artists" [ngValue]="artist">
+              {{artist.name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-3">
+          <app-date-time-picker placeholder="Select start time of event" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                formControlName="startDate">
+          </app-date-time-picker>
+        </div>
+        <div class="col-sm-3">
+          <app-date-time-picker placeholder="Select end time of event" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                formControlName="endDate">
+          </app-date-time-picker>
+        </div>
+        <div class="col-sm">
+          <div *ngIf="check" class="bi-check"></div>
+        </div>
+        <div class="col-sm">
+          <button (click)="removePerson(i)" class="btn btn-sm responsive-danger-button bi bi-trash float-end"
+                  style="color: red"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <button type="button" class="btn btn-secondary" (click)="addPerson()">
+    +
+  </button>
+  <button ype="button" class="btn btn-primary float-end" [disabled]="performanceForm.invalid">
+    Add Performances to Event
+  </button>
+</form>

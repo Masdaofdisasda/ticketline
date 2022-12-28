@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs/internal/observable/of';
 import { ArtistService } from '../../../services/artist.service';
+import { PerformanceDto } from '../../../dto/performance.dto';
 
 @Component({
   selector: 'app-event-create',
@@ -19,6 +20,8 @@ import { ArtistService } from '../../../services/artist.service';
 })
 export class EventCreateComponent implements OnInit {
   createFormGroup: FormGroup;
+
+  performances: PerformanceDto[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,6 +53,7 @@ export class EventCreateComponent implements OnInit {
       endDate: this.createFormGroup.get('endTime').value
         ? this.createFormGroup.get('endTime').value.toISOString()
         : '',
+      performances: this.performances,
     } as EventDto);
     observable.subscribe({
       next: (data) => {
@@ -64,5 +68,10 @@ export class EventCreateComponent implements OnInit {
         this.notification.error('Error creating event: \n' + err.error.errors);
       },
     });
+  }
+
+  receivePerformances(performancesList: PerformanceDto[]): void {
+    this.performances = performancesList;
+    console.log(this.performances);
   }
 }

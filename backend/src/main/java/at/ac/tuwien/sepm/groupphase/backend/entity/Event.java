@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class Event {
 
   private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   //MultipleBagFetchException: cannot simultaneously fetch multiple bags
   @Fetch(value = FetchMode.SUBSELECT)
   @Builder.Default

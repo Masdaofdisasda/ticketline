@@ -32,7 +32,7 @@ import {EventCreateComponent} from './components/event/event-create/event-create
 import {RegistrationComponent} from './components/registration/registration.component';
 import {LockedUsersComponent} from './components/locked-users/locked-users.component';
 import {DateTimePickerComponent} from './components/shared/date-time-picker/date-time-picker.component';
-
+import { EventPerformanceCreateComponent } from './components/event/event-performance-create/event-performance-create.component';
 import {SeatSelectionComponent} from './components/order/seat-selection/seat-selection.component';
 import {ShoppingCartComponent} from './components/order/shopping-cart/shopping-cart.component';
 import {TicketItemComponent} from './components/order/ticket-item/ticket-item.component';
@@ -69,6 +69,7 @@ import {BookingsComponent} from './components/user/bookings/bookings.component';
     EventCreateComponent,
     ArtistComponent,
     ArtistCreateComponent,
+    EventPerformanceCreateComponent,
     UserComponent,
     BookingsComponent,
     RoomElementComponent,

@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PerformanceDto {
-  private Long id;
-  private LocalDateTime startDate;
-  private LocalDateTime endDate;
-
+  Long id;
+  LocalDateTime startDate;
+  LocalDateTime endDate;
+  ArtistDto artist;
   @Builder.Default
-  private List<TicketDto> tickets = new ArrayList<>();
+  List<TicketDto> tickets = new ArrayList<>();
 }

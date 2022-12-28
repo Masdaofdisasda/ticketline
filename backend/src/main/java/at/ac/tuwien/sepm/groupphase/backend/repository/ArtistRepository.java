@@ -20,4 +20,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
   List<Artist> findArtistsByName(String name);
 
   List<Artist> findArtistsByNameStartingWith(String string);
+
+  List<Artist> findAll();
 }
