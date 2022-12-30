@@ -27,7 +27,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     value = "SELECT ev FROM Event ev"
       + " LEFT JOIN Performance pf ON pf.id IN ELEMENTS(ev.performances)"
       + " LEFT JOIN Artist art ON pf.artist = art"
-      + " LEFT JOIN Venue venue ON pf.venue = venue"
+      + " LEFT JOIN Venue venue ON pf.room.venue = venue"
       + " WHERE (ev.startDate >= :#{#eventSearchRequest.startTime} OR ev.startDate >= CURRENT_TIMESTAMP)"
       + " AND (coalesce(:#{#eventSearchRequest.endTime},'')='' OR ev.endDate <= :#{#eventSearchRequest.endTime})"
       + " AND (coalesce(:#{#eventSearchRequest.nameOfEvent}, '')='' OR lower(ev.name) like concat('%',lower(:#{#eventSearchRequest.nameOfEvent}),'%'))"

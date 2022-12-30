@@ -51,8 +51,6 @@ public class Performance {
   @ManyToOne
   private Artist artist;
 
-  @ManyToOne
-  private Venue venue;
 
   @Override
   public String toString() {

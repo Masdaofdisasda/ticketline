@@ -161,10 +161,10 @@ class EventEndpointTest implements TestData {
     ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
     ArtistDto artistDto2 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(2L, "Artist2", null)));
 
-    PerformanceDto performanceDto1 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto1, null);
-    PerformanceDto performanceDto2 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto1, null);
-    PerformanceDto performanceDto3 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto2, null);
-    PerformanceDto performanceDto4 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto2, null);
+    PerformanceDto performanceDto1 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto1, null, null);
+    PerformanceDto performanceDto2 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto1, null, null);
+    PerformanceDto performanceDto3 = new PerformanceDto(null, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2), artistDto2, null, null);
+    PerformanceDto performanceDto4 = new PerformanceDto(null, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), artistDto2, null, null);
     EventDto eventDto1 =
       new EventDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1, performanceDto2));
     EventDto eventDto2 =

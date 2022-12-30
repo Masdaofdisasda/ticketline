@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ArtistMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
@@ -34,15 +35,17 @@ public class DefaultEventService implements EventService {
   private final PerformanceService performanceService;
   private final ArtistMapper artistMapper;
   private final PerformanceRepository performanceRepository;
+  private final RoomMapper roomMapper;
 
   public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper, EventValidator eventValidator, PerformanceService performanceService,
-                             ArtistMapper artistMapper, PerformanceRepository performanceRepository) {
+                             ArtistMapper artistMapper, PerformanceRepository performanceRepository, RoomMapper roomMapper) {
     this.eventRepository = eventRepository;
     this.eventMapper = eventMapper;
     this.eventValidator = eventValidator;
     this.performanceService = performanceService;
     this.artistMapper = artistMapper;
     this.performanceRepository = performanceRepository;
+    this.roomMapper = roomMapper;
   }
 
   /**
@@ -97,6 +100,7 @@ public class DefaultEventService implements EventService {
         .endDate(performanceDto.getEndDate().plusHours(1)) //convert GMT to GMT+1
         .artist(artistMapper.artistDtoToArtist(performanceDto.getArtist()))
         .event(event)
+        .room(roomMapper.roomDtoToRoom(performanceDto.getRoom()))
         .build();
       performances.add(perf);
     });
