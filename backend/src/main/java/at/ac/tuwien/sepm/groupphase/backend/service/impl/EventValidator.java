@@ -60,7 +60,7 @@ public class EventValidator {
     }
 
     if (performance.getStartDate().isAfter(performance.getEndDate())) {
-      validationErrors.add("Performance start must be earlier than event end");
+      validationErrors.add("Performance start must be earlier than performance end");
     }
 
     return validationErrors;

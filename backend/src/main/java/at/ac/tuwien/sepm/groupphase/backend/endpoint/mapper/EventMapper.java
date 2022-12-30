@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ExtendedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,11 +46,12 @@ public interface EventMapper {
 
   @Named("getEventHallName")
   default String getEventHallName(List<Performance> performances) {
-    List<String> eventHallNames = performances.stream().map(Performance::getVenue)
-      .filter(Objects::nonNull)
-      .distinct().map(Venue::getName).toList();
+    //List<String> eventHallNames = performances.stream().map(Performance::getVenue)
+    //  .filter(Objects::nonNull)
+    //  .distinct().map(Venue::getName).toList();
 
-    return String.join(",", eventHallNames);
+    //return String.join(",", eventHallNames);
+    return "not yet implemented";
   }
 
   // TODO: 26.12.22 mapper for location/seating-plan room name (venue name)

@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -42,4 +43,6 @@ public class Room {
 
   @ManyToOne
   private Venue venue;
+  @OneToMany(mappedBy = "room")
+  private List<Performance> performances = new ArrayList<>();
 }

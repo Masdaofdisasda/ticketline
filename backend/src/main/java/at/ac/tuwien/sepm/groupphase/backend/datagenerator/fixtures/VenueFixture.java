@@ -23,33 +23,36 @@ public class VenueFixture {
   public static Venue buildVenue1() {
     return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(1L)
+      .name("Stadthalle")
       .city("Vienna")
       .country("Austria")
       .zipCode("1220")
       .street("Belongs to the Street")
-      .performances(new ArrayList<>())
+      .rooms(new ArrayList<>())
       .build();
   }
 
   public static Venue buildVenue2() {
     return Venue.builder()
       .id(2L)
+      .name("Stadthalle in Salzburg")
       .city("Salzburg")
       .country("Austria")
       .zipCode("3312")
       .street("Belongs to the Street")
-      .performances(new ArrayList<>())
+      .rooms(new ArrayList<>())
       .build();
   }
 
   public static Venue buildVenue3() {
     return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(3L)
+      .name("Stadthalle in Berlin")
       .city("Berlin")
       .country("Germany")
       .zipCode("8492")
       .street("Belongs to the Street")
-      .performances(new ArrayList<>())
+      .rooms(new ArrayList<>())
       .build();
   }
 }

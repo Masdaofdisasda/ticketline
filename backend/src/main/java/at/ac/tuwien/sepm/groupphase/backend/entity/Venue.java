@@ -54,6 +54,4 @@ public class Venue {
   @Builder.Default
   private List<Room> rooms = new ArrayList<>();
 
-  @OneToMany(mappedBy = "venue")
-  private List<Performance> performances = new ArrayList<>();
 }
