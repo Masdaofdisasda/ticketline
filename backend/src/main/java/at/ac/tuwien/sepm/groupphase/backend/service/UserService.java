@@ -105,4 +105,11 @@ public interface UserService extends UserDetailsService {
    * @return List of locked users.
    */
   List<ApplicationUser> getLockedUsers();
+
+  /**
+   * Fetch all users.
+   *
+   * @return List of users.
+   */
+  public List<ApplicationUser> getUsers();
 }

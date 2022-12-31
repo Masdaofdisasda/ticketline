@@ -126,6 +126,41 @@ public class UserEndpointTest implements TestData {
   }
 
   @Test
+  public void getUsersWithAdmin() throws Exception {
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          get(USER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    List<SimpleUserDto> simpleUserDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+      SimpleUserDto[].class));
+
+    assertEquals(2, simpleUserDtos.size());
+  }
+
+  @Test
+  public void getUsersFailsWithoutAdminRoles() throws Exception {
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          get(USER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+  }
+
+  @Test
   public void unlockUserWithAdmin() throws Exception {
     ApplicationUser user = userRepository.findUserByEmail("viktor@email.com");
     MvcResult mvcResult =

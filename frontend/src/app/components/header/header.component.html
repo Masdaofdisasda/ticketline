@@ -1,38 +1,29 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-  <a class="navbar-brand ml-lg-5 mx-4" href="">TICKETLINE</a>
-  <button class="navbar-toggler ml-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <div class="d-flex flex-row-reverse mx-4 w-100">
-      <ul class="navbar-nav">
-        <a class="nav-link mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/login"
-           routerLinkActive="active">Login</a>
-        <a class="nav-link mx-2" *ngIf="authService.isLoggedIn()" routerLink="/"
-           (click)="authService.logoutUser()">Logout</a>
-        <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="!authService.isLoggedIn()" routerLink="/registration"
-           routerLinkActive="active">Sign
-          Up</a>
-        <a class="nav-link btn btn-primary px-4 mx-2" *ngIf="authService.isLoggedIn()" routerLink="/user"
-           routerLinkActive="active">
-          <i class="bi bi-person-circle me-2"></i>Account
-        </a>
-      </ul>
-      <ul class="navbar-nav d-flex flex-row-reverse">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand mx-4" href="">TICKETLINE</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/order/cart"
-             routerLinkActive="active">Cart</a>
+          <a class="nav-link" routerLink="/order/cart" routerLinkActive="active">Cart</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message"
-             routerLinkActive="active">Message</a>
+            routerLinkActive="active">Message</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" *ngIf="authService.isAdmin"
-             routerLink="/user/locked" routerLinkActive="active">Locked
-            Users</a>
+        <li class="nav-item dropdown" *ngIf="authService.isLoggedIn() && authService.isAdmin()">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Admin
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/users" routerLinkActive="active">All
+                Users</a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/event" routerLinkActive="active">Events</a>
@@ -44,7 +35,17 @@
           <a class="nav-link" href="https://youtu.be/dQw4w9WgXcQ?t=43">Help</a>
         </li>
       </ul>
+
+      <div class="navbar-nav">
+        <div class="d-flex">
+          <a *ngIf="!authService.isLoggedIn()" class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        </div>
+        <a *ngIf="!authService.isLoggedIn()" class="nav-link nav-btn btn btn-primary" routerLink="/registration"
+          routerLinkActive="active">Sign
+          Up</a>
+        <a *ngIf="authService.isLoggedIn()" class="nav-link" routerLink="/"
+          (click)="authService.logoutUser()">Logout</a>
+      </div>
     </div>
   </div>
 </nav>
-

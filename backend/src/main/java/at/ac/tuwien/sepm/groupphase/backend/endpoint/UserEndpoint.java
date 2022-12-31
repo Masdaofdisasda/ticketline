@@ -43,6 +43,13 @@ public class UserEndpoint {
   }
 
   @Secured("ROLE_ADMIN")
+  @GetMapping()
+  public List<SimpleUserDto> getAll() {
+    LOGGER.info("GET /api/v1/user");
+    return userMapper.userToSimpleUserDto(userService.getUsers());
+  }
+
+  @Secured("ROLE_ADMIN")
   @PutMapping("/{id}/accountNonLocked")
   public void updateLocked(@PathVariable Long id, @RequestBody UpdateUserLockedDto updateUserLockedDto) {
     LOGGER.info("PUT /api/v1/user/{}/accountNonLocked body: {}", updateUserLockedDto);
