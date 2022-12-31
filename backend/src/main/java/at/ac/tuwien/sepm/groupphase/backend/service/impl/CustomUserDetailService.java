@@ -173,6 +173,11 @@ public class CustomUserDetailService implements UserService {
     return userRepository.getLockedUsers();
   }
 
+  @Override
+  public List<ApplicationUser> getUsers() {
+    return userRepository.findAll();
+  }
+
   public void lock(ApplicationUser user) {
     user.setAccountNonLocked(false);
     user.setLockTime(new Date());

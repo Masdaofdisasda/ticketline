@@ -21,6 +21,14 @@ export class UserService {
   }
 
   /**
+   * Get list of users.
+   *
+   */
+  getUsers(): Observable<User[]> {
+    return this.httpClient.get<User[]>(this.userBaseUri);
+  }
+
+  /**
    * Unlock a user.
    *
    */
@@ -28,6 +36,17 @@ export class UserService {
     return this.httpClient.put(
       this.userBaseUri + '/' + userId + '/accountNonLocked',
       { accountNonLocked: true }
+    );
+  }
+
+  /**
+   * Lock a user.
+   *
+   */
+  lock(userId: number) {
+    return this.httpClient.put(
+      this.userBaseUri + '/' + userId + '/accountNonLocked',
+      { accountNonLocked: false }
     );
   }
 }

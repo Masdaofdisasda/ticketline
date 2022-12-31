@@ -25,4 +25,6 @@ public class SimpleUserDto {
 
   @NotNull(message = "ID must not be null")
   private Long id;
+
+  private Boolean accountNonLocked;
 }

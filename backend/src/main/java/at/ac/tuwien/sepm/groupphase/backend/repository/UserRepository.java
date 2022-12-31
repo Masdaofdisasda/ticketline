@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<ApplicationUser, Long> {
 
   @Query("SELECT u from ApplicationUser u WHERE u.accountNonLocked = false")
   public List<ApplicationUser> getLockedUsers();
+
+  public List<ApplicationUser> findAll();
 }
