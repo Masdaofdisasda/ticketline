@@ -47,17 +47,6 @@ const routes: Routes = [
   { path: 'order/cart', component: CheckoutComponent, pathMatch: 'full' },
   { path: 'order/:bookingId', component: OrderCompleteComponent },
   { path: 'message', canActivate: [AuthGuard], component: MessageComponent },
-  {
-    path: 'venue',
-    children: [
-      {
-        path: 'create',
-        component: CreateVenueComponent,
-        data: { edit: false },
-      },
-      { path: 'edit', component: CreateVenueComponent, data: { edit: true } },
-    ],
-  },
   { path: 'message', canActivate: [AuthGuard], component: MessageComponent },
   {
     path: 'admin/venue/create',
@@ -70,7 +59,12 @@ const routes: Routes = [
     data: { edit: true },
   },
   { path: 'admin/venue/show/:id', component: ShowVenueComponent },
-  { path: 'admin/venue', component: VenueAdminComponent, pathMatch: 'full' },
+  {
+    path: 'admin/venue',
+    canActivate: [AdminGuard],
+    component: VenueAdminComponent,
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
