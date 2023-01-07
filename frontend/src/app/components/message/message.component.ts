@@ -4,7 +4,7 @@ import {MessageDto} from '../../dto/messageDto';
 import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {Router} from '@angular/router';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-message',
@@ -37,6 +37,32 @@ export class MessageComponent implements OnInit {
 
   navigateCreatePage() {
     this.router.navigateByUrl('/message/create');
+  }
+
+  openExistingMessageModal(id: number, messageAddModal: TemplateRef<any>) {
+    this.messageService.getMessageById(id).subscribe({
+      next: res => {
+        this.currentMessage = res;
+        this.modalService.open(messageAddModal, {ariaLabelledBy: 'modal-basic-title'});
+      },
+      error: err => {
+        this.defaultServiceErrorHandling(err);
+      }
+    });
+  }
+
+  /**
+   * Starts form validation and builds a message dto for sending a creation request if the form is valid.
+   * If the procedure was successful, the form will be cleared.
+   */
+  addMessage(form) {
+    this.submitted = true;
+
+    if (form.valid) {
+      this.currentMessage.publishedAt = new Date().toISOString();
+      this.createMessage(this.currentMessage);
+      this.clearForm();
+    }
   }
 
   getMessage(): MessageDto[] {

@@ -104,4 +104,15 @@ public class MessageEndpoint {
       return originalFilename;
     }
   }
+
+  @ResponseBody
+  @PostMapping(value = "/picture")
+  @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
+  public UploadResponseDto uploadPicture(@RequestParam MultipartFile imageFile) {
+    LOGGER.info("POST /api/v1/messages/picture body: {}", imageFile);
+    return UploadResponseDto.builder()
+      .originalFilename(imageFile.getOriginalFilename())
+      .generatedFilename("1324.jpg")
+      .build();
+  }
 }

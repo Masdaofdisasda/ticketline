@@ -43,8 +43,12 @@ export class MessageCreateComponent implements OnInit {
       messageTitle: new FormControl('', Validators.required),
       messagePublishedAt: new FormControl('', Validators.required),
       messageSummary: new FormControl('', Validators.required),
-      messageText: new FormControl('', Validators.required)
+      messageText: new FormControl('')
     });
+  }
+
+  getMessage(): MessageDto[] {
+    return this.message;
   }
 
   public onFileChanged(event) {
@@ -70,6 +74,13 @@ export class MessageCreateComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Error flag will be deactivated, which clears the error message
+   */
+  vanishError() {
+    this.error = false;
+  }
   private createMessage(generatedFileName: string) {
     const observable = this.messageService.createMessage({
       title: this.createFormGroup.get('messageTitle').value,
@@ -88,6 +99,7 @@ export class MessageCreateComponent implements OnInit {
       },
       error: (err) => {
         console.log('Error creating Event', err);
+        console.log(err);
         this.notification.error('Error creating event: \n' + err.error.errors);
       },
     });

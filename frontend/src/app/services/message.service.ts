@@ -4,7 +4,7 @@ import {MessageDto} from '../dto/messageDto';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {MessageCreateDto} from '../dto/messageCreateDto';
-import {UploadResponseDto} from '../dto/uploadResponseDto';
+import {UploadResponseDto} from "../dto/uploadResponseDto";
 
 @Injectable({
   providedIn: 'root'
