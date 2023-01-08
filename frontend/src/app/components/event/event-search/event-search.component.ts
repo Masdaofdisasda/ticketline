@@ -65,7 +65,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
         today.setDate(today.getDate() + ((7 - today.getDay() + 5) % 7 || 7))
       );
       const nextSunday = new Date(
-        nextFriday.getDate() + 2
+        today.setDate(today.getDate() + ((9 - today.getDay() + 7) % 9 || 9))
       );
       this.searchFormGroup.get('startTime').setValue(nextFriday);
       this.searchFormGroup.get('endTime').setValue(nextSunday);
@@ -91,13 +91,19 @@ export class EventSearchComponent implements OnInit, OnDestroy {
       zipCode: this.searchFormGroup.get('zipCode').value,
       venueName: this.searchFormGroup.get('venueName').value,
       eventHall: this.searchFormGroup.get('eventHall').value,
-      startTime: this.searchFormGroup.get('startTime').value
-        ? this.searchFormGroup.get('startTime').value.toISOString()
-        : '',
-      endTime: this.searchFormGroup.get('endTime').value ? this.searchFormGroup.get('endTime').value.toISOString()
-        : '',
+      startTime: this.getStartTime(this.searchFormGroup.get('startTime').value),
+      endTime: this.getEndTime(this.searchFormGroup.get('endTime').value),
       category: this.searchFormGroup.get('category').value,
       nameOfEvent: this.searchFormGroup.get('nameOfEvent').value,
     } as EventSearchRequest;
+  }
+
+  // this is necessary because toISOString subtracts one hour
+  private getStartTime(startDate: Date): string {
+    return startDate ? startDate.toISOString().replace(new RegExp('T\\d{2}'), 'T' + startDate.getHours()) : '';
+  }
+
+  private getEndTime(endDate: Date): string {
+    return endDate ? endDate.toISOString().replace(new RegExp('T\\d{2}'), 'T' + endDate.getHours()) : '';
   }
 }

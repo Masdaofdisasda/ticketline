@@ -21,15 +21,15 @@ export class EventService {
   /*
    * Load all events from the backend
    */
-  getEvents(): Observable<PageResponseDto<EventDto>> {
+  getEvents(): Observable<PageResponseDto<ExtendedEventDto>> {
     const params = new HttpParams()
       .set('pageIndex', 0)
       .set('pageSize', 10);
 
-    return this.httpClient.get<PageResponseDto<EventDto>>(this.eventBaseUri, {params});
+    return this.httpClient.get<PageResponseDto<ExtendedEventDto>>(this.eventBaseUri, {params});
   }
 
-  filter(eventSearchRequest?: EventSearchRequest): Observable<PageResponseDto<EventDto>> {
+  filter(eventSearchRequest?: EventSearchRequest): Observable<PageResponseDto<ExtendedEventDto>> {
     const params = new HttpParams()
       .set('artistName', eventSearchRequest.artistName)
       .set('country', eventSearchRequest.country)
@@ -45,7 +45,7 @@ export class EventService {
       .set('pageIndex', eventSearchRequest.pageIndex)
       .set('pageSize', eventSearchRequest.pageSize);
 
-    return this.httpClient.get<PageResponseDto<EventDto>>(this.eventBaseUri + '/filter', {params});
+    return this.httpClient.get<PageResponseDto<ExtendedEventDto>>(this.eventBaseUri + '/filter', {params});
   }
 
   getTopEventsOfMonth(pageDto: PageDto): Observable<PageResponseDto<ExtendedEventDto>> {
