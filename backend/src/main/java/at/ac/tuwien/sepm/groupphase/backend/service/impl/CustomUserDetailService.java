@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
@@ -9,12 +10,6 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
-
-import java.lang.invoke.MethodHandles;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +17,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.invoke.MethodHandles;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailService implements UserService {
@@ -59,7 +59,7 @@ public class CustomUserDetailService implements UserService {
       ApplicationUser applicationUser = findApplicationUserByEmail(email);
 
       List<GrantedAuthority> grantedAuthorities;
-      if (applicationUser.getAdmin()) {
+      if (Boolean.TRUE.equals(applicationUser.getAdmin())) {
         grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
       } else {
         grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
@@ -176,6 +176,43 @@ public class CustomUserDetailService implements UserService {
   @Override
   public List<ApplicationUser> getUsers() {
     return userRepository.findAll();
+  }
+
+  @Override
+  public SimpleUserDto getUser() {
+    ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    return SimpleUserDto.builder()
+      .id(user.getId())
+      .email(user.getEmail())
+      .firstName(user.getFirstName())
+      .lastName(user.getLastName())
+      .build();
+  }
+
+  @Override
+  public SimpleUserDto updateUser(SimpleUserDto userData) throws ValidationException {
+    customUserValidator.validateForUpdate(userData);
+
+    ApplicationUser user = userRepository.findUserById(userData.getId());
+    user.setEmail(userData.getEmail());
+    user.setFirstName(userData.getFirstName());
+    user.setLastName(userData.getLastName());
+
+    ApplicationUser updatedUser = userRepository.save(user);
+
+    return SimpleUserDto.builder()
+      .id(updatedUser.getId())
+      .firstName(updatedUser.getFirstName())
+      .lastName(updatedUser.getLastName())
+      .email(updatedUser.getEmail())
+      .build();
+  }
+
+  @Override
+  public void deleteUser(Long userId) throws ValidationException {
+
+    customUserValidator.validateForDelete(userId);
+    userRepository.deleteById(userId);
   }
 
   public void lock(ApplicationUser user) {

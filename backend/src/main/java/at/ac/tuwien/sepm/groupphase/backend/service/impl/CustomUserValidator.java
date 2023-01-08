@@ -1,19 +1,22 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * CustomUserValidator.
@@ -96,5 +99,40 @@ public class CustomUserValidator {
     if (!validationErrors.isEmpty()) {
       throw new ValidationException("Validation of user for create failed", validationErrors);
     }
+  }
+
+  public void validateForUpdate(SimpleUserDto userDto) throws ValidationException {
+    LOGGER.trace("validateForUpdate({})", userDto);
+    List<String> validationErrors = new ArrayList<>();
+
+    ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    if (!Objects.equals(user.getId(), userDto.getId())) {
+      validationErrors.add("User can only change his own data");
+    }
+    validationErrors.addAll(validateUserEmail(user.getEmail()));
+    validationErrors.addAll(validateRequiredStringProperty(user.getFirstName(), "first name"));
+    validationErrors.addAll(validateRequiredStringProperty(user.getLastName(), "last name"));
+    if (!validationErrors.isEmpty()) {
+      throw new ValidationException("Validation of user for create failed", validationErrors);
+    }
+
+  }
+
+  public void validateForDelete(Long userId) throws ValidationException {
+    var roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+    if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+      ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+      if (!Objects.equals(user.getId(), userId)) {
+        throw new ValidationException("Cannot delete other users", List.of("Cannot delete other users"));
+      }
+
+    } else if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+      ApplicationUser user = userRepository.findUserById(userId);
+      if (Boolean.TRUE.equals(user.getAdmin())) {
+        throw new ValidationException("Cannot delete admin users", List.of("Cannot delete admin users"));
+      }
+    }
+
   }
 }
