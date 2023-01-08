@@ -5,6 +5,8 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ExtendedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,6 +30,7 @@ public interface EventMapper {
   @Named("eventToExtendedEventDto")
   @Mapping(source = "performances", target = "artistName", qualifiedByName = "getArtistName")
   @Mapping(source = "performances", target = "eventHallName", qualifiedByName = "getEventHallName")
+  @Mapping(source = "performances", target = "venueName", qualifiedByName = "getVenueName")
   ExtendedEventDto eventToExtendedEventDto(Event event);
 
   @IterableMapping(qualifiedByName = "eventToExtendedEventDto")
@@ -46,13 +49,21 @@ public interface EventMapper {
 
   @Named("getEventHallName")
   default String getEventHallName(List<Performance> performances) {
-    //List<String> eventHallNames = performances.stream().map(Performance::getVenue)
-    //  .filter(Objects::nonNull)
-    //  .distinct().map(Venue::getName).toList();
+    List<String> eventHallNames = performances.stream().map(Performance::getRoom)
+      .filter(Objects::nonNull)
+      .distinct().map(Room::getName).toList();
 
-    //return String.join(",", eventHallNames);
-    return "not yet implemented";
+    return String.join(",", eventHallNames);
   }
 
-  // TODO: 26.12.22 mapper for location/seating-plan room name (venue name)
+  @Named("getVenueName")
+  default String getVenueName(List<Performance> performances) {
+    List<String> venueNames = performances.stream()
+      .map(Performance::getRoom)
+      .map(Room::getVenue)
+      .filter(Objects::nonNull)
+      .distinct().map(Venue::getName).toList();
+
+    return String.join(",", venueNames);
+  }
 }
