@@ -5,12 +5,14 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UpdateUserLockedDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -43,7 +46,7 @@ public class UserEndpoint {
   }
 
   @Secured("ROLE_ADMIN")
-  @GetMapping()
+  @GetMapping(value = "/all")
   public List<SimpleUserDto> getAll() {
     LOGGER.info("GET /api/v1/user");
     return userMapper.userToSimpleUserDto(userService.getUsers());
@@ -60,11 +63,34 @@ public class UserEndpoint {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       String currentPrincipalName = authentication.getName();
       ApplicationUser currentUser = userService.findApplicationUserByEmail(currentPrincipalName);
-      if (currentUser.getId() != id) {
+      if (!Objects.equals(currentUser.getId(), id)) {
         userService.lock(user);
       } else {
         throw new CustomLockedException("A user can't lock their own account");
       }
     }
   }
+
+  @Secured({"ROLE_ADMIN", "ROLE_USER"})
+  @GetMapping
+  public SimpleUserDto getCurrentUser() {
+    LOGGER.info("GET /api/v1/user");
+    return userService.getUser();
+  }
+
+  @Secured("ROLE_USER")
+  @PutMapping(value = "/{userId}")
+  public SimpleUserDto updateUserData(@RequestBody SimpleUserDto userData, @PathVariable Long userId) throws ValidationException {
+    LOGGER.info("GET /api/v1/user/{} {}", userId, userData);
+    userData.setId(userId);
+    return userService.updateUser(userData);
+  }
+
+  @Secured({"ROLE_ADMIN", "ROLE_USER"})
+  @DeleteMapping(value = "{userId}")
+  public void deleteUser(@PathVariable Long userId) throws ValidationException {
+    LOGGER.info("GET /api/v1/user/{}", userId);
+    userService.deleteUser(userId);
+  }
+
 }

@@ -25,7 +25,7 @@ export class UserService {
    *
    */
   getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(this.userBaseUri);
+    return this.httpClient.get<User[]>(this.userBaseUri + '/all');
   }
 
   /**
@@ -48,5 +48,25 @@ export class UserService {
       this.userBaseUri + '/' + userId + '/accountNonLocked',
       { accountNonLocked: false }
     );
+  }
+
+  /**
+   * get data of the currently logged in user
+   */
+  fetchUser(): Observable<User>{
+    return this.httpClient.get<User>(this.userBaseUri + '/');
+  }
+
+  /**
+   * updates user data
+   *
+   * @param user the data to update
+   */
+  updateUser(user: User): Observable<User>{
+    return this.httpClient.put<User>(this.userBaseUri + '/' + user.id, user);
+  }
+
+  deleteUser(userId: number): Observable<void> {
+    return this.httpClient.delete<void>(this.userBaseUri + '/' + userId);
   }
 }

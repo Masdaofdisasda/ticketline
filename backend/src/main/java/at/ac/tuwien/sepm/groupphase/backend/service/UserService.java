@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
-
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -112,4 +112,27 @@ public interface UserService extends UserDetailsService {
    * @return List of users.
    */
   public List<ApplicationUser> getUsers();
+
+  /**
+   * Fetch the current users account data.
+   *
+   * @return user data
+   */
+  SimpleUserDto getUser();
+
+  /**
+   * Updates all user data, except the password.
+   *
+   * @param userData to update, including the user id
+   * @return the updated user data
+   */
+  SimpleUserDto updateUser(SimpleUserDto userData) throws ValidationException;
+
+  /**
+   * Removes the user from the persistent storage and refunds all tickets. Only the owner of the account
+   * and the admins are allowed to delete said account
+   *
+   * @param userId of the user to delete
+   */
+  void deleteUser(Long userId) throws ValidationException;
 }

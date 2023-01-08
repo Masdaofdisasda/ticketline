@@ -29,7 +29,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
@@ -130,7 +131,7 @@ public class UserEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          get(USER_BASE_URI)
+          get(USER_BASE_URI + "/all")
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -150,7 +151,7 @@ public class UserEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          get(USER_BASE_URI)
+          get(USER_BASE_URI + "/all")
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -197,4 +198,23 @@ public class UserEndpointTest implements TestData {
 
     assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
   }
+
+  @Test
+  void AdminCannotUpdateUserData() throws Exception {
+    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com");
+
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          put(USER_BASE_URI + "/{id}", user.getId())
+            .content(objectMapper.writeValueAsString(new SimpleUserDto(user.getEmail(), "Firstname", "Lastname", user.getId(), false)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
 }
