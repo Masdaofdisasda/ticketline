@@ -88,7 +88,6 @@ export class MessageCreateComponent implements OnInit {
       },
       error: (err) => {
         console.log('Error creating Event', err);
-        console.log(err);
         this.notification.error('Error creating event: \n' + err.error.errors);
       },
     });

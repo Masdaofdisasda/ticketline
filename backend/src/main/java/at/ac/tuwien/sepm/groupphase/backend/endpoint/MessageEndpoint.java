@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UploadResponseDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -74,14 +75,18 @@ public class MessageEndpoint {
   @ResponseBody
   @PostMapping(value = "/picture")
   @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
-  public UploadResponseDto uploadPicture(@RequestParam MultipartFile imageFile) {
+  public UploadResponseDto uploadPicture(@RequestParam MultipartFile imageFile) throws ValidationException {
     LOGGER.info("POST /api/v1/messages/picture body: {}", imageFile);
     String generatedFilename = generateFilename(imageFile.getOriginalFilename());
     ClassLoader classLoader = getClass().getClassLoader();
-    try {
-      imageFile.transferTo(new File(classLoader.getResource(".").getFile() + "/" + generatedFilename));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    if (imageFile.getContentType() != null && imageFile.getContentType().startsWith("image/")) {
+      try {
+        imageFile.transferTo(new File(classLoader.getResource(".").getFile() + "/" + generatedFilename));
+      } catch (IOException | NullPointerException e) {
+        throw new RuntimeException(e);
+      }
+    } else {
+      throw new ValidationException("While submitting an image Errors have occured", List.of("The uploaded file does not contain an image"));
     }
 
     return UploadResponseDto.builder()
