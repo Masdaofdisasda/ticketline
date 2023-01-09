@@ -43,7 +43,7 @@ export class MessageCreateComponent implements OnInit {
       messageTitle: new FormControl('', Validators.required),
       messagePublishedAt: new FormControl('', Validators.required),
       messageSummary: new FormControl('', Validators.required),
-      messageText: new FormControl('')
+      messageText: new FormControl('', Validators.required)
     });
   }
 
