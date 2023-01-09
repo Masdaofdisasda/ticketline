@@ -47,10 +47,6 @@ export class MessageCreateComponent implements OnInit {
     });
   }
 
-  getMessage(): MessageDto[] {
-    return this.message;
-  }
-
   public onFileChanged(event) {
     this.selectedFile = event.target.files[0];
   }
@@ -74,13 +70,6 @@ export class MessageCreateComponent implements OnInit {
     });
   }
 
-
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
-  }
   private createMessage(generatedFileName: string) {
     const observable = this.messageService.createMessage({
       title: this.createFormGroup.get('messageTitle').value,
