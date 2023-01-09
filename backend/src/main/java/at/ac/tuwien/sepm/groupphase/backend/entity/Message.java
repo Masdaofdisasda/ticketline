@@ -35,6 +35,5 @@ public class Message {
   @Column(nullable = false, length = 10000)
   private String text;
 
-  @Column(length = 100)
   private String fileName;
 }

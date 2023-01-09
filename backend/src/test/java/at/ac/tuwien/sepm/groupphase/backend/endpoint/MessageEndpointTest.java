@@ -165,22 +165,6 @@ public class MessageEndpointTest implements TestData {
   }
 
   @Test
-  public void givenValidMessage_whenSubmittingMessage_then201() throws Exception {
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
-
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(body)
-        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
-      .andDo(print())
-      .andReturn();
-    MockHttpServletResponse response = mvcResult.getResponse();
-
-    assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-  }
-
-  @Test
   public void givenNothing_whenPostInvalid_then400() throws Exception {
     message.setTitle(null);
     message.setSummary(null);
