@@ -7,9 +7,18 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PasswordResetTokenRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import at.ac.tuwien.sepm.groupphase.backend.security.PasswordResetToken;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+
+import java.lang.invoke.MethodHandles;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +45,7 @@ public class CustomUserDetailService implements UserService {
     LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 24 hours
   private final UserRepository userRepository;
+  private final PasswordResetTokenRepository passwordResetTokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenizer jwtTokenizer;
   private final CustomUserValidator customUserValidator;
@@ -43,10 +53,12 @@ public class CustomUserDetailService implements UserService {
   @Autowired
   public CustomUserDetailService(
     UserRepository userRepository,
+    PasswordResetTokenRepository passwordResetTokenRepository,
     PasswordEncoder passwordEncoder,
     JwtTokenizer jwtTokenizer,
     CustomUserValidator customUserValidator) {
     this.userRepository = userRepository;
+    this.passwordResetTokenRepository = passwordResetTokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtTokenizer = jwtTokenizer;
     this.customUserValidator = customUserValidator;
@@ -54,7 +66,7 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    LOGGER.debug("Load all user by email");
+    LOGGER.debug("Load all users by email");
     try {
       ApplicationUser applicationUser = findApplicationUserByEmail(email);
 
@@ -122,6 +134,7 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public String login(UserLoginDto userLoginDto) {
+    LOGGER.debug("Login user");
     UserDetails userDetails = loadUserByUsername(userLoginDto.getEmail());
     if (userDetails != null
       && userDetails.isAccountNonExpired()
@@ -146,6 +159,7 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public void register(UserRegistrationDto userRegistrationDto) throws ValidationException {
+    LOGGER.debug("Login new user");
     customUserValidator.validateForCreate(userRegistrationDto);
     ApplicationUser applicationUser =
       ApplicationUser.builder()
@@ -170,11 +184,13 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public List<ApplicationUser> getLockedUsers() {
+    LOGGER.debug("Get all locked users");
     return userRepository.getLockedUsers();
   }
 
   @Override
   public List<ApplicationUser> getUsers() {
+    LOGGER.debug("Get all users");
     return userRepository.findAll();
   }
 
@@ -216,13 +232,16 @@ public class CustomUserDetailService implements UserService {
   }
 
   public void lock(ApplicationUser user) {
+    LOGGER.debug("Lock a user");
     user.setAccountNonLocked(false);
     user.setLockTime(new Date());
 
     userRepository.save(user);
   }
 
+  @Override
   public void unlock(ApplicationUser user) {
+    LOGGER.debug("Unlock a user");
     user.setAccountNonLocked(true);
     user.setLockTime(null);
     user.setFailedAttempt(0);
@@ -240,5 +259,26 @@ public class CustomUserDetailService implements UserService {
     }
 
     return false;
+  }
+
+  public void createPasswordResetTokenForUser(ApplicationUser user, String token) {
+    LOGGER.debug("Create a password reset token for given user");
+    PasswordResetToken myToken =
+      new PasswordResetToken(token, user);
+    passwordResetTokenRepository.save(myToken);
+  }
+
+  @Override
+  public Optional<ApplicationUser> getUserByPasswordResetToken(String token) {
+    LOGGER.debug("Get application user by password reset token");
+    return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser());
+  }
+
+  @Override
+  public void changeUserPassword(ApplicationUser applicationUser, String newPassword) throws ValidationException {
+    LOGGER.debug("Set new password for given user");
+    this.customUserValidator.validateNewPassword(newPassword);
+    applicationUser.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(applicationUser);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Globals } from '../global/globals';
 import { User } from '../dto/user.dto';
 
@@ -53,7 +53,7 @@ export class UserService {
   /**
    * get data of the currently logged in user
    */
-  fetchUser(): Observable<User>{
+  fetchUser(): Observable<User> {
     return this.httpClient.get<User>(this.userBaseUri + '/');
   }
 
@@ -62,11 +62,37 @@ export class UserService {
    *
    * @param user the data to update
    */
-  updateUser(user: User): Observable<User>{
+  updateUser(user: User): Observable<User> {
     return this.httpClient.put<User>(this.userBaseUri + '/' + user.id, user);
   }
 
   deleteUser(userId: number): Observable<void> {
     return this.httpClient.delete<void>(this.userBaseUri + '/' + userId);
+  }
+
+  /**
+   * Send reset password mail to user.
+   *
+   */
+  resetPassword(email: string) {
+    const params = new HttpParams().append('email', email);
+    return this.httpClient.post(this.userBaseUri + '/resetPassword', null, {
+      params,
+    });
+  }
+
+  /**
+   * Change password of a user.
+   *
+   * */
+  changePassword(password: string, token: string) {
+    console.log({
+      newPassword: password,
+      token,
+    });
+    return this.httpClient.post(this.userBaseUri + '/savePassword', {
+      newPassword: password,
+      token,
+    });
   }
 }

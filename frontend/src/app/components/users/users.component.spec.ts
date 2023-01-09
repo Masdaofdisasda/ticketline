@@ -18,6 +18,7 @@ describe('UsersComponent', () => {
     getUsers: jasmine.createSpy('getUsers'),
     lock: jasmine.createSpy('lock'),
     unlock: jasmine.createSpy('unlock'),
+    resetPassword: jasmine.createSpy('resetPassword'),
   };
   const authService = {
     getUserEmail: jasmine.createSpy('getUsers'),
@@ -150,5 +151,13 @@ describe('UsersComponent', () => {
     ) as HTMLElement[];
     accountNonLockedCheckboxes[2].click();
     expect(userService.unlock).toHaveBeenCalledWith(3);
+  });
+
+  it('calls resetPassword when button is clicked', () => {
+    const resetPasswordButtons = Array.from(
+      fixture.nativeElement.querySelectorAll('.resetPasswordButton')
+    ) as HTMLElement[];
+    resetPasswordButtons[1].click();
+    expect(userService.resetPassword).toHaveBeenCalledWith('max@mustermann.at');
   });
 });

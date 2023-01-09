@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
+import { GenericResponse } from 'src/app/dto/generic-response.dto';
 
 @Component({
   selector: 'app-users',
@@ -62,6 +63,24 @@ export class UsersComponent implements OnInit {
   isLoggedInUser(user: User) {
     return user.email === this.authService.getUserEmail();
   }
+
+  resetPassword(user: User) {
+    this.userService.resetPassword(user.email).subscribe({
+      next: (res: GenericResponse) => {
+        if (res.error === null) {
+          this.toastr.success('Sent password reset email to : ' + user.email);
+        } else {
+          this.toastr.error(
+            'An Error occured while trying to reset password for user ' +
+              user.email +
+              ': ' +
+              res.message
+          );
+        }
+      },
+    });
+  }
+
   private unlock(user: User) {
     this.userService.unlock(user.id).subscribe({
       next: (res) => {

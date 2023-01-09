@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PasswordDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
@@ -133,6 +134,14 @@ public class CustomUserValidator {
         throw new ValidationException("Cannot delete admin users", List.of("Cannot delete admin users"));
       }
     }
+  }
 
+  public void validateNewPassword(String password) throws ValidationException {
+    LOGGER.trace("validateNewPassword({})", password);
+    List<String> validationErrors = new ArrayList<>();
+    validationErrors.addAll(validatePassword(password));
+    if (!validationErrors.isEmpty()) {
+      throw new ValidationException("Validation of password failed", validationErrors);
+    }
   }
 }
