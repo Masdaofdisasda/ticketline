@@ -20,4 +20,6 @@ public class SimpleMessageDto {
   private String title;
 
   private String summary;
+
+  private String fileName;
 }

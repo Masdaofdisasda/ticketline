@@ -42,6 +42,7 @@ import { ArtistCreateComponent } from './components/artist/artist-create/artist-
 import { UserComponent } from './components/user/user/user.component';
 import { UsersComponent } from './components/users/users.component';
 import { BookingsComponent } from './components/user/bookings/bookings.component';
+import {MessageCreateComponent} from './components/message/message-create/message-create.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
 
 @NgModule({
@@ -52,6 +53,7 @@ import { SettingsComponent } from './components/user/settings/settings.component
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    MessageCreateComponent,
     CreateVenueComponent,
     CreateVenueComponent,
     ColorInputFieldComponent,

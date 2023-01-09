@@ -20,6 +20,7 @@ import { ArtistComponent } from './components/artist/artist.component';
 import { ArtistCreateComponent } from './components/artist/artist-create/artist-create.component';
 import { UserComponent } from './components/user/user/user.component';
 import { BookingsComponent } from './components/user/bookings/bookings.component';
+import {MessageCreateComponent} from './components/message/message-create/message-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/event', pathMatch: 'full' },
@@ -32,6 +33,8 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     component: UsersComponent,
   },
+  {path: 'message', component: MessageComponent},
+  {path: 'message/create', component: MessageCreateComponent},
   { path: 'message', component: MessageComponent },
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
