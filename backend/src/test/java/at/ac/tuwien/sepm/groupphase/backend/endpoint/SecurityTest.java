@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.BackendApplication;
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.repository.MessageRepository;
@@ -166,8 +166,8 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenAdminLoggedIn_whenPost_then201() throws Exception {
-    MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-    String body = objectMapper.writeValueAsString(messageInquiryDto);
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
@@ -182,9 +182,8 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenNoOneLoggedIn_whenPost_then403() throws Exception {
-    message.setPublishedAt(null);
-    MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-    String body = objectMapper.writeValueAsString(messageInquiryDto);
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
@@ -198,9 +197,8 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenUserLoggedIn_whenPost_then403() throws Exception {
-    message.setPublishedAt(null);
-    MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-    String body = objectMapper.writeValueAsString(messageInquiryDto);
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)

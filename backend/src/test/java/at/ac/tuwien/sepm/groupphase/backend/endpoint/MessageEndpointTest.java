@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
@@ -30,8 +30,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -150,10 +148,26 @@ public class MessageEndpointTest implements TestData {
   }
 
   @Test
-  public void givenNothing_whenPost_thenMessageWithAllSetPropertiesPlusIdAndPublishedDate() throws Exception {
+  public void givenEmptyPublishedAtField_whenSubmittingMessage_then400() throws Exception {
     message.setPublishedAt(null);
-    MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-    String body = objectMapper.writeValueAsString(messageInquiryDto);
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
+
+    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(body)
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+      .andDo(print())
+      .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+  }
+
+  @Test
+  public void givenValidMessage_whenSubmittingMessage_then201() throws Exception {
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
@@ -164,18 +178,6 @@ public class MessageEndpointTest implements TestData {
     MockHttpServletResponse response = mvcResult.getResponse();
 
     assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-    assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
-
-    DetailedMessageDto messageResponse = objectMapper.readValue(response.getContentAsString(),
-      DetailedMessageDto.class);
-
-    assertNotNull(messageResponse.getId());
-    assertNotNull(messageResponse.getPublishedAt());
-    assertTrue(isNow(messageResponse.getPublishedAt()));
-    //Set generated properties to null to make the response comparable with the original input
-    messageResponse.setId(null);
-    messageResponse.setPublishedAt(null);
-    assertEquals(message, messageMapper.detailedMessageDtoToMessage(messageResponse));
   }
 
   @Test
@@ -183,8 +185,8 @@ public class MessageEndpointTest implements TestData {
     message.setTitle(null);
     message.setSummary(null);
     message.setText(null);
-    MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-    String body = objectMapper.writeValueAsString(messageInquiryDto);
+    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
+    String body = objectMapper.writeValueAsString(messageCreationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)

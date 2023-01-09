@@ -1,9 +1,10 @@
 import {ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
 import {MessageService} from '../../services/message.service';
-import {Message} from '../../dto/message';
+import {MessageDto} from '../../dto/messageDto';
 import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-message',
@@ -17,14 +18,15 @@ export class MessageComponent implements OnInit {
   // After first submission attempt, form validation will start
   submitted = false;
 
-  currentMessage: Message;
+  currentMessage: MessageDto;
 
-  private message: Message[];
+  private message: MessageDto[];
 
   constructor(private messageService: MessageService,
               private ngbPaginationConfig: NgbPaginationConfig,
               private formBuilder: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
+              private router: Router,
               public authService: AuthService,
               private modalService: NgbModal) {
   }
@@ -33,39 +35,11 @@ export class MessageComponent implements OnInit {
     this.loadMessage();
   }
 
-  openAddModal(messageAddModal: TemplateRef<any>) {
-    this.currentMessage = new Message();
-    this.modalService.open(messageAddModal, {ariaLabelledBy: 'modal-basic-title'});
+  navigateCreatePage() {
+    this.router.navigateByUrl('/message/create');
   }
 
-  openExistingMessageModal(id: number, messageAddModal: TemplateRef<any>) {
-    this.messageService.getMessageById(id).subscribe({
-      next: res => {
-        this.currentMessage = res;
-        this.modalService.open(messageAddModal, {ariaLabelledBy: 'modal-basic-title'});
-      },
-      error: err => {
-        this.defaultServiceErrorHandling(err);
-      }
-    });
-  }
-
-  /**
-   * Starts form validation and builds a message dto for sending a creation request if the form is valid.
-   * If the procedure was successful, the form will be cleared.
-   */
-  addMessage(form) {
-    this.submitted = true;
-
-
-    if (form.valid) {
-      this.currentMessage.publishedAt = new Date().toISOString();
-      this.createMessage(this.currentMessage);
-      this.clearForm();
-    }
-  }
-
-  getMessage(): Message[] {
+  getMessage(): MessageDto[] {
     return this.message;
   }
 
@@ -81,7 +55,7 @@ export class MessageComponent implements OnInit {
    *
    * @param message the message which should be created
    */
-  private createMessage(message: Message) {
+  private createMessage(message: MessageDto) {
     this.messageService.createMessage(message).subscribe({
         next: () => {
           this.loadMessage();
@@ -98,7 +72,7 @@ export class MessageComponent implements OnInit {
    */
   private loadMessage() {
     this.messageService.getMessage().subscribe({
-      next: (message: Message[]) => {
+      next: (message: MessageDto[]) => {
         this.message = message;
       },
       error: error => {
@@ -119,7 +93,7 @@ export class MessageComponent implements OnInit {
   }
 
   private clearForm() {
-    this.currentMessage = new Message();
+    this.currentMessage = new MessageDto();
     this.submitted = false;
   }
 
