@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface UserService extends UserDetailsService {
@@ -135,4 +136,22 @@ public interface UserService extends UserDetailsService {
    * @param userId of the user to delete
    */
   void deleteUser(Long userId) throws ValidationException;
+
+  /**
+   * saves a password reset token for a given user.
+   *
+   * @param user The user account that will receive the token
+   * @param token The password reset token that will be stored for the given user
+   */
+  void createPasswordResetTokenForUser(ApplicationUser user, String token);
+
+  /**
+   * Retrieves user with given passwordResetToken if it exists.
+   *
+   * @param token password reset token
+   * @return user
+   */
+  Optional<ApplicationUser> getUserByPasswordResetToken(String token);
+
+  void changeUserPassword(ApplicationUser applicationUser, String newPassword) throws ValidationException;
 }

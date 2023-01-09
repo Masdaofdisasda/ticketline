@@ -39,10 +39,14 @@
             {{user.firstName}} {{user.lastName}}
           </div>
         </div>
-        <div class="form-check form-switch">
-          <input class="form-check-input" role="switch" type="checkbox" id="accountNonLocked"
-            [ngModel]="user.accountNonLocked" (click)="changeLocked(user)" [disabled]="isLoggedInUser(user)">
-          <label class="form-check-label" for="accountNonLocked">unlocked</label>
+        <div class="d-flex align-items-center">
+          <div class="form-check form-switch mr-4">
+            <input class="form-check-input" role="switch" type="checkbox" id="accountNonLocked"
+              [ngModel]="user.accountNonLocked" (click)="changeLocked(user)" [disabled]="isLoggedInUser(user)">
+            <label class="form-check-label" for="accountNonLocked">unlocked</label>
+          </div>
+          <button type="button" class="btn btn-secondary resetPasswordButton" (click)="resetPassword(user)">Reset
+            Password</button>
         </div>
         <!-- <small class="opacity-50 text-nowrap">now</small> -->
       </div>

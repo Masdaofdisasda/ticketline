@@ -1,9 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {AuthService} from '../services/auth.service';
-import {catchError, Observable, throwError} from 'rxjs';
-import {Globals} from '../global/globals';
-import {ToastrService} from 'ngx-toastr';
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Globals } from '../global/globals';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -11,8 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private globals: Globals,
     private toastr: ToastrService
-  ) {
-  }
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -40,7 +44,16 @@ export class AuthInterceptor implements HttpInterceptor {
           errorMsg = `Error: ${error.error.message}`;
         } else {
           console.log('This is server side error');
-          errorMsg = `Error Code: ${error.status},  Message: ${error.message ? error.message : error.error}`;
+          errorMsg = `Error Code: ${error.status},  Message: ${
+            // error.message ? error.message : error.error
+            error.error
+          }`;
+          console.log(error.error);
+          if (error.error === 'Invalid authorization header or token') {
+            //remove token
+            localStorage.removeItem('authToken');
+            console.log(localStorage.getItem('authToken'));
+          }
         }
         console.log(errorMsg);
         this.toastr.error(errorMsg);

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
+import at.ac.tuwien.sepm.groupphase.backend.security.PasswordResetToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +12,13 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.Date;
 import java.util.List;
 
@@ -57,6 +61,10 @@ public class ApplicationUser {
   @Fetch(FetchMode.JOIN)
   @Builder.Default
   private List<Booking> bookings = new java.util.ArrayList<>();
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "password_token_id", referencedColumnName = "id")
+  private PasswordResetToken passwordResetToken;
 
   public ApplicationUser(String email, String password, String firstName, String lastName, Boolean admin) {
     this.email = email;

@@ -44,6 +44,8 @@ import { UsersComponent } from './components/users/users.component';
 import { BookingsComponent } from './components/user/bookings/bookings.component';
 import {MessageCreateComponent} from './components/message/message-create/message-create.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { PasswordForgotComponent } from './components/password-forgot/password-forgot.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,8 @@ import { SettingsComponent } from './components/user/settings/settings.component
     ShowVenueComponent,
     UsersComponent,
     SettingsComponent,
+    ChangePasswordComponent,
+    PasswordForgotComponent,
   ],
   imports: [
     BrowserModule,
