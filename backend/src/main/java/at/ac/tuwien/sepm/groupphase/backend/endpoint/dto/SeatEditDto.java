@@ -13,6 +13,8 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 public class SeatEditDto {
   @Nullable
+  private Long id;
+  @Nullable
   private Integer rowNumber;
   @Nullable
   private Integer colNumber;

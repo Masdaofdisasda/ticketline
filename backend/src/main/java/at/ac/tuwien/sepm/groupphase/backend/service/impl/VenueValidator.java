@@ -19,19 +19,29 @@ public class VenueValidator {
     List<String> errors = new ArrayList<>();
 
     for (final Room room : venue.getRooms()) {
-      if (room.getColumnSize() < 1) {
-        errors.add("The column size of room " + room.getName() + " must be greater than 0, is" + room.getColumnSize());
+      if (room.getColumnSize() == null) {
+        errors.add("columnSize of room " + room.getName() + " must be set");
+      } else if (room.getColumnSize() < 1) {
+        errors.add("columnSize of room " + room.getName() + " must be greater than 0, is" + room.getColumnSize());
       }
-      if (room.getRowSize() < 1) {
-        errors.add("The row size of room " + room.getName() + " must be greater than 0, is" + room.getRowSize());
+      if (room.getRowSize() == null) {
+        errors.add("rowSize of room " + room.getName() + " must be set");
+      } else if (room.getRowSize() < 1) {
+        errors.add("rowSize of room " + room.getName() + " must be greater than 0, is" + room.getRowSize());
       }
       for (final Sector sector : room.getSectors()) {
         for (final Seat seat : sector.getSeats()) {
           if (seat.getColNumber() >= room.getRowSize()) {
-            errors.add("Seats column number cannot be greater than the rooms row size");
+            errors.add("Seats rowNumber must be smaller than the rooms rowSize (" + room.getRowSize() + "), is " + seat.getColNumber());
+          }
+          if (seat.getColNumber() < 0) {
+            errors.add("Seats colNumber must be greater than 0, is " + seat.getColNumber());
           }
           if (seat.getRowNumber() >= room.getColumnSize()) {
-            errors.add("Seats row number cannot be greater than the rooms column size");
+            errors.add("Seats rowNumber must be smaller than the rooms columnSize (" + room.getColumnSize() + "), is " + seat.getRowNumber());
+          }
+          if (seat.getRowNumber() < 0) {
+            errors.add("Seats rowNumber must be greater than 0, is " + seat.getRowNumber());
           }
         }
       }

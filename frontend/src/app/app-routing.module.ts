@@ -20,6 +20,7 @@ import { ArtistComponent } from './components/artist/artist.component';
 import { ArtistCreateComponent } from './components/artist/artist-create/artist-create.component';
 import { UserComponent } from './components/user/user/user.component';
 import { BookingsComponent } from './components/user/bookings/bookings.component';
+import {SelectPerformanceComponent} from './components/event/select-performance/select-performance.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { PasswordForgotComponent } from './components/password-forgot/password-forgot.component';
 import { MessageCreateComponent } from './components/message/message-create/message-create.component';
@@ -46,7 +47,8 @@ const routes: Routes = [
   { path: 'event', component: EventComponent },
   { path: 'event/create', component: EventCreateComponent },
   { path: 'event', component: EventComponent },
-  { path: 'event/:eventId/seats', component: SeatSelectionComponent },
+  { path: 'event/:eventId/performances', component: SelectPerformanceComponent },
+  { path: 'event/performance/:performanceId/seats', component: SeatSelectionComponent },
 
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },

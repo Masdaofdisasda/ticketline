@@ -1,13 +1,15 @@
-<div class="bg-white rounded-2 py-3 px-3">
+<div class="bg-white rounded-2 py-3 px-3 d-flex flex-column min-height-0 h-100">
   <div class="fw-bold px-2">{{getHeader()}}</div>
 
-  <div *ngIf="(tickets$ | async).length === 0" class="fw-lighter px-2 py-3 text-center">Seems like your cart is empty</div>
+  <div *ngIf="(tickets$ | async).length === 0" class="fw-lighter px-2 py-3 text-center">Seems like your cart is empty
+  </div>
 
-
-  <div *ngIf="(tickets$ | async).length !== 0" class="container-fluid py-3">
-    <ul class="list-group list-group-flush">
-      <li *ngFor="let ticket of tickets$ | async" class="list-group-item">
-        <app-ticket-item [ticket]="ticket"></app-ticket-item>
+  <div *ngIf="(tickets$ | async).length !== 0"
+       class="container-fluid py-3 flex-shrink-1 min-height-0 d-flex flex-column">
+    <ul class="overflow-scroll list-group list-group-flush flex-grow-1">
+      <li *ngFor="let ticket of tickets$ | async" class="list-group-item" (mouseenter)="onHoverStart(ticket)"
+          (mouseleave)="onHoverEnd(ticket)">
+        <app-ticket-item [ticket]="ticket" (delete)="onHoverEnd(ticket)"></app-ticket-item>
       </li>
     </ul>
     <div class="fw-normal text-end pt-4 pe-4">

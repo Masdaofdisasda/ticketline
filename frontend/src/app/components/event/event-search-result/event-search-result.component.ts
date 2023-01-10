@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {PageResponseDto} from '../../../dto/page-response.dto';
 import {PageDto} from '../../../dto/page.dto';
 import {ExtendedEventDto} from '../../../dto/extended-event.dto';
+import {Router} from '@angular/router';
+import {EventDto} from '../../../dto/event.dto';
 
 @Component({
   selector: 'app-event-search-result',
@@ -15,7 +17,7 @@ export class EventSearchResultComponent implements OnChanges {
 
   pagedEventsDefault = PageResponseDto.getPageResponseDto();
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   refreshEvents() {
@@ -30,6 +32,14 @@ export class EventSearchResultComponent implements OnChanges {
       // this is needed because bootstrap pagination and spring pagination have an offset
       changes.pagedEvents.currentValue['pageIndex'] = changes.pagedEvents.currentValue['pageIndex'] + 1;
       this.pagedEventsDefault = changes.pagedEvents.currentValue;
+    }
+  }
+
+  getTicketsClicked(event: EventDto) {
+    if (event.performances.length === 1) {
+      this.router.navigateByUrl(`event/performance/${event.performances[0].id}/seats`);
+    } else {
+      this.router.navigateByUrl(`event/${event.id}/performances`);
     }
   }
 }

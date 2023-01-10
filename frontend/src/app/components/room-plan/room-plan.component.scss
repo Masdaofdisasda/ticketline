@@ -11,10 +11,23 @@
 }
 
 .seat:hover {
-    color: #d5de78;
-    fill: #e9eaec;
+  color: #d5de78;
+  fill: #e9eaec;
 }
 
 svg {
-    shape-rendering: optimizeSpeed;
+  shape-rendering: optimizeSpeed;
+}
+
+.info {
+  top: 0;
+  right: 0;
+}
+
+.popper {
+  z-index: 1000;
+}
+
+.popper p {
+  margin: 0 0 .1rem;
 }

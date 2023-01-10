@@ -1,17 +1,21 @@
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    height: 20rem;
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+}
+
+.sector-list-outer {
+  min-height: 0;
 }
 
 .sector-list {
-    height: auto;
-    overflow-y: auto;
+  height: auto;
+  overflow-y: auto;
 }
 
 .room-view-wrapper {
-    height: 20rem;
-    overflow: scroll;
+  height: 20rem;
+  overflow: scroll;
 }
 
 .room-view {

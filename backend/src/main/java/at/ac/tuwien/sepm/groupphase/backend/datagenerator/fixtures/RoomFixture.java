@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue1;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue2;
@@ -43,15 +44,20 @@ public class RoomFixture {
   }
 
   public static Room buildRoom1() {
-    return at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
+    Room room = at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
       .id(1L)
       .venue(buildVenue1())
       .performances(new ArrayList<>())
-      .sectors(new ArrayList<>())
       .columnSize(10)
       .rowSize(10)
       .name("Hall1")
       .build();
+    room.setSectors(List.of(
+      SectorFixture.build10x10Sector4(room),
+      SectorFixture.build10x10Sector5(room)
+    ));
+
+    return room;
   }
 
   public static Room buildRoom2() {
@@ -79,15 +85,18 @@ public class RoomFixture {
   }
 
   public static Room buildRoom4() {
-    return at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
+    Room room = at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
       .id(4L)
       .venue(buildVenue2())
       .performances(new ArrayList<>())
-      .sectors(new ArrayList<>())
       .columnSize(10)
       .rowSize(10)
       .name("Hall4")
       .build();
+
+    room.setSectors(List.of(SectorFixture.build10x10Sector1(room), SectorFixture.build10x10Sector2(room)));
+
+    return room;
   }
 
   public static Room buildRoom5() {
@@ -115,27 +124,37 @@ public class RoomFixture {
   }
 
   public static Room buildRoom7() {
-    return at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
+    Room room = at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
       .id(7L)
       .venue(buildVenue3())
       .performances(new ArrayList<>())
-      .sectors(new ArrayList<>())
       .columnSize(10)
       .rowSize(10)
       .name("Hall7")
       .build();
+
+    room.setSectors(List.of(SectorFixture.build10x10Sector3(room)));
+
+    return room;
   }
 
   public static Room buildRoom8() {
-    return at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
+    Room room = at.ac.tuwien.sepm.groupphase.backend.entity.Room.builder()
       .id(8L)
       .venue(buildVenue3())
       .performances(new ArrayList<>())
-      .sectors(new ArrayList<>())
       .columnSize(20)
       .rowSize(20)
       .name("Hall8")
       .build();
+    room.setSectors(List.of(
+      SectorFixture.buildSector1(room),
+      SectorFixture.buildSector2(room),
+      SectorFixture.buildSector3(room),
+      SectorFixture.buildSector4(room)
+    ));
+
+    return room;
   }
 
   public static Room buildRoom9() {

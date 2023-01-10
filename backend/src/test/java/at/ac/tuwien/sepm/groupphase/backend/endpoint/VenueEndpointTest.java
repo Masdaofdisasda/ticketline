@@ -3,6 +3,9 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
@@ -12,6 +15,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
@@ -44,6 +48,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -414,8 +419,37 @@ public class VenueEndpointTest implements TestData {
 
     venueRepository.save(venueToAdd);
 
-    MvcResult mvcResult = this.mockMvc.perform(get(VENUE_BASE_URI)
+
+    VenueEditDto edit = VenueEditDto.builder()
+      .name(editName)
+      .city(editCity)
+      .street(editStreet)
+      .houseNumber(editHouseNumber)
+      .zipCode(editZipCode)
+      .rooms(List.of(RoomEditDto.builder()
+        .columnSize(editColumnSize)
+        .rowSize(editRowSize)
+        .name(editRoomName)
+        .sectors(List.of(SectorEditDto.builder()
+          .name(editSectorName)
+          .seats(List.of(SeatEditDto.builder()
+              .state(editSeatState)
+              .rowNumber(editRowNumber)
+              .colNumber(editColumnNumber)
+            .build(),
+            SeatEditDto.builder()
+              .state(editSeatState)
+              .rowNumber(editRowNumber1)
+              .colNumber(editColumnNumber1)
+              .build()))
+          .build()))
+        .build()))
+      .build();
+
+    MvcResult mvcResult = this.mockMvc.perform(patch(VENUE_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+        .content(Json.pretty(edit))
+        .contentType(MediaType.APPLICATION_JSON)
       )
       .andDo(print())
       .andReturn();

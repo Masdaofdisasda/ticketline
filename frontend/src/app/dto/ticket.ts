@@ -1,3 +1,5 @@
+import {Seat} from './venue';
+
 export class Ticket {
   performance: string;
   sector: string;
@@ -6,4 +8,6 @@ export class Ticket {
 
   seatNumber: string;
   price: number;
+
+  seat?: Seat;
 }

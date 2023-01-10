@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import org.springframework.data.domain.Page;
 
@@ -42,7 +43,7 @@ public interface EventService {
    * @return created event
    * @throws ValidationException when validation for EventDto fails
    */
-  public Event create(EventDto event) throws ValidationException;
+  Event create(EventDto event) throws ValidationException;
 
   /**
    * get Event categories from database.
@@ -50,4 +51,12 @@ public interface EventService {
    * @return list of event categories
    */
   List<String> getCategories();
+
+  /**
+   * get a single Event by its ID.
+   *
+   * @param id the id of the event that should be queried
+   * @return The Event with the given id
+   */
+  Event getById(long id) throws NotFoundException;
 }

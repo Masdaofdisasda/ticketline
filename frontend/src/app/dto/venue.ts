@@ -22,7 +22,6 @@ export class Room {
 export class Sector {
   id?: number;
   name: string;
-  pricing: number;
 
   priceCategory: PriceCategory;
 
@@ -48,4 +47,5 @@ export class PriceCategory {
   id?: number;
   name: string;
   color: string;
+  pricing: number;
 }

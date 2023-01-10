@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
 public class VenueFixture {
@@ -20,11 +21,13 @@ public class VenueFixture {
     }
   }
 
+  @PostConstruct
   public static Venue buildVenue1() {
     return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(1L)
       .name("Stadthalle")
       .city("Vienna")
+      .houseNumber("5")
       .country("Austria")
       .zipCode("1220")
       .street("Belongs to the Street")
@@ -32,6 +35,7 @@ public class VenueFixture {
       .build();
   }
 
+  @PostConstruct
   public static Venue buildVenue2() {
     return Venue.builder()
       .id(2L)
@@ -40,10 +44,12 @@ public class VenueFixture {
       .country("Austria")
       .zipCode("3312")
       .street("Belongs to the Street")
+      .houseNumber("5")
       .rooms(new ArrayList<>())
       .build();
   }
 
+  @PostConstruct
   public static Venue buildVenue3() {
     return at.ac.tuwien.sepm.groupphase.backend.entity.Venue.builder()
       .id(3L)
@@ -52,6 +58,7 @@ public class VenueFixture {
       .country("Germany")
       .zipCode("8492")
       .street("Belongs to the Street")
+      .houseNumber("5")
       .rooms(new ArrayList<>())
       .build();
   }

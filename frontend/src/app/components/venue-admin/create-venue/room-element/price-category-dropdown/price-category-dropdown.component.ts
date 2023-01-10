@@ -20,12 +20,16 @@ export class PriceCategoryDropdownComponent implements OnInit {
   @Input()
   priceCategories: Array<PriceCategory>;
 
+  @Input()
+  disabled: boolean;
+
   @Output()
   selectedChange = new EventEmitter<PriceCategory>();
 
   currentMode = 'default';
   priceCategoryAdd = new PriceCategory();
   colorSimilarTo = null;
+  expanded3Digit = false;
 
   readonly minColorDistance = 40;
 
@@ -59,13 +63,27 @@ export class PriceCategoryDropdownComponent implements OnInit {
     this.currentMode = 'createNew';
   }
 
-  checkSimilarity() {
+  contentUpdated() {
     this.colorSimilarTo = null;
     this.priceCategories.forEach(category => {
       if (this.colorDistance(category.color, this.priceCategoryAdd.color) < this.minColorDistance) {
         this.colorSimilarTo = category.name;
       }
     });
+
+    if (this.expanded3Digit) {
+      const charArray = [...this.priceCategoryAdd.color];
+      const last = charArray.splice(-1);
+      setTimeout(() => this.priceCategoryAdd.color = charArray.filter((value, index) => index % 2 === 0).join('') + last, 10);
+      this.expanded3Digit = false;
+    } else if (this.priceCategoryAdd.color.length === 3) {
+      setTimeout(() => {
+        this.priceCategoryAdd.color = this.convertTo6Digit(this.priceCategoryAdd.color);
+        this.expanded3Digit = true;
+      }, 50);
+    } else {
+      this.expanded3Digit = false;
+    }
   }
 
   colorDistance(colorA: string, colorB: string): number {
@@ -95,4 +113,7 @@ export class PriceCategoryDropdownComponent implements OnInit {
     return color;
   }
 
+  updateColor() {
+    this.priceCategoryAdd.color = this.convertTo6Digit(this.priceCategoryAdd.color);
+  }
 }

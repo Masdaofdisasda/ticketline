@@ -22,6 +22,8 @@ public interface TestData {
 
   String VENUE_BASE_URI = BASE_URI + "/venue";
 
+  String PERFORMANCE_BASE_URI = BASE_URI + "/performance";
+
   String ADMIN_USER = "admin@email.com";
   List<String> ADMIN_ROLES = new ArrayList<>() {
     {

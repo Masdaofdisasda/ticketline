@@ -4,12 +4,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.VenueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -43,7 +43,7 @@ public class VenueEndpoint {
    * @return The location that was added
    */
   @PostMapping
-  @PermitAll
+  @Secured("ROLE_ADMIN")
   public VenueDto addVenue(@RequestBody VenueAddDto toAdd) throws ValidationException {
     LOGGER.info("addVenue({})", toAdd);
     return this.mapper.venueToVenueDto(
@@ -60,7 +60,7 @@ public class VenueEndpoint {
    * @return The location that was deleted
    */
   @DeleteMapping("{id}")
-  @PermitAll
+  @Secured("ROLE_ADMIN")
   public VenueDto deleteVenue(@PathVariable long id) throws NotFoundException {
     LOGGER.info("deleteVenue({})", id);
     return this.mapper.venueToVenueDto(service.deleteVenue(id));
@@ -69,14 +69,15 @@ public class VenueEndpoint {
   /**
    * Edit a location in persistence.
    *
-   * @param id the id of the location to edit
+   * @param id     the id of the location to edit
    * @param toEdit the data the location should be edited by
    * @return the location that was edited
    */
   @PatchMapping("{id}")
-  @PermitAll
-  public Venue editVenue(@PathVariable long id, @RequestBody VenueEditDto toEdit) throws NotFoundException, ValidationException {
-    return service.editVenue(id, toEdit);
+  @Secured("ROLE_ADMIN")
+  public VenueDto editVenue(@PathVariable long id, @RequestBody VenueEditDto toEdit) throws NotFoundException, ValidationException {
+    LOGGER.info("editVenue({},{})", id, toEdit);
+    return mapper.venueToVenueDto(service.editVenue(id, toEdit));
   }
 
   /**
