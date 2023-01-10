@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Ticket} from '../../../dto/ticket';
 
@@ -12,9 +12,13 @@ export class TicketItemComponent implements OnInit {
   @Input()
   ticket: Ticket;
 
+  @Output()
+  delete = new EventEmitter<void>();
+
   constructor(
     private shoppingCartService: ShoppingCartService,
-    ) { }
+  ) {
+  }
 
   ngOnInit(): void {
   }
@@ -30,6 +34,7 @@ export class TicketItemComponent implements OnInit {
 
   removeItem() {
     this.shoppingCartService.removeItem(this.ticket);
+    this.delete.emit();
   }
 
 }

@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
@@ -113,5 +114,10 @@ public class DefaultEventService implements EventService {
   @Override
   public List<String> getCategories() {
     return eventRepository.findCategories();
+  }
+
+  @Override
+  public Event getById(long id) throws NotFoundException {
+    return this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException("Event with id" + id + " could not be found"));
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
@@ -17,6 +17,11 @@ export class ShoppingCartComponent implements OnInit {
   @Input()
   checkoutMode = false;
 
+  @Output()
+  hoverStart = new EventEmitter<Ticket>();
+  @Output()
+  hoverEnd = new EventEmitter<Ticket>();
+
   tickets$: Observable<Ticket[]>;
 
   constructor(
@@ -24,7 +29,8 @@ export class ShoppingCartComponent implements OnInit {
     private bookingService: BookingService,
     private router: Router,
     public authService: AuthService,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.tickets$ = this.shoppingCartService.tickets$;
@@ -35,11 +41,11 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   getHeader(): string {
-    if (this.checkoutMode){
+    if (this.checkoutMode) {
       return 'Your order:';
     }
 
-    if (this.isEmpty()){
+    if (this.isEmpty()) {
       return 'Please select seats';
     } else {
       return 'Your tickets:';
@@ -68,7 +74,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   purchaseTickets(): void {
-      this.bookingService.purchaseTickets(this.shoppingCartService.getItems())
+    this.bookingService.purchaseTickets(this.shoppingCartService.getItems())
       .subscribe({
         next: data => {
           const orderId = data;
@@ -76,5 +82,13 @@ export class ShoppingCartComponent implements OnInit {
           this.router.navigate(['order', orderId]);
         }
       });
+  }
+
+  onHoverStart(ticket: Ticket): void {
+    this.hoverStart.emit(ticket);
+  }
+
+  onHoverEnd(ticket: Ticket): void {
+    this.hoverEnd.emit(ticket);
   }
 }

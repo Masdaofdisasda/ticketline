@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter, ViewContainerRef } from '@angular/core';
-import { ColorPickerDirective } from 'ngx-color-picker';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ColorPickerDirective} from 'ngx-color-picker';
 
 @Component({
   selector: 'app-color-input-field',
@@ -36,7 +36,7 @@ export class ColorInputFieldComponent implements OnInit {
 
   @Input()
   set color(color: string) {
-    this._color = color.replace('#', '');
+    this._color = color?.replace('#', '');
     this.colorChange.emit(this._color);
   }
 

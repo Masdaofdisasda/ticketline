@@ -51,7 +51,6 @@ public class Performance {
   @ManyToOne
   private Artist artist;
 
-
   @Override
   public String toString() {
     return "Performance{" + "id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + "}";

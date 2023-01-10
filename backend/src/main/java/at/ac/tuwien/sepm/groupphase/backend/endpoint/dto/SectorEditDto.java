@@ -15,10 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 public class SectorEditDto {
   @Nullable
+  private Long id;
+  @Nullable
   private String name;
   @Nullable
   private PriceCategory priceCategory;
 
-  @Nullable
   private List<SeatEditDto> seats;
 }

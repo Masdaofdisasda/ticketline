@@ -17,15 +17,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Data
 public class Sector {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +33,7 @@ public class Sector {
   @Column(nullable = false)
   private String name;
 
-  @OneToOne
+  @ManyToOne(cascade = CascadeType.MERGE)
   private PriceCategory priceCategory;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "sector")

@@ -22,7 +22,15 @@ export class VenueService {
     return this.httpClient.post<Venue>(this.venueBaseUri, venue);
   }
 
+  public editVenue(venue: Venue): Observable<Venue> {
+    return this.httpClient.patch<Venue>(`${this.venueBaseUri}/${venue.id}`, venue);
+  }
+
   public getAll(): Observable<Array<Venue>> {
     return this.httpClient.get<Array<Venue>>(this.venueBaseUri);
+  }
+
+  public deleteVenue(id: number): Observable<Venue> {
+    return this.httpClient.delete<Venue>(`${this.venueBaseUri}/${id}`);
   }
 }

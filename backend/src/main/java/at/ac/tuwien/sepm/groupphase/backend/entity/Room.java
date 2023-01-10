@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Room {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -39,10 +39,14 @@ public class Room {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
   @Fetch(FetchMode.SUBSELECT)
   @LazyCollection(LazyCollectionOption.FALSE)
+  @Builder.Default
+  @NotNull
   private List<Sector> sectors = new java.util.ArrayList<>();
 
   @ManyToOne
   private Venue venue;
+
   @OneToMany(mappedBy = "room")
+  @Builder.Default
   private List<Performance> performances = new ArrayList<>();
 }

@@ -18,8 +18,8 @@ public class PerformanceDto {
   LocalDateTime startDate;
   LocalDateTime endDate;
   ArtistDto artist;
-
   RoomDto room;
+
   @Builder.Default
   List<TicketDto> tickets = new ArrayList<>();
 }

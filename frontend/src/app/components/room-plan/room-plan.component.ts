@@ -62,7 +62,7 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
   initialColor = '#e9eaec';
 
   mouseOver = false;
-  spaceDown = false;
+  shiftDown = false;
   mouseDown: Seat;
   lastEntered: Seat;
   selected: Array<Seat>;
@@ -80,15 +80,16 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     this.seatSize = Math.min((this.width) / (this.room.rowSize * (1 + this.padding)),
       (this.height) / (this.room.columnSize * (1 + this.padding))) * this.scaleMultiplier;
 
-    this.wrapper.nativeElement.style.transform = `matrix(${1 / this.scaleMultiplier}, 0, 0, ${1 / this.scaleMultiplier}, 0, 0)`;
-    this.panzoom.nativeElement.style.top = '-1420px';
-    this.panzoom.nativeElement.style.left = '-1500px';
+    this.panzoom.nativeElement.style.transform = `matrix(${1 / this.scaleMultiplier}, 0, 0, ${1 / this.scaleMultiplier}, 0, 0)`;
 
-    this.seatGrid = Array.from({ length: this.room.columnSize }, () =>
-      Array.from({ length: this.room.rowSize }, () => null)
+    this.panzoom.nativeElement.style.top = -this.height * this.scaleMultiplier * 0.45 + 'px';
+    this.panzoom.nativeElement.style.left = -this.width * this.scaleMultiplier * 0.45 + 25 + 'px';
+
+    this.seatGrid = Array.from({length: this.room.columnSize}, () =>
+      Array.from({length: this.room.rowSize}, () => null)
     );
 
-      // check if all possible seats should be drawn or only already existing ones
+    // check if all possible seats should be drawn or only already existing ones
     if (this.drawAllPossible) {
       // draw all possible seats by rooms size
       for (let column = 0; column < this.room.rowSize; column++) {
@@ -146,20 +147,20 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     // initialize the element to be panable and zoomable
     panzoom(this.panzoom.nativeElement,
       {
-          bound: 'none',
-          panCondition: () => this.spaceDown,
-          zoomCondition: () => true,
-          scaleMin: .3 / this.scaleMultiplier,
-          scaleMax: 100 / this.scaleMultiplier,
-          initialScale: 1 / this.scaleMultiplier
-        },
+        bound: 'none',
+        panCondition: () => this.shiftDown,
+        zoomCondition: () => true,
+        scaleMin: .3 / this.scaleMultiplier,
+        scaleMax: 100 / this.scaleMultiplier,
+        initialScale: 1 / this.scaleMultiplier
+      },
       this.wrapper.nativeElement);
   }
 
   ngOnInit(): void {
     document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === ' ') {
-        this.spaceDown = true;
+      if (e.key === 'Shift') {
+        this.shiftDown = true;
         if (this.mouseOver || e.target === document.body) {
           e.preventDefault();
         }
@@ -167,8 +168,8 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     });
 
     document.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === ' ') {
-        this.spaceDown = false;
+      if (e.key === 'Shift') {
+        this.shiftDown = false;
         if (this.mouseOver || e.target === document.body) {
           e.preventDefault();
         }
@@ -208,7 +209,7 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     rect.addEventListener('mouseleave', () => this.hoverEnd.emit(seat), {passive: true});
     if (this.multiSelect) {
       rect.addEventListener('mousedown', () => {
-        if (!this.spaceDown) {
+        if (!this.shiftDown) {
           this.mouseDown = this.lastEntered = (seat);
           this.selected = [this.lastEntered];
         }

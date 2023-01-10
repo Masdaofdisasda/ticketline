@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,17 +18,18 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class PriceCategory {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany
+  @OneToMany(mappedBy = "priceCategory")
+  @LazyCollection(LazyCollectionOption.FALSE)
   private List<Sector> sectorList;
 
   @ManyToOne

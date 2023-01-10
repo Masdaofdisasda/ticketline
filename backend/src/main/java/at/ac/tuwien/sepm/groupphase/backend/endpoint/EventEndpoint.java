@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +100,14 @@ public class EventEndpoint {
   public List<String> getCategories() {
     LOGGER.info("GET /api/v1/events/categories");
     return eventService.getCategories();
+  }
+
+  @PermitAll
+  @GetMapping("{id}")
+  @Operation(summary = "Get a single event by its ID")
+  public EventDto getById(@PathVariable long id) {
+    LOGGER.info("GET /api/v1/events/" + id);
+    return eventMapper.eventToEventDto(this.eventService.getById(id));
   }
 
   private <T extends EventDto> PageDtoResponse<T> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<T> data) {

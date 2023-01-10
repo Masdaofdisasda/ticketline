@@ -12,10 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomEditDto {
-
+  private Long id;
   private String name;
   private Integer rowSize;
   private Integer columnSize;
 
-  private List<SectorAddDto> sectors;
+  private List<SectorEditDto> sectors;
 }

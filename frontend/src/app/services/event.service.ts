@@ -65,4 +65,8 @@ export class EventService {
   getCategories(): Observable<string[]> {
     return this.httpClient.get<string[]>(this.eventBaseUri + '/categories');
   }
+
+  getById(id: number): Observable<EventDto> {
+    return this.httpClient.get<EventDto>(this.eventBaseUri + '/' + id);
+  }
 }

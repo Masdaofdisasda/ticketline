@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
+import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.PriceCategoryFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.SectorFixture;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -12,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.ArtistRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.RoomRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TicketRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.ArtistFixture.getBuildArtist;
@@ -46,13 +50,15 @@ public class PerformanceDataGenerator {
   private final BookingRepository bookingRepository;
   private final RoomRepository roomRepository;
 
+  private final PriceCategoryRepository priceCategoryRepository;
+
   public PerformanceDataGenerator(PerformanceRepository performanceRepository,
                                   EventRepository eventRepository,
                                   ArtistRepository artistRepository,
                                   VenueRepository venueRepository,
                                   TicketRepository ticketRepository,
                                   BookingRepository bookingRepository,
-                                  RoomRepository roomRepository) {
+                                  RoomRepository roomRepository, PriceCategoryRepository priceCategoryRepository) {
     this.performanceRepository = performanceRepository;
     this.eventRepository = eventRepository;
     this.artistRepository = artistRepository;
@@ -60,6 +66,7 @@ public class PerformanceDataGenerator {
     this.ticketRepository = ticketRepository;
     this.bookingRepository = bookingRepository;
     this.roomRepository = roomRepository;
+    this.priceCategoryRepository = priceCategoryRepository;
   }
 
   @PostConstruct
@@ -68,8 +75,12 @@ public class PerformanceDataGenerator {
       LOGGER.debug("performance already generated");
     } else {
       LOGGER.debug("generating {} performance entries", NUMBER_OF_PERFORMANCES_TO_GENERATE);
-      for (int i = 1; i <= NUMBER_OF_PERFORMANCES_TO_GENERATE; i++) {
 
+      priceCategoryRepository.saveAll(Arrays.asList(PriceCategoryFixture.getAll()));
+      // This is painful but the only way it really works, this will be changed anyway when the data model for PriceCategory is adjusted
+      SectorFixture.repository = priceCategoryRepository;
+
+      for (int i = 1; i <= NUMBER_OF_PERFORMANCES_TO_GENERATE; i++) {
         Venue venue = venueRepository.save(getBuildVenue(i));
         Artist artist = artistRepository.save(getBuildArtist(i));
         Event event = eventRepository.save(getBuildEvent(i));

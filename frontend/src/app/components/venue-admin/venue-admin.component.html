@@ -1,17 +1,15 @@
 <div class="pt-4">
   <h2>Manage Venues</h2>
 
-  <button class="btn btn-primary mb-4" routerLink="/admin/venue/create"><i class="bi bi-plus"></i>Create Venue</button>
-  <div class="venue-list list-group">
-    <div class="venue-item d-flex align-items-center list-group-item" *ngFor="let venue of venues"
-      [routerLink]="['/admin/venue/show', venue.id]">
-      {{venue.name}}
-      <div class="btn-group ml-4">
-        <button class="btn btn-outline-primary" [routerLink]="['/admin/venue/show', venue.id]"><i
-            class="bi bi-info"></i>
-        </button>
-        <button class="btn btn-outline-secondary" [routerLink]="['/admin/venue/edit', venue.id]"><i
+  <button class="btn btn-primary" routerLink="/admin/venue/create"><i class="bi bi-plus"></i>Create Venue</button>
+  <div class="venue-list">
+    <div class="venue-item d-flex mt-2" *ngFor="let venue of venues">
+      <p class="flex-grow-1">{{venue.name}}</p>
+      <div class="btn-group">
+        <button class="btn btn-outline-warning" [routerLink]="['/admin/venue/edit', venue.id]"><i
             class="bi bi-pencil"></i></button>
+        <button class="btn btn-outline-danger" (click)="deleteVenueClicked(venue)"><i
+          class="bi bi-trash"></i></button>
       </div>
     </div>
   </div>

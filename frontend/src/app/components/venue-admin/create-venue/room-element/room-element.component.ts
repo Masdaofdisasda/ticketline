@@ -1,8 +1,9 @@
-import {AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {PriceCategory, Room, Seat, Sector} from 'src/app/dto/venue';
 import {MultiselectEvent} from '../../../room-plan/multiselect-event';
 import {RoomPlanComponent} from '../../../room-plan/room-plan.component';
+import {ConfirmDeleteService} from '../../../../services/confirm-delete-service.service';
 
 @Component({
   selector: 'app-room-element',
@@ -23,13 +24,16 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
   @ViewChild(RoomPlanComponent)
   roomPlan: RoomPlanComponent;
 
+  @Output()
+  updated = new EventEmitter<void>();
+
   selectedIndex = -1;
   readonly unselectedColor = '#e9eaec';
   readonly unselectedID = -1;
   readonly unselectedSector = {id: this.unselectedID, name: '', pricing: .0, priceCategory: new PriceCategory()};
   selectedSector = new BehaviorSubject<Sector>(this.unselectedSector);
 
-  constructor() {
+  constructor(private confirmDelete: ConfirmDeleteService) {
   }
 
   ngOnInit(): void {
@@ -43,7 +47,8 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
   ngAfterContentInit(): void {
   }
 
-  selectSector(element: Element, sector: Sector, index: number) {
+  selectSector(target: EventTarget, sector: Sector, index: number) {
+    const element = target as Element;
     // if clicked sector was already selected, select no sector (indicated by unselectedID)
     if (element.classList.contains('active')) {
       element.classList.remove('active');
@@ -66,18 +71,15 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
       this.room.sectors = [];
     }
     // add the new sector to the front of the sectors array
-    this.room.sectors.unshift({
+    this.room.sectors = [{
       name: '',
-      priceCategory: {name: 'select...', color: 'ffffff'},
-      pricing: .0
-    });
-    // update the selectedSector to new sector
-    this.selectedSector.next(this.room.sectors[0]);
+      priceCategory: {name: 'select...', color: 'ffffff', pricing: null},
+    }, ...this.room.sectors];
 
     // timeout is needed because the ngFor of the sector list takes some time
     setTimeout(() => {
       // select the newly added sector
-      this.selectSector(this.sectorList.nativeElement.children[0], this.selectedSector.value, 0);
+      this.selectSector(this.sectorList.nativeElement.children[0], this.room.sectors[0], 0);
       // focus on the name input
       this.nameInput.nativeElement.focus();
     }, 10);
@@ -96,14 +98,17 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     this.selectedSector.next(this.selectedSector.value);
   }
 
-  handleSelection(seat: Seat) {
+  handleSelection(seat: Seat, removeAlreadySelected = true) {
     // check if a sector is selected
     if (this.selectedSector.value.id !== this.unselectedID) {
       if (!this.selectedSector.value.seats) {
         // if seats were uninitialized, initialize them
         this.selectedSector.value.seats = [];
-      } else if (this.selectedSector.value.seats
-        .find((val) => (val.rowNumber === seat.rowNumber && val.colNumber === seat.colNumber))) {
+      } else if (this.selectedSector.value.seats.find((val) => (val.rowNumber === seat.rowNumber && val.colNumber === seat.colNumber))) {
+        if (!removeAlreadySelected) {
+          // if already selected elements should not be removed we dont have to do anything
+          return;
+        }
         // if the selected sector already contains clickedSeat, remove it from the selectedSector
         const newSeats = this.selectedSector.value.seats
           .filter((val) => (val.rowNumber !== seat.rowNumber || val.colNumber !== seat.colNumber));
@@ -115,8 +120,9 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
       }
       // remove seats from sectors that already contain them
       this.room.sectors?.forEach(sector => {
-        if (sector.seats?.find((val) => (val.rowNumber === seat.rowNumber && val.colNumber === seat.colNumber))) {
-          sector.seats?.splice(sector.seats.indexOf(seat), 1);
+        const index = sector.seats?.findIndex((val) => (val.rowNumber === seat.rowNumber && val.colNumber === seat.colNumber));
+        if (index > 0) {
+          sector.seats?.splice(index, 1);
         }
       });
       // add clicked seat to selected sector
@@ -147,7 +153,7 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     if (seats.length < 2) {
       return;
     }
-    seats.forEach(async seat => this.handleSelection(seat));
+    seats.forEach(async seat => this.handleSelection(seat, true));
     // send update to all subscribers
     this.selectedSector.next(this.selectedSector.value);
   }
@@ -159,10 +165,10 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
   }
 
   async update(): Promise<void> {
+    this.updated.emit();
     if (this.selectedIndex >= 0) {
       this.room.sectors[this.selectedIndex] = this.selectedSector.value;
     }
-    // todo update rooms sector that is selected
     this.room.sectors?.forEach(sector => {
       if (!sector.seats) {
         return;
@@ -176,6 +182,8 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     this.selectedSector.value.seats?.forEach((seat) => {
       this.roomPlan.setColor(this.selectedSector.value.priceCategory.color, seat.colNumber, seat.rowNumber);
     });
+
+    window.localStorage.setItem('roomAdd_' + this.room.name, JSON.stringify(this.room));
   }
 
   hoverEnd(seat: Seat) {
@@ -183,4 +191,13 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     this.update();
   }
 
+  deleteSectorClicked(event: MouseEvent, sector: Sector) {
+    event.stopPropagation();
+    this.confirmDelete.open('Sector', sector.name).then(result => {
+      if (result) {
+        this.room.sectors.splice(this.room.sectors.indexOf(sector), 1);
+        this.update();
+      }
+    });
+  }
 }
