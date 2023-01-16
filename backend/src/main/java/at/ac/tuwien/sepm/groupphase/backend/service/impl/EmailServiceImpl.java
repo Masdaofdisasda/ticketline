@@ -12,15 +12,16 @@ public class EmailServiceImpl implements EmailService {
   private String email;
 
   @Override
-  public SimpleMailMessage constructResetTokenEmail(
-    String contextPath, String token, ApplicationUser user) {
+  public SimpleMailMessage constructResetTokenEmail(String contextPath, String token, ApplicationUser user) {
     String url = contextPath + "/user/changePassword?token=" + token;
-    String message = "Reset Password";
-    return constructEmail("Reset Password", message + " \r\n" + url, user);
+    String message = "You have requested a password reset link. Here is your link: \r\n"
+      + url + "\r\nThe link will expire after 24 hours. \r\n"
+      + "In case you didn't request this link you can simply ignore this message. Your password will not be changed.\r\n\r\n"
+      + "Kind regards,\r\n The Ticketline team";
+    return constructEmail("Ticketline - Reset Password", message, user);
   }
 
-  private SimpleMailMessage constructEmail(String subject, String body,
-                                           ApplicationUser user) {
+  private SimpleMailMessage constructEmail(String subject, String body, ApplicationUser user) {
     SimpleMailMessage email = new SimpleMailMessage();
     email.setSubject(subject);
     email.setText(body);
