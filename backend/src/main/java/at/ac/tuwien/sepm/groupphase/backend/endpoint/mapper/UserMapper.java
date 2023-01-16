@@ -1,11 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
@@ -19,6 +17,8 @@ public interface UserMapper {
   UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
   ApplicationUser userRegistrationDtoToApplicationUser(UserRegistrationDto userDto);
+
+  ApplicationUser userCreationDtoToApplicationUser(UserCreationDto userDto);
 
   @Named("simpleUser")
   SimpleUserDto userToSimpleUserDto(ApplicationUser user);

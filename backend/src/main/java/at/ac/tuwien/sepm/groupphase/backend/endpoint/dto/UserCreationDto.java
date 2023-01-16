@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegistrationDto {
+public class UserCreationDto {
 
   @NotNull(message = "Email must not be null")
   @Email
@@ -26,5 +26,6 @@ public class UserRegistrationDto {
 
   @NotNull(message = "Last name must not be null")
   private String lastName;
+  @NotNull(message = "isAdmin must not be null")
+  private Boolean isAdmin;
 }
-

@@ -2,9 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UpdateUserLockedDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
@@ -29,8 +28,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
@@ -55,6 +54,9 @@ public class UserEndpointTest implements TestData {
 
   @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  private UserMapper userMapper;
 
   private UserLoginDto adminDto = UserLoginDto.builder()
     .email("admin@email.com")
@@ -217,4 +219,197 @@ public class UserEndpointTest implements TestData {
     assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
   }
 
+
+  @Test
+  public void createAdminUserWithUserCreateEndpoint() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@tst.com")
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+    ApplicationUser createdUser = userRepository.findUserByEmail(userDto.getEmail());
+    assertEquals(createdUser.getEmail(), userMapper.userCreationDtoToApplicationUser(userDto).getEmail());
+  }
+
+  @Test
+  public void failCreateUserWhenUserExistsAlready() throws Exception {
+    ApplicationUser user = ApplicationUser.builder()
+      .email("test@test.com")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .admin(false)
+      .password(
+        passwordEncoder.encode("12345678")
+      ).build();
+
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@test.com")
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+
+    userRepository.save(user);
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenEmailIsNotGiven() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenFirstNameIsNotGiven() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@test.com")
+      .password("12345678")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenLastNameIsNotGiven() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@test.com")
+      .password("12345678")
+      .firstName("Max")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenEmailIsMalformed() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test")
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenIsAdminIsNotGiven() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@test.com")
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), response.getStatus());
+  }
+
+  @Test
+  public void failCreateUserWhenUserIsNotAdmin() throws Exception {
+    UserCreationDto userDto = UserCreationDto.builder()
+      .email("test@tst.com")
+      .password("12345678")
+      .firstName("Max")
+      .lastName("Mustermann")
+      .isAdmin(true)
+      .build();
+    MvcResult mvcResult =
+      this.mockMvc
+        .perform(
+          post(USER_BASE_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
+            .content(objectMapper.writeValueAsString(userDto)))
+        .andDo(print())
+        .andReturn();
+    MockHttpServletResponse response = mvcResult.getResponse();
+
+    assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+  }
 }

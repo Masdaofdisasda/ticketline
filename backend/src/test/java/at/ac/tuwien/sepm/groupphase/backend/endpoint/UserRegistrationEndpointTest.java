@@ -87,7 +87,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())
@@ -105,7 +105,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())
@@ -126,7 +126,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())
@@ -146,7 +146,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())
@@ -166,7 +166,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())
@@ -187,7 +187,7 @@ public class UserRegistrationEndpointTest implements TestData {
     MvcResult mvcResult =
       this.mockMvc
         .perform(
-          post(USER_BASE_URI)
+          post(USER_BASE_URI + "/register")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userDto)))
         .andDo(print())

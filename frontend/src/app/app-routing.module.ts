@@ -20,9 +20,10 @@ import { ArtistComponent } from './components/artist/artist.component';
 import { ArtistCreateComponent } from './components/artist/artist-create/artist-create.component';
 import { UserComponent } from './components/user/user/user.component';
 import { BookingsComponent } from './components/user/bookings/bookings.component';
-import {SelectPerformanceComponent} from './components/event/select-performance/select-performance.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { PasswordForgotComponent } from './components/password-forgot/password-forgot.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
+import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
 import { MessageCreateComponent } from './components/message/message-create/message-create.component';
 
 const routes: Routes = [
@@ -33,6 +34,11 @@ const routes: Routes = [
   { path: 'user', component: UserComponent },
   { path: 'user/bookings', component: BookingsComponent },
   { path: 'user/changePassword', component: ChangePasswordComponent },
+  {
+    path: 'user/create',
+    canActivate: [AdminGuard],
+    component: CreateUserComponent,
+  },
   {
     path: 'admin/users',
     canActivate: [AdminGuard],

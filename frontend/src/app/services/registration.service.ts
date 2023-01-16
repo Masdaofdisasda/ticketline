@@ -8,7 +8,8 @@ import { Globals } from '../global/globals';
   providedIn: 'root',
 })
 export class RegistrationService {
-  private registrationBaseUri: string = this.globals.backendUri + '/user';
+  private registrationBaseUri: string =
+    this.globals.backendUri + '/user/register';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {}
 
