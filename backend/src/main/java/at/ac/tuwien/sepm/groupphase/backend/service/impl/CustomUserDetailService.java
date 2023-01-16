@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
@@ -159,8 +160,8 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public void register(UserRegistrationDto userRegistrationDto) throws ValidationException {
-    LOGGER.debug("Login new user");
-    customUserValidator.validateForCreate(userRegistrationDto);
+    LOGGER.debug("Register new user");
+    customUserValidator.validateForRegister(userRegistrationDto);
     ApplicationUser applicationUser =
       ApplicationUser.builder()
         .email(userRegistrationDto.getEmail())
@@ -168,6 +169,21 @@ public class CustomUserDetailService implements UserService {
         .firstName(userRegistrationDto.getFirstName())
         .lastName(userRegistrationDto.getLastName())
         .admin(false)
+        .accountNonLocked(true)
+        .build();
+    userRepository.save(applicationUser);
+  }
+
+  public void createUser(UserCreationDto userCreationDto) throws ValidationException {
+    LOGGER.debug("Create new user");
+    customUserValidator.validateForCreate(userCreationDto);
+    ApplicationUser applicationUser =
+      ApplicationUser.builder()
+        .email(userCreationDto.getEmail())
+        .password(passwordEncoder.encode(userCreationDto.getPassword()))
+        .firstName(userCreationDto.getFirstName())
+        .lastName(userCreationDto.getLastName())
+        .admin(userCreationDto.getIsAdmin())
         .accountNonLocked(true)
         .build();
     userRepository.save(applicationUser);

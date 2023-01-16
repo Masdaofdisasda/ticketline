@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GenericResponse } from 'src/app/dto/generic-response.dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -21,7 +22,8 @@ export class UsersComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +81,10 @@ export class UsersComponent implements OnInit {
         }
       },
     });
+  }
+
+  create() {
+    this.router.navigate(['user/create']);
   }
 
   private unlock(user: User) {

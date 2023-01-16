@@ -14,7 +14,7 @@ import javax.annotation.security.PermitAll;
 import java.lang.invoke.MethodHandles;
 
 @RestController
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/api/v1/user/register")
 public class RegistrationEndpoint {
 
   private static final Logger LOGGER =

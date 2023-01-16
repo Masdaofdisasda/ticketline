@@ -33,7 +33,7 @@ describe('PasswordForgotComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should call resetPassword when form data is valid', fakeAsync(() => {
+  it('should call resetPassword when form data is valid', fakeAsync(() => {
     const inputEmail = fixture.nativeElement.querySelector(
       '#inputEmail'
     ) as HTMLInputElement;
@@ -51,7 +51,7 @@ describe('PasswordForgotComponent', () => {
     expect(userService.resetPassword).toHaveBeenCalledWith('test@test.com');
   }));
 
-  fit('should not call resetPassword when email is missing', fakeAsync(() => {
+  it('should not call resetPassword when email is missing', fakeAsync(() => {
     userService.resetPassword.calls.reset();
     const inputEmail = fixture.nativeElement.querySelector(
       '#inputEmail'

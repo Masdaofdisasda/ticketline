@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
@@ -154,4 +155,6 @@ public interface UserService extends UserDetailsService {
   Optional<ApplicationUser> getUserByPasswordResetToken(String token);
 
   void changeUserPassword(ApplicationUser applicationUser, String newPassword) throws ValidationException;
+
+  void createUser(UserCreationDto userCreationDto) throws ValidationException;
 }

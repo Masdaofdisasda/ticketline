@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PasswordDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -78,13 +80,24 @@ public class CustomUserValidator {
     return validationErrors;
   }
 
+
+  private Collection<String> validateIsAdmin(Boolean isAdmin) {
+    List<String> validationErrors = new ArrayList<>();
+
+    if (isAdmin == null) {
+      validationErrors.add("IsAdmin of user is required but null");
+    }
+
+    return validationErrors;
+  }
+
   /**
    * Validates user data for the create operation.
    *
    * @param user user data
    * @throws ValidationException on invalid data
    */
-  public void validateForCreate(UserRegistrationDto user) throws ValidationException {
+  public void validateForRegister(UserRegistrationDto user) throws ValidationException {
     LOGGER.trace("validateForCreate({})", user);
     List<String> validationErrors = new ArrayList<>();
 
@@ -101,6 +114,32 @@ public class CustomUserValidator {
       throw new ValidationException("Validation of user for create failed", validationErrors);
     }
   }
+
+  /**
+   * Validates user data for the create operation.
+   *
+   * @param user user data
+   * @throws ValidationException on invalid data
+   */
+  public void validateForCreate(UserCreationDto user) throws ValidationException {
+    LOGGER.trace("validateForCreate({})", user);
+    List<String> validationErrors = new ArrayList<>();
+
+    ApplicationUser applicationUser = userRepository.findUserByEmail(user.getEmail());
+    if (applicationUser != null) {
+      validationErrors.add("A user with the given email address already exists.");
+    }
+
+    validationErrors.addAll(validateUserEmail(user.getEmail()));
+    validationErrors.addAll(validateIsAdmin(user.getIsAdmin()));
+    validationErrors.addAll(validatePassword(user.getPassword()));
+    validationErrors.addAll(validateRequiredStringProperty(user.getFirstName(), "first name"));
+    validationErrors.addAll(validateRequiredStringProperty(user.getLastName(), "last name"));
+    if (!validationErrors.isEmpty()) {
+      throw new ValidationException("Validation of user for create failed", validationErrors);
+    }
+  }
+
 
   public void validateForUpdate(SimpleUserDto userDto) throws ValidationException {
     LOGGER.trace("validateForUpdate({})", userDto);

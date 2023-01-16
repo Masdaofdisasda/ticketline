@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Globals } from '../global/globals';
 import { User } from '../dto/user.dto';
+import { CreateUserRequest } from '../dto/create-user-request.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -86,13 +87,17 @@ export class UserService {
    *
    * */
   changePassword(password: string, token: string) {
-    console.log({
-      newPassword: password,
-      token,
-    });
     return this.httpClient.post(this.userBaseUri + '/savePassword', {
       newPassword: password,
       token,
     });
+  }
+
+  /**
+   * Create new user.
+   *
+   * */
+  createUser(createUserRequest: CreateUserRequest) {
+    return this.httpClient.post(this.userBaseUri, createUserRequest);
   }
 }
