@@ -1,77 +1,46 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { PerformanceDto } from '../../../dto/performance.dto';
-import { ArtistDto } from '../../../dto/artist.dto';
-import { ArtistService } from '../../../services/artist.service';
-import { Room, Venue } from '../../../dto/venue';
-import { VenueService } from '../../../services/venue.service';
+import {Component, Input} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ArtistService} from '../../../services/artist.service';
+import {VenueService} from '../../../services/venue.service';
 
 @Component({
   selector: 'app-event-performance-create',
   templateUrl: './event-performance-create.component.html',
   styleUrls: ['./event-performance-create.component.scss'],
 })
-export class EventPerformanceCreateComponent implements OnInit {
-  @Output() performanceList = new EventEmitter<PerformanceDto[]>();
-  performanceForm: FormGroup;
-  artists: ArtistDto[] = [];
+export class EventPerformanceCreateComponent {
 
-  venues: Venue[] = [];
+  @Input() eventCreateFormGroup: FormGroup = new FormGroup<any>({});
+  performanceFormArray: FormArray = new FormArray<any>([]);
 
+  artists = this.artistService.findAll();
 
-  check = false;
+  venues = this.venueService.getAll();
+  artiste = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private artistService: ArtistService,
-    private venueService: VenueService
-  ) {}
+  constructor(private fb: FormBuilder, private artistService: ArtistService, private venueService: VenueService) {
+    this.eventCreateFormGroup.valueChanges.subscribe(value => console.warn(value));
+  }
 
   get performances() {
-    return (this.performanceForm.get('performances') as FormArray).controls;
+    return this.eventCreateFormGroup.controls['performances'] as FormArray;
   }
 
-  ngOnInit() {
-    this.performanceForm = this.fb.group({
-      performances: this.fb.array([]),
-    });
+  addPerformance(): void {
+    this.performanceFormArray = this.eventCreateFormGroup.get('performances') as FormArray;
+    this.performanceFormArray.push(this.fb.group({
+      startDateControl: new FormControl(new Date(), Validators.required),
+      endDateControl: new FormControl(new Date(), Validators.required),
+      artistsControl: new FormControl([], Validators.required),
+      venueControl: new FormControl(null, Validators.required),
+      roomControl: new FormControl(null, Validators.required),
+    }));
 
-    this.artistService.findAll().subscribe({
-      next: (data) => {
-        this.artists = data;
-      },
-    });
-
-    this.venueService.getAll().subscribe({
-      next: (data) => {
-        this.venues = data;
-      },
-    });
-
-
+    console.log(this.eventCreateFormGroup);
   }
 
-  onFormSubmit() {
-    console.log(this.performanceForm.value.performances);
-    this.performanceList.emit(this.performanceForm.value.performances);
-    this.check = true;
-  }
-
-  addPerson() {
-    (this.performanceForm.get('performances') as FormArray).push(
-      this.fb.group({
-        startDate: [],
-        endDate: [],
-        artist: this.artists[0],
-        venue: this.venues[0],
-        room: this.venues[0].rooms[0],
-      })
-    );
-    console.log(this.performanceForm.value);
-    this.check = false;
-  }
-
-  removePerson(i) {
-    (this.performanceForm.get('performances') as FormArray).removeAt(i);
+  removePerformance(index: number) {
+    this.performanceFormArray.removeAt(index);
+    console.log(this.eventCreateFormGroup);
   }
 }

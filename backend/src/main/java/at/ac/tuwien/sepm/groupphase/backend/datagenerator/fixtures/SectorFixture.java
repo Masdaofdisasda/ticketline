@@ -24,241 +24,201 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(0)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(10)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(10)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(10)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build()));
     return sector;
   }
@@ -275,331 +235,276 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(1)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(18)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(19)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(17)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -617,331 +522,276 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(1)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(11)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(12)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -960,1009 +810,841 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(4)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(12)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(13)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(14)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(15)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(16)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(10)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(13)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(14)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(15)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(16)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(17)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(18)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(19)
         .rowNumber(11)
-        .state(Seat.State.FREE)
         .build()));
     return sector;
   }
@@ -1981,7 +1663,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -1989,7 +1670,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -1997,7 +1677,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2005,7 +1684,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2013,7 +1691,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2021,7 +1698,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2029,7 +1705,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2037,7 +1712,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2045,7 +1719,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2053,7 +1726,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2061,7 +1733,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2069,7 +1740,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2077,7 +1747,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2085,7 +1754,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2093,7 +1761,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2101,7 +1768,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2109,7 +1775,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2117,7 +1782,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2125,7 +1789,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2133,7 +1796,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2141,7 +1803,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2149,7 +1810,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2157,7 +1817,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2165,7 +1824,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2173,7 +1831,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2181,7 +1838,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2189,7 +1845,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2197,7 +1852,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2205,7 +1859,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2213,7 +1866,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -2234,7 +1886,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2242,7 +1893,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2250,7 +1900,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2258,7 +1907,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2266,7 +1914,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2274,7 +1921,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2282,7 +1928,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2290,7 +1935,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2298,7 +1942,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2306,7 +1949,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2314,7 +1956,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2322,7 +1963,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2330,7 +1970,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2338,7 +1977,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2346,7 +1984,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2354,7 +1991,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2362,7 +1998,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2370,7 +2005,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2378,7 +2012,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2386,7 +2019,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2394,7 +2026,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2402,7 +2033,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2410,7 +2040,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2418,7 +2047,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2426,7 +2054,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2434,7 +2061,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2442,7 +2068,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2450,7 +2075,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2458,7 +2082,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2466,7 +2089,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -2485,7 +2107,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2493,7 +2114,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2501,7 +2121,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2509,7 +2128,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2517,7 +2135,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2525,7 +2142,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2533,7 +2149,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2541,7 +2156,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2549,7 +2163,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2557,7 +2170,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2565,7 +2177,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2573,7 +2184,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2581,7 +2191,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2589,7 +2198,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2597,7 +2205,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2605,7 +2212,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2613,7 +2219,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2621,7 +2226,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2629,7 +2233,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2637,7 +2240,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2645,7 +2247,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2653,7 +2254,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2661,7 +2261,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2669,7 +2268,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2677,7 +2275,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2685,7 +2282,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2693,7 +2289,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2701,7 +2296,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2709,7 +2303,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2717,7 +2310,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2725,7 +2317,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2733,7 +2324,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2741,7 +2331,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2749,7 +2338,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2757,7 +2345,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2765,7 +2352,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2773,7 +2359,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2781,7 +2366,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2789,7 +2373,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2797,7 +2380,6 @@ public class SectorFixture {
         .colNumber(10)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2805,7 +2387,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2813,7 +2394,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2821,7 +2401,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2829,7 +2408,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2837,7 +2415,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2845,7 +2422,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2853,7 +2429,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2861,7 +2436,6 @@ public class SectorFixture {
         .colNumber(11)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2869,7 +2443,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2877,7 +2450,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2885,7 +2457,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2893,7 +2464,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2901,7 +2471,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2909,7 +2478,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2917,7 +2485,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2925,7 +2492,6 @@ public class SectorFixture {
         .colNumber(12)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2933,7 +2499,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2941,7 +2506,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2949,7 +2513,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2957,7 +2520,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2965,7 +2527,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2973,7 +2534,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2981,7 +2541,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2989,7 +2548,6 @@ public class SectorFixture {
         .colNumber(13)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -2997,7 +2555,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3005,7 +2562,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3013,7 +2569,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3021,7 +2576,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3029,7 +2583,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3037,7 +2590,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3045,7 +2597,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3053,7 +2604,6 @@ public class SectorFixture {
         .colNumber(14)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3061,7 +2611,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3069,7 +2618,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3077,7 +2625,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3085,7 +2632,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3093,7 +2639,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3101,7 +2646,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3109,7 +2653,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3117,7 +2660,6 @@ public class SectorFixture {
         .colNumber(15)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3125,7 +2667,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3133,7 +2674,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3141,7 +2681,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3149,7 +2688,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3157,7 +2695,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3165,7 +2702,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3173,7 +2709,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3181,7 +2716,6 @@ public class SectorFixture {
         .colNumber(16)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3189,7 +2723,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3197,7 +2730,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3205,7 +2737,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3213,7 +2744,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3221,7 +2751,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3229,7 +2758,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3237,7 +2765,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3245,7 +2772,6 @@ public class SectorFixture {
         .colNumber(17)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3253,7 +2779,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3261,7 +2786,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3269,7 +2793,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3277,7 +2800,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3285,7 +2807,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3293,7 +2814,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3301,7 +2821,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3309,7 +2828,6 @@ public class SectorFixture {
         .colNumber(18)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3317,7 +2835,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3325,7 +2842,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3333,7 +2849,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3341,7 +2856,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3349,7 +2863,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3357,7 +2870,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3365,7 +2877,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3373,7 +2884,6 @@ public class SectorFixture {
         .colNumber(19)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -3393,7 +2903,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3401,7 +2910,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3409,7 +2917,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3417,7 +2924,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3425,7 +2931,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3433,7 +2938,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3441,7 +2945,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3449,7 +2952,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3457,7 +2959,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3465,7 +2966,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3473,7 +2973,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3481,7 +2980,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3489,7 +2987,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3497,7 +2994,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3505,7 +3001,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3513,7 +3008,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3521,7 +3015,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3529,7 +3022,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3537,7 +3029,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3545,7 +3036,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3553,7 +3043,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3561,7 +3050,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3569,7 +3057,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3577,7 +3064,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3585,7 +3071,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3593,7 +3078,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3601,7 +3085,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3609,7 +3092,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -3629,28 +3111,24 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector).rowNumber(4)
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector).rowNumber(5)
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector).rowNumber(6)
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3658,7 +3136,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3666,7 +3143,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3674,7 +3150,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3682,7 +3157,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3690,7 +3164,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3698,7 +3171,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3706,7 +3178,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3714,7 +3185,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3722,7 +3192,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3730,7 +3199,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3738,7 +3206,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3746,7 +3213,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3754,7 +3220,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3762,7 +3227,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3770,7 +3234,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3778,7 +3241,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3786,7 +3248,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3794,7 +3255,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3802,7 +3262,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3810,7 +3269,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3818,7 +3276,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3826,7 +3283,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3834,7 +3290,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3842,7 +3297,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3850,7 +3304,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3858,7 +3311,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3866,7 +3318,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3874,7 +3325,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3882,7 +3332,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3890,7 +3339,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3898,7 +3346,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3906,7 +3353,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -3927,7 +3373,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3935,7 +3380,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3943,7 +3387,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3951,7 +3394,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3959,7 +3401,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3967,7 +3408,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3975,7 +3415,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3983,7 +3422,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3991,7 +3429,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -3999,7 +3436,6 @@ public class SectorFixture {
         .colNumber(0)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4007,7 +3443,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4015,7 +3450,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4023,7 +3457,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4031,7 +3464,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4039,7 +3471,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4047,7 +3478,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4055,7 +3485,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4063,7 +3492,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4071,7 +3499,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4079,7 +3506,6 @@ public class SectorFixture {
         .colNumber(1)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4087,7 +3513,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4095,7 +3520,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4103,7 +3527,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4111,7 +3534,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4119,7 +3541,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4127,7 +3548,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4135,7 +3555,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4143,7 +3562,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4151,7 +3569,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4159,7 +3576,6 @@ public class SectorFixture {
         .colNumber(2)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4167,7 +3583,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4175,7 +3590,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4183,7 +3597,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4191,7 +3604,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4199,7 +3611,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4207,7 +3618,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4215,7 +3625,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4223,7 +3632,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4231,7 +3639,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4239,7 +3646,6 @@ public class SectorFixture {
         .colNumber(3)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4247,7 +3653,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4255,7 +3660,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4263,7 +3667,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4271,7 +3674,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4279,7 +3681,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4287,7 +3688,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4295,7 +3695,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4303,7 +3702,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4311,7 +3709,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4319,7 +3716,6 @@ public class SectorFixture {
         .colNumber(4)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4327,7 +3723,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4335,7 +3730,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4343,7 +3737,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4351,7 +3744,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4359,7 +3751,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4367,7 +3758,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4375,7 +3765,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4383,7 +3772,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4391,7 +3779,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4399,7 +3786,6 @@ public class SectorFixture {
         .colNumber(5)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4407,7 +3793,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4415,7 +3800,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4423,7 +3807,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4431,7 +3814,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4439,7 +3821,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4447,7 +3828,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4455,7 +3835,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4463,7 +3842,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4471,7 +3849,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4479,7 +3856,6 @@ public class SectorFixture {
         .colNumber(6)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4487,7 +3863,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4495,7 +3870,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4503,7 +3877,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4511,7 +3884,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4519,7 +3891,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4527,7 +3898,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4535,7 +3905,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4543,7 +3912,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4551,7 +3919,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4559,7 +3926,6 @@ public class SectorFixture {
         .colNumber(7)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4567,7 +3933,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4575,7 +3940,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4583,7 +3947,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4591,7 +3954,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4599,7 +3961,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4607,7 +3968,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4615,7 +3975,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4623,7 +3982,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4631,7 +3989,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4639,7 +3996,6 @@ public class SectorFixture {
         .colNumber(8)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4647,7 +4003,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4655,7 +4010,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4663,7 +4017,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4671,7 +4024,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4679,7 +4031,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4687,7 +4038,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4695,7 +4045,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4703,7 +4052,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4711,7 +4059,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
@@ -4719,7 +4066,6 @@ public class SectorFixture {
         .colNumber(9)
         .rowName(null)
         .colName(null)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -4736,121 +4082,101 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(3)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build()));
 
     return sector;
@@ -4868,265 +4194,221 @@ public class SectorFixture {
         .sector(sector)
         .colNumber(8)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(9)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(8)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(7)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(0)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(1)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(2)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(3)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(4)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(5)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(0)
         .rowNumber(6)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(1)
         .rowNumber(7)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(2)
         .rowNumber(8)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(3)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(4)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(5)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build(),
       Seat.builder()
         .sector(sector)
         .colNumber(6)
         .rowNumber(9)
-        .state(Seat.State.FREE)
         .build()));
     return sector;
   }

@@ -5,19 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriceCategoryDto {
-  @NotNull
-  private Long id;
-  @NotNull
-  private String name;
-  @NotNull
-  private String color;
-  private BigDecimal pricing;
+public class PerformanceDtoSimple {
+  Long id;
+  LocalDateTime startDate;
+  LocalDateTime endDate;
+
+  List<ArtistDto> artists;
 }

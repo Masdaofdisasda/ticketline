@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -35,11 +36,11 @@ public class BookingMapper {
     ).toList();
   }
 
-  private Float getTotal(Booking booking) {
+  private BigDecimal getTotal(Booking booking) {
     return booking.getTickets().stream()
       .map(Ticket::getPrice)
       .toList().stream()
-      .reduce(0f, Float::sum);
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
 }

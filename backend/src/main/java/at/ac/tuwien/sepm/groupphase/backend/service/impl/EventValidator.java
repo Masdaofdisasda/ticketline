@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventCreateDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import lombok.AllArgsConstructor;
@@ -17,14 +17,14 @@ public class EventValidator {
 
   private EventRepository eventRepository;
 
-  public void validateEvent(EventDto event) throws ValidationException {
+  public void validateEvent(EventCreateDto event) throws ValidationException {
     List<String> validationErrors = new ArrayList<>();
 
     if (event.getEndDate().isBefore(event.getStartDate())) {
       validationErrors.add("Event start must be earlier than event end");
     }
     if (eventRepository.findEventsByName(event.getName()).size() > 0) {
-      validationErrors.add("Event with the name: \'" + event.getName() + "\' already exists");
+      validationErrors.add("Event with the name: '" + event.getName() + "' already exists");
     }
 
     if (event.getPerformances() != null) {
@@ -40,16 +40,16 @@ public class EventValidator {
     }
   }
 
-  public List<String> validatePerformanceOfEvent(PerformanceDto performance, EventDto event) {
+  public List<String> validatePerformanceOfEvent(PerformanceCreateDto performance, EventCreateDto event) {
     List<String> validationErrors = new ArrayList<>();
 
     if (performance.getStartDate() == null) {
       validationErrors.add("StartDate and time of performance must be set");
     }
-    if (performance.getStartDate() == null) {
+    if (performance.getEndDate() == null) {
       validationErrors.add("EndDate and time of performance must be set");
     }
-    if (performance.getArtist() == null) {
+    if (performance.getArtists() == null || performance.getArtists().isEmpty()) {
       validationErrors.add("Performing Artist must be set");
     }
     if (performance.getStartDate().isBefore(event.getStartDate())) {

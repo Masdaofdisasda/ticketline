@@ -24,9 +24,9 @@ public class RoomEndpoint {
   private final RoomService service;
   private final RoomMapper mapper;
 
-  public RoomEndpoint(RoomService service) {
+  public RoomEndpoint(RoomService service, RoomMapper mapper) {
     this.service = service;
-    this.mapper = RoomMapper.INSTANCE;
+    this.mapper = mapper;
   }
 
   @DeleteMapping("{id}")

@@ -2,8 +2,10 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,11 @@ class EventMapperTest {
   @Autowired
   private EventMapper mapper;
 
-  Performance performance = Performance.builder().id(7L).startDate(LocalDateTime.of(2022, 12, 11, 19, 0)).endDate(LocalDateTime.MAX)
+  Performance performance = Performance.builder()
+    .id(7L)
+    .startDate(LocalDateTime.of(2022, 12, 11, 19, 0))
+    .endDate(LocalDateTime.MAX)
+    .room(Room.builder().build())
     .build();
 
   Event event = Event.builder()
@@ -39,6 +45,10 @@ class EventMapperTest {
     .build();
 
   PerformanceDto performanceDto = PerformanceDto.builder().id(7L).startDate(LocalDateTime.of(2022, 12, 11, 19, 0)).endDate(LocalDateTime.MAX)
+    .priceCategoryPricingMap(null)
+    .room(RoomDto.builder()
+      .sectors(new ArrayList<>())
+      .build())
     .build();
 
   EventDto eventDto = EventDto.builder()

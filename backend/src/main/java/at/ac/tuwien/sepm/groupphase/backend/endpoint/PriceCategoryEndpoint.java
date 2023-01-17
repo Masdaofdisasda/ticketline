@@ -24,9 +24,9 @@ public class PriceCategoryEndpoint {
   private final PriceCategoryService service;
   private final PriceCategoryMapper mapper;
 
-  public PriceCategoryEndpoint(PriceCategoryService service) {
+  public PriceCategoryEndpoint(PriceCategoryService service, PriceCategoryMapper mapper) {
     this.service = service;
-    this.mapper = PriceCategoryMapper.INSTANCE;
+    this.mapper = mapper;
   }
 
   @PostMapping()

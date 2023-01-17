@@ -5,6 +5,6 @@ export class PerformanceDto {
   id: number;
   startDate: Date;
   endDate: Date;
-  artist: ArtistDto;
   room: Room;
+  artists: ArtistDto[];
 }

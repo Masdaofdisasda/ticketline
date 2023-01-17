@@ -3,27 +3,28 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
-import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,12 +98,7 @@ public class VenueEndpointTest implements TestData {
     seatID0 = -1L,
     seatID1 = -1L;
 
-  final BigDecimal pricePerSeat = BigDecimal.valueOf(15.60),
-    editPricePerSeat = BigDecimal.valueOf(5.30);
-
-  final Seat.State seatState = Seat.State.RESERVED,
-    seatState1 = Seat.State.FREE,
-    editSeatState = Seat.State.BLOCKED;
+  final Pricing pricePerSeat = null;
 
   @Autowired
   private MockMvc mockMvc;
@@ -151,7 +146,6 @@ public class VenueEndpointTest implements TestData {
   @Test
   void insert_shouldReturnAddedLocation() throws Exception {
     final PriceCategory addedPriceCategory = priceCategoryRepository.save(PriceCategory.builder()
-      .pricing(pricePerSeat)
       .color(color)
       .name(priceCategoryName)
       .build());
@@ -173,7 +167,6 @@ public class VenueEndpointTest implements TestData {
               .name(sectorName)
               .priceCategory(PriceCategoryDto.builder()
                 .id(addedPriceCategory.getId())
-                .pricing(pricePerSeat)
                 .color(color)
                 .name(priceCategoryName)
                 .build())
@@ -181,7 +174,6 @@ public class VenueEndpointTest implements TestData {
                 SeatAddDto.builder()
                   .colNumber(columnNumber)
                   .rowNumber(rowNumber)
-                  .state(seatState)
                   .build()
               ))
               .build()
@@ -226,20 +218,16 @@ public class VenueEndpointTest implements TestData {
     final PriceCategoryDto priceCategory = sector.getPriceCategory();
     assertNotNull(priceCategory);
     assertEquals(priceCategoryName, priceCategory.getName());
-    assertNotNull(priceCategory.getPricing());
-    assertEquals(pricePerSeat.doubleValue(), priceCategory.getPricing().doubleValue());
     assertEquals(color, priceCategory.getColor());
 
     final SeatDto seat = sector.getSeats().get(0);
     assertEquals(columnNumber, seat.getColNumber());
     assertEquals(rowNumber, seat.getRowNumber());
-    assertEquals(seatState, seat.getState());
   }
 
   @Test
   void findAll_shouldReturnOneLocation() throws Exception{
     final PriceCategory addedPriceCategory = priceCategoryRepository.save(PriceCategory.builder()
-      .pricing(pricePerSeat)
       .color(color)
       .name(priceCategoryName)
       .build());
@@ -264,7 +252,6 @@ public class VenueEndpointTest implements TestData {
               .name(sectorName)
               .priceCategory(PriceCategory.builder()
                 .id(addedPriceCategory.getId())
-                .pricing(pricePerSeat)
                 .color(color)
                 .name(priceCategoryName)
                 .build())
@@ -273,13 +260,11 @@ public class VenueEndpointTest implements TestData {
                   .id(seatID0)
                   .colNumber(columnNumber)
                   .rowNumber(rowNumber)
-                  .state(seatState)
                   .build(),
                 Seat.builder()
                   .id(seatID1)
                   .colNumber(columnNumber1)
                   .rowNumber(rowNumber1)
-                  .state(seatState1)
                   .build()
               ))
               .build()
@@ -339,8 +324,6 @@ public class VenueEndpointTest implements TestData {
     final PriceCategoryDto priceCategory = sector.getPriceCategory();
     assertNotNull(priceCategory);
     assertEquals(priceCategoryName, priceCategory.getName());
-    assertNotNull(priceCategory.getPricing());
-    assertEquals(pricePerSeat.doubleValue(), priceCategory.getPricing().doubleValue());
     assertEquals(color, priceCategory.getColor());
 
     // --- Seats ---
@@ -349,18 +332,15 @@ public class VenueEndpointTest implements TestData {
     final SeatDto seat = sector.getSeats().get(0);
     assertEquals(columnNumber, seat.getColNumber());
     assertEquals(rowNumber, seat.getRowNumber());
-    assertEquals(seatState, seat.getState());
 
     final SeatDto seat1 = sector.getSeats().get(1);
     assertEquals(columnNumber1, seat1.getColNumber());
     assertEquals(rowNumber1, seat1.getRowNumber());
-    assertEquals(seatState1, seat1.getState());
   }
 
   @Test
   void editLocation_shouldReturnEdited() throws Exception {
     final PriceCategory addedPriceCategory = priceCategoryRepository.save(PriceCategory.builder()
-      .pricing(pricePerSeat)
       .color(color)
       .name(priceCategoryName)
       .build());
@@ -384,7 +364,6 @@ public class VenueEndpointTest implements TestData {
               .name(sectorName)
               .priceCategory(PriceCategory.builder()
                 .id(addedPriceCategory.getId())
-                .pricing(pricePerSeat)
                 .color(color)
                 .name(priceCategoryName)
                 .build())
@@ -393,13 +372,11 @@ public class VenueEndpointTest implements TestData {
                   .id(seatID0)
                   .colNumber(columnNumber)
                   .rowNumber(rowNumber)
-                  .state(seatState)
                   .build(),
                 Seat.builder()
                   .id(seatID1)
                   .colNumber(columnNumber1)
                   .rowNumber(rowNumber1)
-                  .state(seatState1)
                   .build()
               ))
               .build()
@@ -433,12 +410,10 @@ public class VenueEndpointTest implements TestData {
         .sectors(List.of(SectorEditDto.builder()
           .name(editSectorName)
           .seats(List.of(SeatEditDto.builder()
-              .state(editSeatState)
               .rowNumber(editRowNumber)
               .colNumber(editColumnNumber)
             .build(),
             SeatEditDto.builder()
-              .state(editSeatState)
               .rowNumber(editRowNumber1)
               .colNumber(editColumnNumber1)
               .build()))

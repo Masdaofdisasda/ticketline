@@ -4,12 +4,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.MappingConstants;
 
-@Mapper
+@Mapper(uses = PricingMapper.class, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PriceCategoryMapper {
 
-  PriceCategoryMapper INSTANCE = Mappers.getMapper(PriceCategoryMapper.class);
+  // PriceCategoryMapper INSTANCE = Mappers.getMapper(PriceCategoryMapper.class);
 
   PriceCategory priceCategoryDtoToPriceCategory(PriceCategoryDto priceCategoryDto);
 

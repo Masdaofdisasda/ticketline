@@ -1,8 +1,14 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output,} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {EventSearchRequest} from '../../../dto/event-search-request';
-import {debounceTime, Observable, Subject, takeUntil} from 'rxjs';
-import {EventService} from '../../../services/event.service';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { EventSearchRequest } from '../../../dto/event-search-request';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
+import { EventService } from '../../../services/event.service';
 
 @Component({
   selector: 'app-event-search',
@@ -20,8 +26,10 @@ export class EventSearchComponent implements OnInit, OnDestroy {
 
   clearDate = new EventEmitter<boolean>();
 
-  constructor(private formBuilder: FormBuilder, private eventService: EventService) {
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private eventService: EventService
+  ) {}
 
   ngOnInit(): void {
     this.resetSearchForm();
@@ -100,10 +108,28 @@ export class EventSearchComponent implements OnInit, OnDestroy {
 
   // this is necessary because toISOString subtracts one hour
   private getStartTime(startDate: Date): string {
-    return startDate ? startDate.toISOString().replace(new RegExp('T\\d{2}'), 'T' + startDate.getHours()) : '';
+    if (startDate) {
+      const startHours =
+        startDate.getHours() > 9
+          ? startDate.getHours().toString()
+          : '0' + startDate.getHours().toString();
+      return startDate
+        .toISOString()
+        .replace(new RegExp('T\\d{2}'), 'T' + startHours);
+    }
+    return '';
   }
 
   private getEndTime(endDate: Date): string {
-    return endDate ? endDate.toISOString().replace(new RegExp('T\\d{2}'), 'T' + endDate.getHours()) : '';
+    if (endDate) {
+      const endHours =
+        endDate.getHours() > 9
+          ? endDate.getHours().toString()
+          : '0' + endDate.getHours().toString();
+      return endDate
+        .toISOString()
+        .replace(new RegExp('T\\d{2}'), 'T' + endHours);
+    }
+    return '';
   }
 }

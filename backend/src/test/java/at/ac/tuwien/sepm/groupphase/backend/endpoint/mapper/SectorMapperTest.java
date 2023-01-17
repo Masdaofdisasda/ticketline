@@ -33,9 +33,9 @@ class SectorMapperTest {
     .seats(List.of(seat))
     .build();
 
-
   SeatDto seatDto = SeatDto.builder()
     .id(10L)
+    .state(SeatDto.State.UNSET)
     .build();
   SectorDto sectorDto = SectorDto.builder()
     .id(1L)

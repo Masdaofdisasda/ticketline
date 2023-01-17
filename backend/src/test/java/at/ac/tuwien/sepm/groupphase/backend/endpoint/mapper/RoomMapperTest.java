@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatingPlanDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
@@ -24,43 +23,37 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ActiveProfiles("test")
 class RoomMapperTest {
 
-  @Autowired
-  private RoomMapper mapper;
-
- Sector sector = Sector.builder()
-   .id(11L)
-   .seats(List.of(Seat.builder()
-     .id(123L)
-     .colNumber(1)
-     .rowNumber(1)
-     .build()))
-   .build();
-  Room room = Room.builder()
-    .id(0L)
-    .sectors(List.of(sector))
-    .build();
-
-  SeatingPlanDto seatingPlanDto = SeatingPlanDto.builder()
-    .id(10L)
-    .build();
-
-  SectorDto sectorDto = SectorDto.builder()
+  Sector sector = Sector.builder()
     .id(11L)
-    .seats(List.of(SeatDto.builder()
+    .seats(List.of(Seat.builder()
       .id(123L)
       .colNumber(1)
       .rowNumber(1)
       .build()))
     .build();
-
+  Room room = Room.builder()
+    .id(0L)
+    .sectors(List.of(sector))
+    .build();
+  SectorDto sectorDto = SectorDto.builder()
+    .id(11L)
+    .seats(List.of(SeatDto.builder()
+      .id(123L)
+      .colNumber(1)
+      .state(SeatDto.State.UNSET)
+      .rowNumber(1)
+      .build()))
+    .build();
   RoomDto roomDto = RoomDto.builder()
     .id(1L)
     .sectors(List.of(sectorDto))
     .build();
+  @Autowired
+  private RoomMapper mapper;
 
   @Test
-  void roomToRommDto() {
-    RoomDto currentDto = mapper.roomToRommDto(room);
+  void roomToRoomDto() {
+    RoomDto currentDto = mapper.roomToRoomDto(room);
     assertAll(() -> {
       assertThat(currentDto.getId()).isEqualTo(room.getId());
       assertThat(currentDto.getSectors()).isEqualTo(List.of(sectorDto));
@@ -70,9 +63,7 @@ class RoomMapperTest {
   @Test
   void roomDtoToRoom() {
     Room currentRoom = mapper.roomDtoToRoom(roomDto);
-    assertAll(() -> {
-      assertThat(currentRoom.getId()).isEqualTo(roomDto.getId());
-      assertThat(currentRoom.getSectors()).isEqualTo(List.of(sector));
-    });
+    assertThat(currentRoom.getId()).isEqualTo(roomDto.getId());
+    assertThat(currentRoom.getSectors()).isEqualTo(List.of(sector));
   }
 }

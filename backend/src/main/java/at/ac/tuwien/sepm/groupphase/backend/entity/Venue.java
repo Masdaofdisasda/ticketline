@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -49,8 +47,7 @@ public class Venue {
   private String zipCode;
 
   @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
-  @Fetch(FetchMode.SUBSELECT)
-  @LazyCollection(LazyCollectionOption.FALSE)
+  @Fetch(FetchMode.JOIN)
   @Builder.Default
   private List<Room> rooms = new ArrayList<>();
 

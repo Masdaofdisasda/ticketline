@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.ArtistFixture.buildArtist1;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.ArtistFixture.buildArtist2;
@@ -14,9 +15,6 @@ import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventF
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.RoomFixture.buildRoom1;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.RoomFixture.buildRoom2;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.RoomFixture.buildRoom3;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue1;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue2;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.buildVenue3;
 
 public class PerformanceFixture {
 
@@ -26,7 +24,7 @@ public class PerformanceFixture {
       .startDate(LocalDateTime.now())
       .endDate(LocalDateTime.now().plusDays(7))
       .room(buildRoom1())
-      .artist(buildArtist1())
+      .artists(List.of(buildArtist1()))
       .tickets(new ArrayList<>())
       .event(buildEvent1())
       .build();
@@ -38,7 +36,7 @@ public class PerformanceFixture {
       .startDate(LocalDateTime.now().plusDays(1))
       .endDate(LocalDateTime.now().plusDays(7))
       .room(buildRoom2())
-      .artist(buildArtist2())
+      .artists(List.of(buildArtist2()))
       .tickets(new ArrayList<>())
       .event(buildEvent2())
       .build();
@@ -49,7 +47,7 @@ public class PerformanceFixture {
       .id(3L)
       .startDate(LocalDateTime.now().plusDays(2))
       .endDate(LocalDateTime.now().plusDays(7))
-      .artist(buildArtist3())
+      .artists(List.of(buildArtist3()))
       .room(buildRoom3())
       .tickets(new ArrayList<>())
       .event(buildEvent3())

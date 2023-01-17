@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,14 +35,13 @@ public class Room {
   @Range(min = 0, max = 1024)
   private Integer rowSize;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "room", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
-  @LazyCollection(LazyCollectionOption.FALSE)
   @Builder.Default
   @NotNull
-  private List<Sector> sectors = new java.util.ArrayList<>();
+  private List<Sector> sectors = new ArrayList<>();
 
-  @ManyToOne
+  @ManyToOne()
   private Venue venue;
 
   @OneToMany(mappedBy = "room")

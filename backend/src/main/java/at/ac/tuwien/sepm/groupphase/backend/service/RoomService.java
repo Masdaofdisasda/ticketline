@@ -15,7 +15,7 @@ public interface RoomService {
   /**
    * Edit a room with the given data.
    *
-   * @param id The id of the romm to edit
+   * @param id The id of the room to edit
    * @param toEdit the data of the edit
    * @return the edited room
    * @throws NotFoundException if no room with the given id was found

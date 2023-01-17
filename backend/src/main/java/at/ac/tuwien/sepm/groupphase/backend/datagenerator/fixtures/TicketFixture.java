@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,19 +24,19 @@ public class TicketFixture {
 
   public static Ticket buildTicket1() {
     return Ticket.builder()
-      .price(50.20f)
+      .price(BigDecimal.valueOf(50.20))
       .build();
   }
 
   public static Ticket buildTicket2() {
     return Ticket.builder()
-      .price(19.55f)
+      .price(BigDecimal.valueOf(19.55))
       .build();
   }
 
   public static Ticket buildTicket3() {
     return Ticket.builder()
-      .price(100.50f)
+      .price(BigDecimal.valueOf(100.50))
       .build();
   }
 }
