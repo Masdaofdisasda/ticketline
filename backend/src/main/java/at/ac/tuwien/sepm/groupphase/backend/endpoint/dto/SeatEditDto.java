@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +21,4 @@ public class SeatEditDto {
   private String rowName;
   @Nullable
   private String colName;
-  @Nullable
-  private Seat.State state;
 }

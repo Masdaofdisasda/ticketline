@@ -73,7 +73,7 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     // add the new sector to the front of the sectors array
     this.room.sectors = [{
       name: '',
-      priceCategory: {name: 'select...', color: 'ffffff', pricing: null},
+      priceCategory: {name: 'select...', color: 'ffffff', pricing: .0},
     }, ...this.room.sectors];
 
     // timeout is needed because the ngFor of the sector list takes some time

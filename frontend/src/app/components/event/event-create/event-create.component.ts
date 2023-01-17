@@ -1,17 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { EventService } from '../../../services/event.service';
-import { EventDto } from '../../../dto/event.dto';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { of } from 'rxjs/internal/observable/of';
-import { ArtistService } from '../../../services/artist.service';
-import { PerformanceDto } from '../../../dto/performance.dto';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {EventService} from '../../../services/event.service';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {of} from 'rxjs/internal/observable/of';
+import {ArtistService} from '../../../services/artist.service';
+import {EventDto} from '../../../dto/event.dto';
+import {PerformanceDto} from '../../../dto/performance.dto';
 
 @Component({
   selector: 'app-event-create',
@@ -21,15 +16,14 @@ import { PerformanceDto } from '../../../dto/performance.dto';
 export class EventCreateComponent implements OnInit {
   createFormGroup: FormGroup;
 
-  performances: PerformanceDto[];
-
   constructor(
     private formBuilder: FormBuilder,
     private eventService: EventService,
     private router: Router,
     private notification: ToastrService,
     private artistService: ArtistService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.createFormGroup = this.formBuilder.group({
@@ -37,14 +31,23 @@ export class EventCreateComponent implements OnInit {
       eventCategory: new FormControl('', Validators.required),
       startTime: new FormControl(null, Validators.required),
       endTime: new FormControl(null, Validators.required),
+      performances: this.formBuilder.array([])
     });
   }
 
   artistSuggestion = (input: string) =>
     input === '' ? of([]) : this.artistService.filterByName(input);
+  createEvent() {
+    this.eventService.create(this.getEventDtoFromFormGroup()).subscribe(data => {
+      this.notification.success(
+        `Event: \'${data.name}\' successfully created.`
+      );
+      this.router.navigate(['/event']);
+    });
+  }
 
-  onSubmit(): void {
-    const observable = this.eventService.create({
+  getEventDtoFromFormGroup(): EventDto {
+    const eventDto = {
       name: this.createFormGroup.get('eventName').value,
       category: this.createFormGroup.get('eventCategory').value,
       startDate: this.createFormGroup.get('startTime').value
@@ -53,25 +56,20 @@ export class EventCreateComponent implements OnInit {
       endDate: this.createFormGroup.get('endTime').value
         ? this.createFormGroup.get('endTime').value.toISOString()
         : '',
-      performances: this.performances,
-    } as EventDto);
-    observable.subscribe({
-      next: (data) => {
-        this.notification.success(
-          `Event: \'${data.name}\' successfully created.`
-        );
-        this.router.navigate(['/event']);
-      },
-      error: (err) => {
-        console.log('Error creating Event', err);
-        console.log(err);
-        this.notification.error('Error creating event: \n' + err.error.errors);
-      },
-    });
-  }
+      performances: []
+    } as EventDto;
 
-  receivePerformances(performancesList: PerformanceDto[]): void {
-    this.performances = performancesList;
-    console.log(this.performances);
+    const performanceFormArray = this.createFormGroup.get('performances') as FormArray;
+
+    for (const performanceForm of performanceFormArray.controls) {
+      eventDto.performances.push({
+        startDate: performanceForm.get('startDateControl').value,
+        endDate: performanceForm.get('endDateControl').value,
+        artists: performanceForm.get('artistsControl').value,
+        venue: performanceForm.get('venueControl').value,
+        room: performanceForm.get('roomControl').value
+      } as unknown as PerformanceDto);
+    }
+    return eventDto;
   }
 }

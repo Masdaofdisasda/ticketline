@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,15 +33,15 @@ public class Sector {
   @Column(nullable = false)
   private String name;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
-  private PriceCategory priceCategory;
-
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "sector")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "sector", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
-  @LazyCollection(LazyCollectionOption.FALSE)
   @Builder.Default
   private List<Seat> seats = new ArrayList<>();
 
+  @ManyToOne()
+  @ToString.Exclude
+  PriceCategory priceCategory;
   @ManyToOne
+  @ToString.Exclude
   private Room room;
 }

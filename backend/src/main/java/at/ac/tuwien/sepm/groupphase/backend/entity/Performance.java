@@ -4,15 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
@@ -34,25 +37,28 @@ public class Performance {
 
   private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "performance", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-  @Fetch(value = FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "performance")
   @Builder.Default
   private List<Ticket> tickets = new ArrayList<>();
 
-  @OneToMany
+  @OneToMany(mappedBy = "performance", cascade = CascadeType.ALL)
+  private List<Pricing> pricing;
+
+  @ManyToMany(mappedBy = "performances")
   private List<PriceCategory> priceCategories;
 
-  @ManyToOne
+  @ManyToOne()
   private Event event;
 
-  @ManyToOne
+  @ManyToOne()
   private Room room;
 
-  @ManyToOne
-  private Artist artist;
-
-  @Override
-  public String toString() {
-    return "Performance{" + "id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + "}";
-  }
+  @ManyToMany
+  @Fetch(FetchMode.SUBSELECT)
+  @JoinTable(
+    name = "performace_artists",
+    joinColumns = @JoinColumn(name = "perfromance_id"),
+    inverseJoinColumns = @JoinColumn(name = "artist_id"))
+  @ToString.Exclude
+  private List<Artist> artists;
 }

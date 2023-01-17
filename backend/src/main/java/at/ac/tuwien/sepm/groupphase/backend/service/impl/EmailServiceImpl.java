@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+
 @Service
+@PersistenceContext(type = PersistenceContextType.EXTENDED)
 public class EmailServiceImpl implements EmailService {
   @Value("${support.email}")
   private String email;

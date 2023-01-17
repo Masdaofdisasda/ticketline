@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -25,10 +26,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    */
   @Query(
     value = "SELECT ev FROM Event ev"
-      + " LEFT JOIN Performance pf ON pf.id IN ELEMENTS(ev.performances)"
-      + " LEFT JOIN Artist art ON pf.artist = art"
-      + " LEFT JOIN Room r ON pf.room = r"
-      + " LEFT JOIN Venue v ON r.venue = v"
+      + " JOIN FETCH Performance pf ON pf.id IN ELEMENTS(ev.performances)"
+      + " JOIN FETCH Artist art ON art IN ELEMENTS(pf.artists)"
+      + " JOIN FETCH Room r ON pf.room = r"
+      + " JOIN FETCH Venue v ON r.venue = v"
       + " WHERE((:#{#eventSearchRequest.startTime} IS NOT NULL AND ev.startDate >= :#{#eventSearchRequest.startTime})"
       + " OR (:#{#eventSearchRequest.startTime} IS NULL AND ev.startDate >= CURRENT_TIMESTAMP)"
       + " AND (coalesce(:#{#eventSearchRequest.endTime},'')='' OR ev.endDate <= :#{#eventSearchRequest.endTime}))"
@@ -66,4 +67,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   List<String> findCategories();
 
   List<Event> findEventsByName(String name);
+
+  @Query("SELECT ev FROM Event ev"
+    + " LEFT JOIN FETCH Performance pf ON pf.id IN ELEMENTS(ev.performances)"
+    + " LEFT JOIN FETCH Artist art ON art IN ELEMENTS(pf.artists)"
+    + " LEFT JOIN FETCH Room r ON pf.room = r"
+    + " LEFT JOIN FETCH Sector s ON s IN ELEMENTS(r.sectors)"
+    + " LEFT JOIN FETCH Venue v ON r.venue = v"
+    + " WHERE ev.id = :id")
+  Optional<Event> getById(@Param("id") long id);
 }

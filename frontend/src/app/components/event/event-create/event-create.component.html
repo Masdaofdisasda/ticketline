@@ -28,11 +28,11 @@
       </app-date-time-picker>
     </div>
   </div>
-  <app-event-performance-create (performanceList)="receivePerformances($event)"></app-event-performance-create>
+  <app-event-performance-create [eventCreateFormGroup]="createFormGroup"></app-event-performance-create>
   <button type="button"
           class="btn btn-primary float-end"
-          [disabled]="createFormGroup.invalid || performances?.length <= 0"
-          (click)="onSubmit()">
+          [disabled]="createFormGroup.invalid || createFormGroup.get('performances').value.size === 0"
+          (click)="createEvent()">
     Create
   </button>
 </form>

@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +34,7 @@ class PerformanceMapperTest {
 
   Performance performance = Performance.builder()
     .id(0L)
+    .room(Room.builder().build())
     .startDate(LocalDateTime.MIN)
     .endDate(LocalDateTime.MAX)
     .tickets(List.of(ticket))
@@ -42,6 +46,7 @@ class PerformanceMapperTest {
 
   PerformanceDto performanceDto = PerformanceDto.builder()
     .id(1L)
+    .room(RoomDto.builder().sectors(new ArrayList<>()).build())
     .startDate(LocalDateTime.MAX)
     .startDate(LocalDateTime.now())
     .tickets(List.of(ticketDto))

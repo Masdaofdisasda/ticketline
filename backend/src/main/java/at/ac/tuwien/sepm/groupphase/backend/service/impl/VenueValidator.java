@@ -19,14 +19,10 @@ public class VenueValidator {
     List<String> errors = new ArrayList<>();
 
     for (final Room room : venue.getRooms()) {
-      if (room.getColumnSize() == null) {
-        errors.add("columnSize of room " + room.getName() + " must be set");
-      } else if (room.getColumnSize() < 1) {
+      if (room.getColumnSize() < 1) {
         errors.add("columnSize of room " + room.getName() + " must be greater than 0, is" + room.getColumnSize());
       }
-      if (room.getRowSize() == null) {
-        errors.add("rowSize of room " + room.getName() + " must be set");
-      } else if (room.getRowSize() < 1) {
+      if (room.getRowSize() < 1) {
         errors.add("rowSize of room " + room.getName() + " must be greater than 0, is" + room.getRowSize());
       }
       for (final Sector sector : room.getSectors()) {

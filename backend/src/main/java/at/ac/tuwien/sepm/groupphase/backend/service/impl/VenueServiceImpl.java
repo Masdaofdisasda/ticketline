@@ -238,7 +238,6 @@ public class VenueServiceImpl implements VenueService {
       .orElseThrow(() -> new NotFoundException("Seat with id " + seat.getId() + " does not exists"));
 
     // update values of editSeat
-    editSeat.setState(ObjectUtils.firstNonNull(seat.getState(), editSeat.getState()));
     editSeat.setRowNumber(ObjectUtils.firstNonNull(seat.getRowNumber(), editSeat.getRowNumber()));
     editSeat.setColNumber(ObjectUtils.firstNonNull(seat.getColNumber(), editSeat.getColNumber()));
     editSeat.setRowName(ObjectUtils.firstNonNull(seat.getRowName(), editSeat.getRowName()));

@@ -2,16 +2,23 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
-import org.mapstruct.InjectionStrategy;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(uses = {SeatMapper.class})
 public interface TicketMapper {
 
   TicketMapper INSTANCE = Mappers.getMapper(TicketMapper.class);
 
+  @Named("ticketToTicketDto")
   TicketDto ticketToTicketDto(Ticket ticket);
 
   Ticket ticketDtoToTicket(TicketDto ticketDto);
+
+  @IterableMapping(qualifiedByName = "ticketToTicketDto")
+  List<TicketDto> ticketsToTicketDtos(List<Ticket> ticketList);
 }

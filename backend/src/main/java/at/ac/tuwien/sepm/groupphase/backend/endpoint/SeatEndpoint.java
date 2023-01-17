@@ -21,9 +21,9 @@ public class SeatEndpoint {
   private final SeatService service;
   private final SeatMapper mapper;
 
-  public SeatEndpoint(SeatService service) {
+  public SeatEndpoint(SeatService service, SeatMapper mapper) {
     this.service = service;
-    this.mapper = SeatMapper.INSTANCE;
+    this.mapper = mapper;
   }
 
   /**

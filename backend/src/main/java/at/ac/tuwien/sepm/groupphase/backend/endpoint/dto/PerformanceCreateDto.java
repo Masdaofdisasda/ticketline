@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,15 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@Builder
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class PerformanceDto {
+public class PerformanceCreateDto {
   Long id;
   LocalDateTime startDate;
   LocalDateTime endDate;
   List<ArtistDto> artists = new ArrayList<>();
-  RoomDto room;
+  Long roomId;
   @Builder.Default
   List<TicketDto> tickets = new ArrayList<>();
   Map<Long, BigDecimal> priceCategoryPricingMap = new HashMap<>();

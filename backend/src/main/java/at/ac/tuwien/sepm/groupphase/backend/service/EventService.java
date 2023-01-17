@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -43,7 +43,7 @@ public interface EventService {
    * @return created event
    * @throws ValidationException when validation for EventDto fails
    */
-  Event create(EventDto event) throws ValidationException;
+  Long create(EventCreateDto event) throws ValidationException;
 
   /**
    * get Event categories from database.

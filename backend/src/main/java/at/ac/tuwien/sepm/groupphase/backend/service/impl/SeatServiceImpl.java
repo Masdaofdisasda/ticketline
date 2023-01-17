@@ -1,7 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -41,9 +39,6 @@ public class SeatServiceImpl implements SeatService {
     }
     if (edit.getColNumber() != null) {
       seat.setColNumber(edit.getColNumber());
-    }
-    if (edit.getState() != null) {
-      seat.setState(edit.getState());
     }
     repository.save(seat);
     return seat;

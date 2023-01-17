@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.ArtistFixture;
 import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventFixture;
 import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.RoomFixture;
 import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.TicketFixture;
@@ -84,7 +83,7 @@ public class PerformanceEndpointTest {
     final Performance performance = Performance.builder()
       .startDate(start)
       .endDate(end)
-      .artist(ArtistFixture.buildArtist1())
+      //.artist(ArtistFixture.buildArtist1())
       .room(RoomFixture.buildRoom1())
       .event(EventFixture.buildEvent1())
       .tickets(List.of(
@@ -113,8 +112,8 @@ public class PerformanceEndpointTest {
     assertEquals(2, performanceDto.getTickets().size());
     assertEquals(ticketMapper.ticketToTicketDto(TicketFixture.buildTicket1()), performanceDto.getTickets().get(0));
     assertEquals(ticketMapper.ticketToTicketDto(TicketFixture.buildTicket2()), performanceDto.getTickets().get(1));
-    assertEquals(artistMapper.artistToArtistDto(ArtistFixture.buildArtist1()), performanceDto.getArtist());
-    assertEquals(roomMapper.roomToRommDto(RoomFixture.buildRoom1()), performanceDto.getRoom());
+    //assertEquals(artistMapper.artistToArtistDto(ArtistFixture.buildArtist1()), performanceDto.getArtist());
+    assertEquals(roomMapper.roomToRoomDto(RoomFixture.buildRoom1()), performanceDto.getRoom());
   }
 
 

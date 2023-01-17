@@ -4,17 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -37,20 +38,10 @@ public class Seat {
   @Length(min = 0, max = 16)
   private String colName;
 
-  @Enumerated(EnumType.ORDINAL)
-  private State state;
-
   @ManyToOne
   private Sector sector;
 
-  @OneToOne
-  private Ticket ticket;
-
-  public enum State {
-    FREE(),
-    RESERVED(),
-    TAKEN(),
-    BLOCKED(),
-    UNSET()
-  }
+  @OneToMany(mappedBy = "seat")
+  @Fetch(FetchMode.JOIN)
+  private List<Ticket> ticketList;
 }

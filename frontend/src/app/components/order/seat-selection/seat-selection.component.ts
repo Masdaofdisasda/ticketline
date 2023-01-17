@@ -49,16 +49,12 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.spinner.show('room-plan-spinner');
-    this.venueService.getByID(1).subscribe(venue => {
-      this.spinner.hide('room-plan-spinner');
-    });
-
     this.route.params.subscribe(() => {
       const performanceId = this.route.snapshot.paramMap.get('performanceId');
       if (!performanceId) {
         return;
       }
-      this.performanceService.getById(parseInt(performanceId, 10)).subscribe({
+      this.performanceService.getRoomPlanPerformance(parseInt(performanceId, 10)).subscribe({
         next: data => {
           this.performance = data;
           this.spinner.hide('room-plan-spinner');
@@ -107,10 +103,12 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   private addSeatToCart(seat: Seat) {
     const sector = this.getSectorOfSeat(seat);
+    console.log(sector, this.performance);
 
     this.shoppingCartService.addToCart({
       performance: 'performance', sector: sector.name, row: seat.rowNumber, column: seat.colNumber,
-      seatNumber: `${seat.rowName || seat.rowNumber}:${seat.colName || seat.colNumber}`, price: sector.priceCategory.pricing,
+      seatNumber: `${seat.rowName || seat.rowNumber}:${seat.colName || seat.colNumber}`,
+      price: sector.priceCategory.pricing,
       seat
     });
   }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,6 +16,6 @@ import java.time.LocalDateTime;
 public class BookingItemDto {
   private Long id;
   private LocalDateTime bookedOn;
-  private Float orderTotal;
+  private BigDecimal orderTotal;
   private BookingType type;
 }

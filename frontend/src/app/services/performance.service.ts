@@ -17,4 +17,8 @@ export class PerformanceService {
   public getById(id: number): Observable<PerformanceDto> {
     return this.httpClient.get<PerformanceDto>(`${this.performanceBaseUri}/${id}`);
   }
+
+  public getRoomPlanPerformance(id: number): Observable<PerformanceDto> {
+    return this.httpClient.get<PerformanceDto>(`${this.performanceBaseUri}/room/${id}`);
+  }
 }

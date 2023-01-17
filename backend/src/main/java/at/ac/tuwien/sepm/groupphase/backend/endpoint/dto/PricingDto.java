@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriceCategoryDto {
-  @NotNull
+public class PricingDto {
   private Long id;
-  @NotNull
-  private String name;
-  @NotNull
-  private String color;
+
+  private Long performanceId;
+
+  private Long categoryId;
+
   private BigDecimal pricing;
 }

@@ -47,5 +47,13 @@ export class PriceCategory {
   id?: number;
   name: string;
   color: string;
+
+  pricing: number;
+}
+
+export class Pricing {
+  id?: number;
+  performanceId: number;
+  priceCategoryId: number;
   pricing: number;
 }

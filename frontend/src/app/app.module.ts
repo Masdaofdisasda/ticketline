@@ -18,6 +18,7 @@ import { RoomElementComponent } from './components/venue-admin/create-venue/room
 import {
   PriceCategoryDropdownComponent
 } from './components/venue-admin/create-venue/room-element/price-category-dropdown/price-category-dropdown.component';
+import {NgSelectModule} from '@ng-select/ng-select';
 import { AttributesDirective } from './directives/attributes.directive';
 import { RoomPlanComponent } from './components/room-plan/room-plan.component';
 import { ConfirmDeleteDialogComponent } from './components/confirm-delete-dialog/confirm-delete-dialog.component';
@@ -99,6 +100,7 @@ import { MessageCreateComponent } from './components/message/message-create/mess
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
+    NgSelectModule,
     FormsModule,
     ColorPickerModule,
     BrowserAnimationsModule,
@@ -113,5 +115,4 @@ import { MessageCreateComponent } from './components/message/message-create/mess
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -2,18 +2,58 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(uses = {SeatMapper.class})
-public interface SectorMapper {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-  SectorMapper INSTANCE = Mappers.getMapper(SectorMapper.class);
+@Mapper(uses = {SeatMapper.class, PriceCategoryMapper.class})
+public abstract class SectorMapper {
 
-  SectorDto sectorToSectorDto(Sector sector);
+  @Autowired
+  SeatMapper seatMapper;
 
-  Sector sectorDtoToSector(SectorDto sectorDto);
+  public abstract SectorDto sectorToSectorDto(Sector sector);
 
-  Sector sectorEditDtoToSector(SectorEditDto sectorEditDto);
+  public abstract Sector sectorDtoToSector(SectorDto sectorDto);
+
+  public abstract Sector sectorEditDtoToSector(SectorEditDto sectorEditDto);
+
+  @Named("sectorToSectorDtoForPerformance")
+  public SectorDto sectorToSectorDtoForPerformance(Sector sector, Long performanceId) {
+    SectorDto sectorGen = sectorToSectorDto(sector);
+    if (performanceId == null) {
+      return sectorGen;
+    }
+
+    for (Pricing p : sector.getPriceCategory().getPricingList()) {
+      if (Objects.equals(p.getPerformance().getId(), performanceId)) {
+        sectorGen.getPriceCategory().setPricing(p.getPricing());
+      }
+    }
+
+    sectorGen.setSeats(seatMapper.seatsToSeatDtosForPerformance(sector.getSeats(), performanceId));
+    return sectorGen;
+  }
+
+  @IterableMapping(qualifiedByName = "sectorToSectorDtoForPerformance")
+  public List<SectorDto> sectorsToSectorDtosForPerformance(List<Sector> sectors, Long performanceId) {
+    if (sectors == null && performanceId == null) {
+      return null;
+    }
+
+    ArrayList<SectorDto> arrayList = new ArrayList<SectorDto>();
+
+    for (Sector sector : sectors) {
+      arrayList.add(sectorToSectorDtoForPerformance(sector, performanceId));
+    }
+
+    return arrayList;
+  }
 }

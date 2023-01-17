@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import java.math.BigDecimal;
 
 
 @Builder(toBuilder = true)
@@ -27,10 +26,9 @@ public class Ticket {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false) //TODO use bigdecimal instead of float
-  private float price;
+  private BigDecimal price;
 
-  @OneToOne(mappedBy = "ticket")
+  @ManyToOne
   private Seat seat;
 
   @ManyToOne

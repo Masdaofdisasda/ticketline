@@ -29,4 +29,7 @@ export class SelectPerformanceComponent implements OnInit {
     });
   }
 
+  artistNames(performance: PerformanceDto): string {
+    return performance.artists.map(artist => artist.name).join(', ');
+  }
 }

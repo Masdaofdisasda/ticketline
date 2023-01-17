@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -40,14 +41,14 @@ public class Event {
 
   private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  //MultipleBagFetchException: cannot simultaneously fetch multiple bags
-  @Fetch(value = FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @Fetch(FetchMode.JOIN)
   @Builder.Default
+  @ToString.Exclude
   private List<Performance> performances = new ArrayList<>();
 
-  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER) //todo: has to be changed at a later point
-  @Fetch(value = FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "event")
   @Builder.Default
+  @ToString.Exclude
   private List<News> news = new ArrayList<>();
 }

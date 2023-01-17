@@ -9,8 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -29,10 +30,9 @@ class TicketMapperTest {
 
   Ticket ticket = Ticket.builder()
     .id(0L)
-    .price(20)
+    .price(BigDecimal.valueOf(20))
     .seat(seat)
     .build();
-
 
   SeatDto seatDto = SeatDto.builder()
     .id(10L)
@@ -40,7 +40,7 @@ class TicketMapperTest {
 
   TicketDto ticketDto = TicketDto.builder()
     .id(1L)
-    .price(30)
+    .price(BigDecimal.valueOf(30))
     .seat(seatDto)
     .build();
 
