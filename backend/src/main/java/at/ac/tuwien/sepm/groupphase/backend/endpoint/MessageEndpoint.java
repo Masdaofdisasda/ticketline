@@ -2,16 +2,21 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UploadResponseDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.MessageService;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,20 +42,25 @@ public class MessageEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final MessageService messageService;
+  private final UserService userService;
   private final MessageMapper messageMapper;
 
   @Autowired
-  public MessageEndpoint(MessageService messageService, MessageMapper messageMapper) {
+  public MessageEndpoint(MessageService messageService, UserService userService, MessageMapper messageMapper) {
     this.messageService = messageService;
+    this.userService = userService;
     this.messageMapper = messageMapper;
   }
 
   @Secured("ROLE_USER")
   @GetMapping
-  @Operation(summary = "Get list of messages without details", security = @SecurityRequirement(name = "apiKey"))
-  public List<SimpleMessageDto> findAll() {
-    LOGGER.info("GET /api/v1/messages");
-    return messageMapper.messageToSimpleMessageDto(messageService.findAll());
+  @ResponseStatus(code = HttpStatus.OK)
+  @Operation(summary = "Get list of news")
+  public PageDtoResponse<NewsOverviewDto> findAllPaginated(PageDto pageDto) {
+    LOGGER.info("GET /api/v1/messages/paginated");
+    Page<Message> page = messageService.findAllPaginated(pageDto);
+    return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
+      messageMapper.messageToNewsOverviewDto(page.getContent()));
   }
 
   @Secured("ROLE_USER")
@@ -58,7 +68,8 @@ public class MessageEndpoint {
   @Operation(summary = "Get detailed information about a specific message", security = @SecurityRequirement(name = "apiKey"))
   public DetailedMessageDto find(@PathVariable Long id) {
     LOGGER.info("GET /api/v1/messages/{}", id);
-    return messageMapper.messageToDetailedMessageDto(messageService.findOne(id));
+    DetailedMessageDto detailedMessageDto = messageMapper.messageToDetailedMessageDto(messageService.findOne(id));
+    return detailedMessageDto;
   }
 
   @Secured("ROLE_ADMIN")
@@ -103,5 +114,9 @@ public class MessageEndpoint {
     } else {
       return originalFilename;
     }
+  }
+
+  private <T extends NewsOverviewDto> PageDtoResponse<T> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<T> data) {
+    return new PageDtoResponse<T>(pageIndex, pageSize, hits, pagesTotal, data);
   }
 }

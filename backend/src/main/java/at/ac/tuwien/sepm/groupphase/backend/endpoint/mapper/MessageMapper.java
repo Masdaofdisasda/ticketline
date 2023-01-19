@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import org.mapstruct.IterableMapping;
@@ -30,5 +31,9 @@ public interface MessageMapper {
   Message messageCreationDtoToMessage(MessageCreationDto messageCreationDto);
 
   MessageCreationDto messageToMessageCreationDto(Message message);
+
+  List<NewsOverviewDto> messageToNewsOverviewDto(List<Message> message);
+
+  NewsOverviewDto messageToNewsOverviewDto(Message message);
 }
 

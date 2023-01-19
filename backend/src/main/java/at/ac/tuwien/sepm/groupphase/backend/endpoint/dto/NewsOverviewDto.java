@@ -14,11 +14,9 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsDto {
+public class NewsOverviewDto {
   private Long id;
   private String title;
   private String summary;
-  private String text;
   private LocalDate publishedAt;
-  private String pictureUrl;
 }
