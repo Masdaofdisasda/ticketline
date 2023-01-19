@@ -15,6 +15,7 @@ public class BookingMapper {
   public BookingItemDto map(Booking booking) {
     return BookingItemDto.builder()
       .id(booking.getId())
+      .orderTotal(getTotal(booking))
       .bookedOn(booking.getCreatedDate())
       .orderTotal(getTotal(booking))
       .type(booking.getBookingType())
@@ -24,8 +25,8 @@ public class BookingMapper {
   public BookingDetailDto map(Booking booking, String email) {
     return BookingDetailDto.builder()
       .bookingId(booking.getId())
-      .boughtByEmail(email)
       .orderTotal(getTotal(booking))
+      .boughtByEmail(email)
       .type(booking.getBookingType())
       .build();
   }
@@ -37,10 +38,7 @@ public class BookingMapper {
   }
 
   private BigDecimal getTotal(Booking booking) {
-    return booking.getTickets().stream()
-      .map(Ticket::getPrice)
-      .toList().stream()
-      .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return booking.getTickets().stream().map(Ticket::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
 }

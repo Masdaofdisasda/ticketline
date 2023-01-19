@@ -26,6 +26,8 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   shoppingCart: ShoppingCartComponent;
 
   performance: PerformanceDto;
+
+  private performanceId: number;
   private readonly selectionOutlineColor = 'b8a';
   private readonly highlightColor = 'ffffff87';
 
@@ -50,11 +52,11 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.spinner.show('room-plan-spinner');
     this.route.params.subscribe(() => {
-      const performanceId = this.route.snapshot.paramMap.get('performanceId');
-      if (!performanceId) {
+      this.performanceId = parseInt(this.route.snapshot.paramMap.get('performanceId'), 10);
+      if (!this.performanceId) {
         return;
       }
-      this.performanceService.getRoomPlanPerformance(parseInt(performanceId, 10)).subscribe({
+      this.performanceService.getRoomPlanPerformance(this.performanceId).subscribe({
         next: data => {
           this.performance = data;
           this.spinner.hide('room-plan-spinner');
@@ -106,11 +108,11 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     console.log(sector, this.performance);
 
     this.shoppingCartService.addToCart({
-      performance: 'performance', sector: sector.name, row: seat.rowNumber, column: seat.colNumber,
+      performanceId: this.performanceId, sector: sector.name, row: seat.rowNumber, column: seat.colNumber,
       seatNumber: `${seat.rowName || seat.rowNumber}:${seat.colName || seat.colNumber}`,
       price: sector.priceCategory.pricing,
       seat
-    });
+    } as Ticket);
   }
 
   private resetSelected() {

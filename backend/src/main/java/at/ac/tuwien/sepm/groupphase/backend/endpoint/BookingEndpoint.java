@@ -2,14 +2,20 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.service.BookingService;
+import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -29,6 +37,7 @@ public class BookingEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final BookingService bookingService;
+  private final CreatePdfService pdfService;
 
   /**
    * Make reservations for multiple tickets and create a new booking for a user.
@@ -39,9 +48,22 @@ public class BookingEndpoint {
   @PostMapping(value = "/reservations")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public Long reserveTickets(@RequestBody List<TicketDto> tickets) {
+  public BookingDetailDto reserveTickets(@RequestBody List<TicketBookingDto> tickets) {
     LOGGER.info("POST /api/v1/booking/reservations: reserveTickets({})", tickets);
-    return bookingService.reserveTickets(tickets);
+
+    return bookingService.makeBooking(tickets, BookingType.RESERVATION);
+  }
+
+  @GetMapping("/{id}/pdf")
+  @PermitAll
+  @Transactional(readOnly = true)
+  public ResponseEntity<byte[]> generatePdf(HttpServletRequest request, @PathVariable long id) {
+    LOGGER.info("POST /api/v1/booking/{}/pdf: generatePdf({})", id, id);
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+      .body(bookingService.createPdfForBooking(bookingService.getById(id),
+        request.getServerName() + ":" + request.getServerPort()));
   }
 
   /**
@@ -53,9 +75,9 @@ public class BookingEndpoint {
   @PostMapping(value = "/purchases")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public Long purchaseTickets(@RequestBody List<TicketDto> tickets) {
-    LOGGER.info("POST /api/v1/booking/purchases: purchaseTickets({})", tickets);
-    return bookingService.purchaseTickets(tickets);
+  public BookingDetailDto purchaseTickets(@RequestBody List<TicketBookingDto> tickets) {
+    LOGGER.info("POST /api/v1/booking/purchases: makeBooking({})", tickets);
+    return bookingService.makeBooking(tickets, BookingType.PURCHASE);
   }
 
   /**

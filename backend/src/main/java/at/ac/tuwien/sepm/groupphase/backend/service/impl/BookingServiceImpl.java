@@ -2,20 +2,34 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.BookingMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.SeatMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.SeatRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.TicketRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.BookingService;
+import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
+import at.ac.tuwien.sepm.groupphase.backend.service.TicketValidationService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Comparator;
@@ -29,30 +43,35 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final UserRepository userRepository;
   private final BookingMapper bookingMapper;
+  private final CreatePdfService pdfService;
+  private final PerformanceRepository performanceRepository;
+  private final SeatRepository seatRepository;
+  private final TicketRepository ticketRepository;
+  private final BookingRepository bookingRepository;
+  private final TicketValidationService validationService;
 
-  @Override
-  @Transactional
-  public Long reserveTickets(Collection<TicketDto> tickets) {
-    ensureSeatsAreAvailable(tickets);
+  private final SeatMapper seatMapper;
 
-    Booking booking = createBookingFromTickets(tickets, BookingType.RESERVATION);
-    ApplicationUser user = attachBookingToUser(booking);
+  private static Booking getLatestBooking(ApplicationUser user) {
+    List<Booking> bookings = user.getBookings();
 
-    return getLatestBooking(user);
+    LocalDateTime latestDate = bookings.stream()
+      .map(Booking::getCreatedDate)
+      .toList().stream().max(Comparator.naturalOrder())
+      .orElseThrow(NotFoundException::new);
+
+    Optional<Booking> latestBooking = bookings.stream()
+      .filter(booking -> booking.getCreatedDate().equals(latestDate))
+      .findFirst();
+
+    return latestBooking.orElseThrow(NotFoundException::new);
   }
 
-  @Override
-  @Transactional
-  public Long purchaseTickets(Collection<TicketDto> tickets) {
-    ensureSeatsAreAvailable(tickets);
-
-    Booking booking = createBookingFromTickets(tickets, BookingType.PURCHASE);
-    ApplicationUser user = attachBookingToUser(booking);
-
-    return getLatestBooking(user);
+  private static String getEmail() {
+    return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
   }
 
   @Override
@@ -116,51 +135,93 @@ public class BookingServiceImpl implements BookingService {
     userRepository.save(user);
   }
 
-  private static Long getLatestBooking(ApplicationUser user) {
-    List<Booking> bookings = user.getBookings();
+  @Override
+  @Transactional
+  public BookingDetailDto makeBooking(Collection<TicketBookingDto> tickets, BookingType type) {
+    ensureSeatsAreAvailable(tickets);
 
-    LocalDateTime latestDate = bookings.stream()
-      .map(Booking::getCreatedDate)
-      .toList().stream().max(Comparator.naturalOrder())
-      .orElseThrow(NotFoundException::new);
+    Booking booking = createBookingFromTickets(tickets, type);
+    ApplicationUser user = attachBookingToUser(booking);
 
-    Optional<Booking> latestBooking = bookings.stream()
-      .filter(booking -> booking.getCreatedDate().equals(latestDate))
-      .findFirst();
-
-    return latestBooking.orElseThrow(NotFoundException::new).getId();
+    return bookingMapper.map(booking, getEmail());
   }
-
 
   private ApplicationUser attachBookingToUser(Booking booking) {
     ApplicationUser user = userRepository.findUserByEmail(getEmail());
     user.addBooking(booking);
+    booking.setUser(user);
+    bookingRepository.save(booking);
     return userRepository.save(user);
   }
 
-  private Booking createBookingFromTickets(Collection<TicketDto> tickets, BookingType type) {
+  private Booking createBookingFromTickets(Collection<TicketBookingDto> tickets, BookingType type) {
     Booking booking = new Booking();
-    List<Ticket> ticketList = tickets
-      .stream().sequential()
-      .map(ticketDto -> Ticket.builder().price(ticketDto.getPrice()).build()) //TODO: create mapper & extend Tickets fields
-      .toList();
-
-    ticketList.forEach(booking::addTicket);
     booking.setBookingType(type);
     booking.setCreatedDate(LocalDateTime.now());
+
+    bookingRepository.save(booking);
+
+    List<Ticket> ticketList = tickets
+      .stream()
+      .map(ticketDto -> Ticket.builder()
+        .performance(performanceRepository.findById(ticketDto.getPerformanceId())
+          .orElseThrow(() -> new NotFoundException("Performance with id " + ticketDto.getPerformanceId() + " not found")))
+        .seat(seatRepository.findById(ticketDto.getSeat().getId())
+          .orElseThrow(() -> new NotFoundException("Seat with id " + ticketDto.getPerformanceId() + " not found")))
+        .booking(booking)
+        .price(seatRepository.findById(ticketDto.getSeat().getId())
+          .orElseThrow(() -> new NotFoundException("Seat with id " + ticketDto.getSeat().getId() + " could not be found"))
+          .getSector().getPriceCategory().getPricingList()
+          .stream()
+          .filter(pc -> pc.getPerformance().getId().equals(ticketDto.getPerformanceId()))
+          .findFirst()
+          .orElseThrow(() ->
+            new NotFoundException("No pricing information for performance with id " + ticketDto.getPerformanceId()))
+          .getPricing())
+        .build())
+      .toList();
+
+    ticketRepository.saveAll(ticketList);
+
+    ticketList.forEach((ticket) -> {
+      ticket.setValidationHash(validationService.generateTicketValidationHash(ticket));
+      booking.addTicket(ticket);
+    });
 
     return booking;
   }
 
-  private static String getEmail() {
-    return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-  }
-
-  private void ensureSeatsAreAvailable(Collection<TicketDto> tickets) {
-    //TODO fetch seats
+  private void ensureSeatsAreAvailable(Collection<TicketBookingDto> tickets) {
+    tickets.forEach((t) -> {
+      Seat seat = seatRepository.findById(t.getSeat().getId())
+        .orElseThrow(() -> new NotFoundException("Seat with id " + t.getSeat().getId() + " could not be found"));
+      SeatDto.State seatState = seatMapper.seatToSeatDtoForPerformance(seat, t.getPerformanceId()).getState();
+      /*
+      Needs to be commented out because SeatState is not sensible yet
+      if (seatState != SeatDto.State.FREE) {
+        throw new SeatNotAvailableException(seat, seatState);
+      }
+      */
+    });
 
     if (false) {
       throw new RuntimeException();
     }
   }
+
+
+  @SneakyThrows
+  public byte[] createPdfForBooking(Booking savedBooking, String domain) {
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+    pdfService.createTicketPdf(stream, savedBooking.getTickets(), domain);
+    return stream.toByteArray();
+  }
+
+  @Override
+  public Booking getById(long id) throws NotFoundException {
+    return bookingRepository.findById(id)
+      .orElseThrow(() -> new NotFoundException("Booking with the id " + id + " could not be found"));
+  }
+
 }
