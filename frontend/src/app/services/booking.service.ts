@@ -24,8 +24,8 @@ export class BookingService {
     return this.http.post<number>(this.baseUri + '/reservations', reservations);
   }
 
-  purchaseTickets(purchases: Ticket[]): Observable<number> {
-    return this.http.post<number>(this.baseUri + '/purchases', purchases);
+  purchaseTickets(purchases: Ticket[]): Observable<BookingDetail> {
+    return this.http.post<BookingDetail>(this.baseUri + '/purchases', purchases);
   }
 
   fetchBooking(bookingId: number): Observable<BookingDetail> {
@@ -42,5 +42,9 @@ export class BookingService {
 
   purchaseReservation(bookingId: number): Observable<void> {
     return this.http.put<any>(this.baseUri + '/' + bookingId, {});
+  }
+
+  downloadPDF(bookingId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUri}/${bookingId}/pdf`, {responseType: 'blob'});
   }
 }

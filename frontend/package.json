@@ -35,7 +35,6 @@
     "ngx-popper": "^7.0.0",
     "ngx-spinner": "^14.0.0",
     "ngx-toastr": "15.2.0",
-    "panzoom": "^9.4.3",
     "popper.js": "^1.16.1",
     "rxjs": "7.5.7",
     "tslib": "2.4.1",

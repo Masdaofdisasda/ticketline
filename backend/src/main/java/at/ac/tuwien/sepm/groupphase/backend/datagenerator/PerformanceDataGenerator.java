@@ -111,6 +111,7 @@ public class PerformanceDataGenerator {
           pricingRepository.save(pricing);
         });
 
+
         for (Ticket ticket : tickets) {
           ticket = ticket.toBuilder()
             .booking(bookingRepository.save(Booking.builder()
@@ -125,6 +126,7 @@ public class PerformanceDataGenerator {
 
           ticketRepository.save(ticket);
         }
+
 
         performance.setTickets(tickets);
 

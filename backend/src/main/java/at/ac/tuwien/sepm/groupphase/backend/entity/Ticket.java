@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 public class Ticket {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -36,4 +35,10 @@ public class Ticket {
 
   @ManyToOne
   private Booking booking;
+
+  private byte[] validationHash;
+
+  @Builder.Default
+  private Boolean used = false;
+
 }
