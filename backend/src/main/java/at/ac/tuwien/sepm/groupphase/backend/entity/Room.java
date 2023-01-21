@@ -41,7 +41,7 @@ public class Room {
   @NotNull
   private List<Sector> sectors = new ArrayList<>();
 
-  @ManyToOne()
+  @ManyToOne(cascade = CascadeType.ALL)
   private Venue venue;
 
   @OneToMany(mappedBy = "room")

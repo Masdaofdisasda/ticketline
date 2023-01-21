@@ -28,6 +28,7 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
   updated = new EventEmitter<void>();
 
   selectedIndex = -1;
+  currentlySelected = new Array<Seat>();
   readonly unselectedColor = '#e9eaec';
   readonly unselectedID = -1;
   readonly unselectedSector = {id: this.unselectedID, name: '', pricing: .0, priceCategory: new PriceCategory()};
@@ -145,10 +146,12 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     }
     event.removed.forEach(seat => this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber));
     this.update();
+    this.currentlySelected = event.all;
     event.all.forEach(seat => this.roomPlan.setColor(this.selectedSector.value.priceCategory.color + '7b', seat.colNumber, seat.rowNumber));
   }
 
   multiSelectEnd(seats: Array<Seat>) {
+    this.currentlySelected.forEach(seat => this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber));
     this.update();
     if (seats.length < 2) {
       return;

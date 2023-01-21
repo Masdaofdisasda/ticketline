@@ -45,7 +45,6 @@ class EventMapperTest {
     .build();
 
   PerformanceDto performanceDto = PerformanceDto.builder().id(7L).startDate(LocalDateTime.of(2022, 12, 11, 19, 0)).endDate(LocalDateTime.MAX)
-    .priceCategoryPricingMap(null)
     .room(RoomDto.builder()
       .sectors(new ArrayList<>())
       .build())

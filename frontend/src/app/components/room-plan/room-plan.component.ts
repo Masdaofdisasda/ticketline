@@ -201,10 +201,18 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     rect.setAttribute('class', 'seat');
     rect.setAttribute('column', seat.colNumber.toString());
     rect.setAttribute('row', seat.rowNumber.toString());
-    rect.setAttribute('fill', color ? ('#' + color?.replace('#', '')) : this.initialColor);
     rect.setAttribute('rx', (this.seatSize * this.borderRadius).toString());
+    const computeSeatColor = (col: string, state: SeatState) => {
+      if (state === SeatState.free || state === SeatState.unset) {
+        return '#' + col.replace('#', '');
+      } else {
+        return '#' + col.replace('#', '') + '44';
+      }
+    };
+
+    rect.setAttribute('fill', color ? computeSeatColor(color, seat.state) : this.initialColor);
+
     rect.addEventListener('click', () => this.seatClicked.emit(seat));
-    // rect.addEventListener('mousemove', () => this.hover.emit({y, x}));
     rect.addEventListener('mouseenter', () => this.hover.emit(seat), {passive: true});
     rect.addEventListener('mouseleave', () => this.hoverEnd.emit(seat), {passive: true});
     if (this.multiSelect) {

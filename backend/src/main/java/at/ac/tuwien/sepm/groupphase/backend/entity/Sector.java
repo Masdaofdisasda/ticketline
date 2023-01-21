@@ -38,7 +38,7 @@ public class Sector {
   @Builder.Default
   private List<Seat> seats = new ArrayList<>();
 
-  @ManyToOne()
+  @ManyToOne
   @ToString.Exclude
   PriceCategory priceCategory;
   @ManyToOne

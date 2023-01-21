@@ -40,10 +40,10 @@ public class PriceCategory {
   @Builder.Default
   private List<Performance> performances = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "priceCategory")
   @Fetch(FetchMode.SUBSELECT)
   @Builder.Default
-  private List<Sector> sector = new ArrayList<>();
+  private List<Sector> sectorList = new ArrayList<>();
 
   @OneToMany(mappedBy = "priceCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)

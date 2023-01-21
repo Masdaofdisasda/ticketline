@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-  // TODO: 23.12.22 future datetimes where no event takes place do throw an exception
-
   /**
    * findForFilter returns a page object containing all or a slice of events matching given criteria.
    *
@@ -25,14 +23,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    * @return page with matching events
    */
   @Query(
-    value = "SELECT ev FROM Event ev"
-      + " JOIN FETCH Performance pf ON pf.id IN ELEMENTS(ev.performances)"
-      + " JOIN FETCH Artist art ON art IN ELEMENTS(pf.artists)"
-      + " JOIN FETCH Room r ON pf.room = r"
-      + " JOIN FETCH Venue v ON r.venue = v"
-      + " WHERE((:#{#eventSearchRequest.startTime} IS NOT NULL AND ev.startDate >= :#{#eventSearchRequest.startTime})"
+    value = "SELECT DISTINCT ev FROM Event ev"
+      + " LEFT JOIN Performance pf ON pf.id IN ELEMENTS(ev.performances)"
+      + " LEFT JOIN Artist art ON art IN ELEMENTS(pf.artists)"
+      + " LEFT JOIN Room r ON pf.room = r"
+      + " LEFT JOIN Venue v ON r.venue = v"
+      + " WHERE(((:#{#eventSearchRequest.startTime} IS NOT NULL AND ev.startDate >= :#{#eventSearchRequest.startTime})"
       + " OR (:#{#eventSearchRequest.startTime} IS NULL AND ev.startDate >= CURRENT_TIMESTAMP)"
-      + " AND (coalesce(:#{#eventSearchRequest.endTime},'')='' OR ev.endDate <= :#{#eventSearchRequest.endTime}))"
+      + " AND (coalesce(:#{#eventSearchRequest.endTime},'')='' OR ev.endDate <= :#{#eventSearchRequest.endTime})))"
       + " AND (coalesce(:#{#eventSearchRequest.nameOfEvent}, '')='' OR lower(ev.name) like concat('%',lower(:#{#eventSearchRequest.nameOfEvent}),'%'))"
       + " AND (coalesce(:#{#eventSearchRequest.venueName},'')='' OR lower(v.name) like concat('%',lower(:#{#eventSearchRequest.venueName}),'%'))"
       + " AND (coalesce(:#{#eventSearchRequest.eventHall},'')='' OR lower(r.name) like concat('%',lower(:#{#eventSearchRequest.eventHall}),'%'))"
@@ -50,13 +48,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    * @param pageable holds page information like index and pagesize
    * @return page with matching events
    */
-  @Query("SELECT ev FROM Event ev"
-    + " LEFT JOIN Performance pf ON pf.event = ev"
-    + " LEFT JOIN Ticket tk ON tk.performance = pf"
-    + " WHERE tk.booking IS NOT NULL"
-    + " AND Month(ev.startDate) = Month(CURRENT_DATE)"
-    + " GROUP BY ev ORDER BY count(tk.booking) desc")
+  @Query("select pf.event FROM Performance pf"
+    + " LEFT join Ticket t ON t.performance = pf"
+    + " AND Month(pf.event.startDate) = Month(CURRENT_DATE)"
+    + " GROUP BY pf.event"
+    + " ORDER BY COUNT(distinct(COALESCE(t.booking, 0))) desc")
   Page<Event> findTopOfMonth(Pageable pageable);
+
 
   /**
    * Get event categories saved in the db.

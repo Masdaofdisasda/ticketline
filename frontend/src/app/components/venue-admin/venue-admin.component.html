@@ -1,16 +1,22 @@
-<div class="pt-4">
-  <h2>Manage Venues</h2>
+<div>
+  <br>
+  <div class="fourXone">
+    <h2>Manage Venues</h2>
+    <span style="width: 80%"></span>
+    <button type="button" class="btn btn-primary mr-1" routerLink="/admin/venue/create">Create Venue</button>
+  </div>
+  <br>
+</div>
 
-  <button class="btn btn-primary" routerLink="/admin/venue/create"><i class="bi bi-plus"></i>Create Venue</button>
-  <div class="venue-list">
-    <div class="venue-item d-flex mt-2" *ngFor="let venue of venues">
-      <p class="flex-grow-1">{{venue.name}}</p>
-      <div class="btn-group">
-        <button class="btn btn-outline-warning" [routerLink]="['/admin/venue/edit', venue.id]"><i
-            class="bi bi-pencil"></i></button>
-        <button class="btn btn-outline-danger" (click)="deleteVenueClicked(venue)"><i
-          class="bi bi-trash"></i></button>
-      </div>
+
+<div class="venue-list">
+  <div class="venue-item d-flex mt-2" *ngFor="let venue of venues">
+    <p class="flex-grow-1">{{venue.name}}</p>
+    <div class="btn-group">
+      <button class="btn btn-outline-warning" [routerLink]="['/admin/venue/edit', venue.id]"><i
+        class="bi bi-pencil"></i></button>
+      <button class="btn btn-outline-danger" (click)="deleteVenueClicked(venue)"><i
+        class="bi bi-trash"></i></button>
     </div>
   </div>
 </div>

@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {EventService} from '../../../services/event.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {of} from 'rxjs/internal/observable/of';
 import {ArtistService} from '../../../services/artist.service';
 import {EventDto} from '../../../dto/event.dto';
 import {PerformanceDto} from '../../../dto/performance.dto';
@@ -35,15 +34,11 @@ export class EventCreateComponent implements OnInit {
     });
   }
 
-  artistSuggestion = (input: string) =>
-    input === '' ? of([]) : this.artistService.filterByName(input);
   createEvent() {
-    this.eventService.create(this.getEventDtoFromFormGroup()).subscribe(data => {
-      this.notification.success(
-        `Event: \'${data.name}\' successfully created.`
-      );
-      this.router.navigate(['/event']);
-    });
+    const dto = this.getEventDtoFromFormGroup();
+    this.eventService.create(dto).subscribe(
+      () => this.router.navigate(['/event'])
+    );
   }
 
   getEventDtoFromFormGroup(): EventDto {
@@ -66,8 +61,8 @@ export class EventCreateComponent implements OnInit {
         startDate: performanceForm.get('startDateControl').value,
         endDate: performanceForm.get('endDateControl').value,
         artists: performanceForm.get('artistsControl').value,
-        venue: performanceForm.get('venueControl').value,
-        room: performanceForm.get('roomControl').value
+        roomId: performanceForm.get('roomControl').value,
+        priceCategoryPricingMap: performanceForm.get('pricingsControl').value
       } as unknown as PerformanceDto);
     }
     return eventDto;

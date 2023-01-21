@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
-import at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.BookingFixture;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
-import java.util.List;
 
 @Profile("generateData")
 @Component
@@ -92,9 +89,6 @@ public class UserDataGenerator {
       .accountNonLocked(true)
       .admin(false)
       .build();
-
-    List<Booking> bookings = BookingFixture.getBuildBooking(13);
-    bookings.forEach(user::addBooking);
 
     LOGGER.debug("saving user {}", user);
     userRepository.save(user);

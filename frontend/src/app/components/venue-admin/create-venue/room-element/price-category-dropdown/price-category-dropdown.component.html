@@ -39,7 +39,7 @@
         <p *ngIf="! colorInput.valid && colorInput.touched" class="text-danger">
           <i class="bi bi-exclamation-triangle"></i>The selected color not valid</p>
         <button class="btn btn-secondary float-start" type="">Cancel</button>
-        <button class="btn btn-primary float-end" type="submit"
+        <button class="btn btn-primary float-end" type="submit" [disabled]="!colorInput.valid && colorInput.touched"
                 (click)="addPriceCategory($event, addForm, colorInput)">Add
         </button>
       </form>

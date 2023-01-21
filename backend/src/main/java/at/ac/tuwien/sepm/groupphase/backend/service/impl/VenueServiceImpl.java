@@ -20,6 +20,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.SeatRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.SectorRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.VenueService;
+import at.ac.tuwien.sepm.groupphase.backend.service.validator.VenueValidator;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,8 @@ public class VenueServiceImpl implements VenueService {
   public Venue addVenue(Venue toAdd) throws ValidationException {
     LOGGER.trace("addVenue({})", toAdd);
 
+    venueValidator.validateVenue(toAdd);
+
     for (Room room : toAdd.getRooms()) {
       for (Sector sector : room.getSectors()) {
         for (Seat seat : sector.getSeats()) {
@@ -78,7 +81,6 @@ public class VenueServiceImpl implements VenueService {
       }
       room.setVenue(toAdd);
     }
-    venueValidator.validateVenue(toAdd);
 
     return repository.save(toAdd);
   }
