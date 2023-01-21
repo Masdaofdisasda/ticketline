@@ -1,0 +1,84 @@
+<div class="mb-3">
+  <h1 class="display-6 d-inline mr-2">add performances</h1>
+  <button type="button" class="btn btn-secondary d-inline float-end" (click)="addPerformance()">
+    +
+  </button>
+</div>
+<form [formGroup]="eventCreateFormGroup">
+  <ng-container formArrayName="performances">
+    <ul class="list-group">
+      <li class="p-3 list-group-item" *ngFor="let performance of performances.controls; let i = index;">
+        <div class="form-group row" [formGroupName]="i">
+          <div class="col-sm-3">
+            <ng-select [multiple]="true" formControlName="artistsControl">
+              <ng-option *ngFor="let artist of artists | async" [value]="artist">{{artist.name}}</ng-option>
+            </ng-select>
+          </div>
+          <div class="col-sm-2">
+            <select class="form-control form-select dropdown-toggle" formControlName="venueControl">
+              <option *ngFor="let venue of venues | async" [ngValue]="venue">
+                {{venue.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <select class="form-control form-select dropdown-toggle" formControlName="roomControl">
+              <option *ngFor="let room of performance?.value.venueControl?.rooms" [ngValue]="room.id">
+                {{room.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <app-date-time-picker placeholder="start time" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                  formControlName="startDateControl">
+            </app-date-time-picker>
+          </div>
+          <div class="col-sm-2">
+            <app-date-time-picker placeholder="end time" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+                                  formControlName="endDateControl">
+            </app-date-time-picker>
+          </div>
+          <div class="col-sm">
+            <button (click)="removePerformance(i)" class="btn btn-sm responsive-danger-button bi bi-trash float-end"
+                    style="color: red"></button>
+          </div>
+          <div>
+            <button name="button" class="btn btn-outline-primary dropdown-toggle mt-2 mb-2 text-right" type="button"
+                    id="addRoomDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="bi bi-plus"></i>Set PriceCategories
+            </button>
+
+            <div class="dropdown-menu p-3" aria-labelledby="addRoomDropdown">
+              <ng-container *ngIf="priceCategories |async; else noRoomSelected">
+                <ng-container *ngIf="(priceCategories |async)?.length > 0; else noPriceCategories">
+                  <div class="form-group row"
+                       *ngFor="let priceCategory of priceCategories | async">
+                    <div class="col">
+                      <p><i class="bi bi-square-fill mr-1 "
+                            [ngStyle]="{color: '#' + priceCategory.color}"></i>{{priceCategory.name}}</p>
+                    </div>
+                    <div class="col">
+                      <input class="form-control" type="number" step="0.01" placeholder="Pricing"
+                             (input)="updatePricingMap($event, priceCategory.id, performance)"/>
+                    </div>
+
+                  </div>
+                </ng-container>
+                <ng-template #noPriceCategories>
+                  <p>Seems like your room has no PriceCategories set.</p>
+                  <p>Click <a [routerLink]="['/admin/venue/edit/', performance.controls.venueControl.value.id]"
+                              target="_blank">here <i class="bi bi-box-arrow-up-right"></i></a> to edit the venue</p>
+                </ng-template>
+              </ng-container>
+              <ng-template #noRoomSelected>
+                <p>Please select a room first!</p>
+              </ng-template>
+            </div>
+          </div>
+
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+  <br>
+</form>

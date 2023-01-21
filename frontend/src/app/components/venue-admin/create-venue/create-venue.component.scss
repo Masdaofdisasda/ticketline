@@ -1,0 +1,72 @@
+input[type=text] {
+  width: 100%;
+  //max-width: 20rem;
+}
+
+.houseNumber {
+  width: 25%;
+}
+
+.street {
+  padding-right: 1%;
+  width: 92%;
+}
+
+input,
+label {
+  display: block;
+}
+
+.input-row {
+  display: block;
+}
+
+input {
+    margin-bottom: .6rem;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+
+.item {
+    margin-bottom: 0;
+    border-bottom: 1px solid rgb(178, 188, 189);
+}
+
+.item:last-of-type {
+    border-bottom: none;
+}
+
+.head {
+    background-color: rgb(234, 249, 250);
+    padding: 1rem;
+}
+
+.content {
+    padding-left: 2rem;
+    background-color: #f1f6f7;
+}
+
+.createNew > form {
+  padding: 1rem;
+}
+
+.dropdown-menu form {
+  margin: 1rem .5rem;
+  margin-top: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.address {
+  justify-content: left;
+}

@@ -1,0 +1,34 @@
+<h1 class="display-1 py-4">Thank you for your order!</h1>
+
+<div class="row">
+  <div class="col-3">
+  </div>
+
+  <div class="col-6">
+    <div *ngIf="booking" class="bg-white rounded-2 py-3 px-3">
+      <div *ngIf="booking.type === 'PURCHASE' " class="fw-bold px-2 text-center">We have processed your purchase:</div>
+      <div *ngIf="booking.type === 'RESERVATION' " class="fw-bold px-2 text-center">We have reserved your tickets:</div>
+
+      <div class="container-fluid py-3">
+        <div class="py-3">
+          <div class="fw-normal">Order number:</div>
+          <div class="fw-lighter">{{booking.bookingId}}</div>
+        </div>
+        <div class="py-3">
+          <div class="fw-normal">Order total:</div>
+          <div class="fw-lighter">{{booking.orderTotal}} EUR</div>
+        </div>
+        <div class="py-3">
+          <div class="fw-normal">Tickets and order confirmation are sent to:</div>
+          <div class="fw-lighter">{{booking.boughtByEmail}}</div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-primary">Download tickets</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-3">
+  </div>
+</div>

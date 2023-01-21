@@ -1,9 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild, ViewChildren} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MessageService} from '../../services/message.service';
-import {Message} from '../../dtos/message';
+import {MessageDto} from '../../dto/messageDto';
 import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
-import {UntypedFormBuilder, NgForm} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
+import {PageResponseDto} from '../../dto/page-response.dto';
+import {PageDto} from '../../dto/page.dto';
+import {NewsOverviewDto} from '../../dto/newsOverviewDto';
 
 @Component({
   selector: 'app-message',
@@ -17,63 +21,49 @@ export class MessageComponent implements OnInit {
   // After first submission attempt, form validation will start
   submitted = false;
 
-  currentMessage: Message;
+  currentMessage: MessageDto;
 
-  private message: Message[];
+  pagedProperties = PageResponseDto.getPageResponseDto();
+
+  private news: NewsOverviewDto[];
 
   constructor(private messageService: MessageService,
               private ngbPaginationConfig: NgbPaginationConfig,
               private formBuilder: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
-              private authService: AuthService,
+              private router: Router,
+              public authService: AuthService,
               private modalService: NgbModal) {
   }
 
   ngOnInit() {
-    this.loadMessage();
+    this.refreshNews();
   }
 
-  /**
-   * Returns true if the authenticated user is an admin
-   */
-  isAdmin(): boolean {
-    return this.authService.getUserRole() === 'ADMIN';
+  navigateCreatePage() {
+    this.router.navigateByUrl('/message/create');
   }
 
-  openAddModal(messageAddModal: TemplateRef<any>) {
-    this.currentMessage = new Message();
-    this.modalService.open(messageAddModal, {ariaLabelledBy: 'modal-basic-title'});
-  }
-
-  openExistingMessageModal(id: number, messageAddModal: TemplateRef<any>) {
-    this.messageService.getMessageById(id).subscribe({
-      next: res => {
-        this.currentMessage = res;
-        this.modalService.open(messageAddModal, {ariaLabelledBy: 'modal-basic-title'});
-      },
-      error: err => {
-        this.defaultServiceErrorHandling(err);
-      }
-    });
-  }
-
-  /**
-   * Starts form validation and builds a message dto for sending a creation request if the form is valid.
-   * If the procedure was successful, the form will be cleared.
-   */
-  addMessage(form) {
-    this.submitted = true;
-
-
-    if (form.valid) {
-      this.currentMessage.publishedAt = new Date().toISOString();
-      this.createMessage(this.currentMessage);
-      this.clearForm();
+  nextPage(){
+    if (this.pagedProperties.pageIndex < this.pagedProperties.pagesTotal-1){
+      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex++, ...this.pagedProperties};
+      this.refreshNews();
     }
   }
 
-  getMessage(): Message[] {
-    return this.message;
+  previousPage(){
+    if (this.pagedProperties.pageIndex > 0){
+      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex--, ...this.pagedProperties};
+      this.refreshNews();
+    }
+  }
+
+  loadNews(): NewsOverviewDto[] {
+    return this.news;
+  }
+
+  refreshNews() {
+    this.loadOldNews(this.pagedProperties);
   }
 
   /**
@@ -84,29 +74,17 @@ export class MessageComponent implements OnInit {
   }
 
   /**
-   * Sends message creation request
-   *
-   * @param message the message which should be created
+   * Loads the specified page of messages from the backend
    */
-  private createMessage(message: Message) {
-    this.messageService.createMessage(message).subscribe({
-        next: () => {
-          this.loadMessage();
-        },
-        error: error => {
-          this.defaultServiceErrorHandling(error);
+  private loadOldNews(pageDto: PageDto) {
+    this.messageService.getPaginatedMessage(pageDto).subscribe({
+      next: (news: PageResponseDto<NewsOverviewDto>) => {
+        this.pagedProperties = news;
+        this.news = news.data;
+        if (this.pagedProperties.pagesTotal < this.pagedProperties.pageIndex){
+          this.pagedProperties.pageIndex = this.pagedProperties.pagesTotal - 1;
+          this.refreshNews();
         }
-      }
-    );
-  }
-
-  /**
-   * Loads the specified page of message from the backend
-   */
-  private loadMessage() {
-    this.messageService.getMessage().subscribe({
-      next: (message: Message[]) => {
-        this.message = message;
       },
       error: error => {
         this.defaultServiceErrorHandling(error);
@@ -126,7 +104,7 @@ export class MessageComponent implements OnInit {
   }
 
   private clearForm() {
-    this.currentMessage = new Message();
+    this.currentMessage = new MessageDto();
     this.submitted = false;
   }
 

@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -77,7 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     List<SimpleGrantedAuthority> authorities = ((List<?>) claims
       .get("rol")).stream()
       .map(authority -> new SimpleGrantedAuthority((String) authority))
-      .toList();
+      .collect(Collectors.toList());
 
     if (username == null || username.isEmpty()) {
       throw new IllegalArgumentException("Token contains no user");
