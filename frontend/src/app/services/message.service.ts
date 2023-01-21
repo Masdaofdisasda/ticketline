@@ -5,10 +5,9 @@ import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {MessageCreateDto} from '../dto/messageCreateDto';
 import {UploadResponseDto} from '../dto/uploadResponseDto';
-import {PageResponseDto} from "../dto/page-response.dto";
-import {ExtendedEventDto} from "../dto/extended-event.dto";
-import {PageDto} from "../dto/page.dto";
-import {NewsOverviewDto} from "../dto/newsOverviewDto";
+import {PageResponseDto} from '../dto/page-response.dto';
+import {PageDto} from '../dto/page.dto';
+import {NewsOverviewDto} from '../dto/newsOverviewDto';
 
 @Injectable({
   providedIn: 'root'
