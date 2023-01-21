@@ -1,9 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 
-import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
+import org.h2.jdbc.JdbcSQLDataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -12,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -34,7 +33,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   private static final Logger LOGGER =
     LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  /** Use the @ExceptionHandler annotation to write handler for custom exceptions. */
+  /**
+   * Use the @ExceptionHandler annotation to write handler for custom exceptions.
+   */
   @ExceptionHandler(value = {NotFoundException.class})
   protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
     LOGGER.warn(ex.getMessage());
@@ -49,22 +50,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
   }
 
-  @ExceptionHandler
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  @ResponseBody
-  public ValidationErrorRestDto handleValidationException(ValidationException e) {
+  @ExceptionHandler(value = {ValidationException.class})
+  public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
     LOGGER.warn(
       "Terminating request processing with status 422 due to {}: {}",
-      e.getClass().getSimpleName(),
-      e.getMessage());
-    return new ValidationErrorRestDto(e.summary(), e.errors());
+      ex.getClass().getSimpleName(),
+      ex.getMessage());
+    return handleExceptionInternal(
+      ex, ex.errors(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
   }
 
-  @ExceptionHandler(value = {DateParseException.class})
-  protected ResponseEntity<Object> handleDateParseException(RuntimeException ex, WebRequest request) {
+  @ExceptionHandler(value = {JdbcSQLDataException.class})
+  public ResponseEntity<Object> handleJdbcSqlDataException(JdbcSQLDataException ex, WebRequest request) {
     LOGGER.warn(ex.getMessage());
-    System.out.println("Exception catched");
-    return handleExceptionInternal(ex, "The given date could not be parsed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+
+    return handleExceptionInternal(
+      ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(value = {SeatNotAvailableException.class})
+  public ResponseEntity<Object> handleSeatNotAvailableException(SeatNotAvailableException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
+
+    return handleExceptionInternal(
+      ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   /**

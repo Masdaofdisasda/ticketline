@@ -1,14 +1,10 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
-import { catchError, Observable, throwError } from 'rxjs';
-import { Globals } from '../global/globals';
-import { ToastrService } from 'ngx-toastr';
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse,} from '@angular/common/http';
+import {AuthService} from '../services/auth.service';
+import {catchError, Observable, throwError} from 'rxjs';
+import {Globals} from '../global/globals';
+import {ToastrService} from 'ngx-toastr';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -16,7 +12,8 @@ export class AuthInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private globals: Globals,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   intercept(
     req: HttpRequest<any>,
@@ -37,6 +34,11 @@ export class AuthInterceptor implements HttpInterceptor {
     });
 
     return next.handle(this.authService.getToken() ? authReq : req).pipe(
+      tap((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse && event.status === 201) {
+          this.toastr.success('Object created.');
+        }
+      }),
       catchError((error: any) => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {
@@ -44,10 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
           errorMsg = `Error: ${error.error.message}`;
         } else {
           console.log('This is server side error');
-          errorMsg = `Error Code: ${error.status},  Message: ${
-            // error.message ? error.message : error.error
-            error.error
-          }`;
+          errorMsg = `Error Code: ${error.status} \n Message: ${error.error}`;
           console.log(error.error);
           if (error.error === 'Invalid authorization header or token') {
             //remove token

@@ -8,6 +8,8 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.repository.ArtistRepository;
@@ -18,27 +20,29 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PricingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.RoomRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TicketRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.lang.invoke.MethodHandles;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.ArtistFixture.getBuildArtist;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.EventFixture.getBuildEvent;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.RoomFixture.getBuildRoom;
-import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.TicketFixture.getBuildTickets;
 import static at.ac.tuwien.sepm.groupphase.backend.datagenerator.fixtures.VenueFixture.getBuildVenue;
 
 @Profile("generateData")
 @Component
+@DependsOn("userDataGenerator")
 public class PerformanceDataGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -52,6 +56,8 @@ public class PerformanceDataGenerator {
   private final BookingRepository bookingRepository;
   private final RoomRepository roomRepository;
 
+  private final UserRepository userRepository;
+
   private final PricingRepository pricingRepository;
 
   private final PriceCategoryRepository priceCategoryRepository;
@@ -62,7 +68,7 @@ public class PerformanceDataGenerator {
                                   VenueRepository venueRepository,
                                   TicketRepository ticketRepository,
                                   BookingRepository bookingRepository,
-                                  RoomRepository roomRepository, PriceCategoryRepository priceCategoryRepository, PriceCategoryFixture priceCategoryFixture, PricingRepository pricingRepository) {
+                                  RoomRepository roomRepository, PriceCategoryRepository priceCategoryRepository, PriceCategoryFixture priceCategoryFixture, UserRepository userRepository, PricingRepository pricingRepository) {
     this.performanceRepository = performanceRepository;
     this.eventRepository = eventRepository;
     this.artistRepository = artistRepository;
@@ -72,6 +78,7 @@ public class PerformanceDataGenerator {
     this.roomRepository = roomRepository;
     this.priceCategoryRepository = priceCategoryRepository;
     this.priceCategoryFixture = priceCategoryFixture;
+    this.userRepository = userRepository;
     this.pricingRepository = pricingRepository;
   }
 
@@ -90,7 +97,6 @@ public class PerformanceDataGenerator {
         venueRepository.save(getBuildVenue(i));
         Artist artist = artistRepository.save(getBuildArtist(i));
         Event event = eventRepository.save(getBuildEvent(i));
-        List<Ticket> tickets = getBuildTickets(i);
         Room room = roomRepository.save(getBuildRoom(i));
 
         Performance performance = Performance.builder()
@@ -102,30 +108,45 @@ public class PerformanceDataGenerator {
           .event(event)
           .build();
 
-        performanceRepository.save(performance);
+        performance = performanceRepository.save(performance);
 
         int finalI = i;
+        Performance finalPerformance = performance;
+        List<Pricing> pricings = new ArrayList<>();
         priceCategoryRepository.findAll().forEach(pc -> {
           Pricing pricing = pc.getPricingList().get(finalI - 1);
-          pricing.setPerformance(performance);
-          pricingRepository.save(pricing);
+          pricing.setPerformance(finalPerformance);
+          pricings.add(pricing);
         });
 
 
-        for (Ticket ticket : tickets) {
-          ticket = ticket.toBuilder()
-            .booking(bookingRepository.save(Booking.builder()
-              .id((long) i)
-              .bookingType(BookingType.PURCHASE)
-              .tickets(List.of(ticket))
-              .createdDate(LocalDateTime.now().minusDays(i))
-              .build()
-            ))
-            .performance(performance)
-            .price(BigDecimal.ONE).build();
+        pricingRepository.saveAll(pricings);
 
-          ticketRepository.save(ticket);
+        List<Ticket> tickets = new ArrayList<>();
+
+        for (Sector sector : performance.getRoom().getSectors()) {
+          for (Seat seat : sector.getSeats()) {
+            Ticket ticket = Ticket.builder()
+              .price(pricings.stream().filter(pricing -> pricing.getPerformance().getId()
+                  .equals(finalPerformance.getId())).findFirst().orElseThrow().getPricing())
+              .performance(performance)
+              .seat(seat)
+              .build();
+
+            if (Math.random() > .8) {
+              ticket.setBooking(Booking.builder()
+                .tickets(List.of(ticket))
+                .createdDate(LocalDateTime.now())
+                .user(userRepository.findAll().get((int) (Math.random() * 3)))
+                .bookingType(BookingType.values()[(int) (Math.random() * 2)])
+                .build());
+            }
+
+            tickets.add(ticket);
+          }
         }
+
+        ticketRepository.saveAll(tickets);
 
 
         performance.setTickets(tickets);

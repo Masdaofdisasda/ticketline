@@ -72,7 +72,9 @@
             <label class="form-check-label" for="accountNonLocked">admin</label>
           </div>
           <div class="col d-flex justify-content-center my-5">
-            <button type="button" (click)="createUser()" class="btn btn-primary w-75" id="createButton">create</button>
+            <button type="button" (click)="createUser()" class="btn btn-primary w-75" id="createButton"
+                    [disabled]="!this.createUserForm.valid">create
+            </button>
           </div>
         </form>
       </div>

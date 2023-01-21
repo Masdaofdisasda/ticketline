@@ -33,12 +33,10 @@ export class MessageCreateComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private cd: ChangeDetectorRef,
-    public authService: AuthService,
-    private modalService: NgbModal) {
+    public authService: AuthService,) {
   }
 
   ngOnInit() {
-    this.loadMessage();
     this.createFormGroup = this.formBuilder.group({
       messageTitle: new FormControl('', Validators.required),
       messagePublishedAt: new FormControl('', Validators.required),
@@ -90,19 +88,6 @@ export class MessageCreateComponent implements OnInit {
         console.log('Error creating Event', err);
         this.notification.error('Error creating event: \n' + err.error.errors);
       },
-    });
-  }
-  /**
-   * Loads the specified page of message from the backend
-   */
-  private loadMessage() {
-    this.messageService.getMessage().subscribe({
-      next: (message: MessageDto[]) => {
-        this.message = message;
-      },
-      error: error => {
-        this.defaultServiceErrorHandling(error);
-      }
     });
   }
 

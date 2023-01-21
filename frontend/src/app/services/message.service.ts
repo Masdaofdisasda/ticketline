@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {MessageDto} from '../dto/messageDto';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {MessageCreateDto} from '../dto/messageCreateDto';
 import {UploadResponseDto} from '../dto/uploadResponseDto';
+import {PageResponseDto} from '../dto/page-response.dto';
+import {PageDto} from '../dto/page.dto';
+import {NewsOverviewDto} from '../dto/newsOverviewDto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +19,16 @@ export class MessageService {
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
-  /**
-   * Loads all messages from the backend
+
+  /*
+   * Load all messages from the backend
    */
-  getMessage(): Observable<MessageDto[]> {
-    return this.httpClient.get<MessageDto[]>(this.messageBaseUri);
+  getPaginatedMessage(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
+    const params = new HttpParams()
+      .set('pageIndex', pageDto.pageIndex)
+      .set('pageSize', pageDto.pageSize);
+
+    return this.httpClient.get<PageResponseDto<NewsOverviewDto>>(this.messageBaseUri, {params});
   }
 
   /**

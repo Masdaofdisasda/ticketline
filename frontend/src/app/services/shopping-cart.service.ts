@@ -27,8 +27,8 @@ export class ShoppingCartService {
   }
 
   getItems(): Ticket[] {
-    if (this.ticketsSubject.getValue()) {
-      const retrievedObject = localStorage.getItem('cart');
+    if (!this.ticketsSubject.getValue()) {
+      const retrievedObject = sessionStorage.getItem('cart');
       if (retrievedObject) {
         this.ticketsSubject.next(JSON.parse(retrievedObject));
       }

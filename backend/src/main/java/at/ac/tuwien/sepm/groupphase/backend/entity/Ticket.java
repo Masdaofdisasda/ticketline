@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,7 +34,7 @@ public class Ticket {
   @ManyToOne
   private Performance performance;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   private Booking booking;
 
   private byte[] validationHash;

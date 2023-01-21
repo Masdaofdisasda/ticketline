@@ -20,4 +20,8 @@ export class PriceCategoryService {
   addPriceCategory(categoryToAdd: PriceCategory): Observable<PriceCategory> {
     return this.httpClient.post<PriceCategory>(this.priceCategoryBaseUri, categoryToAdd);
   }
+
+  getByRoomId(id: number): Observable<Array<PriceCategory>> {
+    return this.httpClient.get<Array<PriceCategory>>(`${this.priceCategoryBaseUri}/room/${id}`);
+  }
 }

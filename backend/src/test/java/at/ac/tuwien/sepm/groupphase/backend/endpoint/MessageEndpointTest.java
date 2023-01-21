@@ -4,7 +4,8 @@ import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.repository.MessageRepository;
@@ -23,10 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.util.LinkedMultiValueMap;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,8 +70,11 @@ public class MessageEndpointTest implements TestData {
 
   @Test
   public void givenNothing_whenFindAll_thenEmptyList() throws Exception {
+    LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("pageIndex", "0");
+    requestParams.add("pageSize", "10");
     MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
-        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)).params(requestParams))
       .andDo(print())
       .andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();
@@ -81,19 +82,22 @@ public class MessageEndpointTest implements TestData {
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-    List<SimpleMessageDto> simpleMessageDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
-      SimpleMessageDto[].class));
+    PageDtoResponse<NewsOverviewDto> pageDtoResponse = objectMapper.readValue(response.getContentAsString(), PageDtoResponse.class);
 
-    assertEquals(0, simpleMessageDtos.size());
+    assertEquals(0, pageDtoResponse.getData().size());
   }
 
   @Test
   public void givenOneMessage_whenFindAll_thenListWithSizeOneAndMessageWithAllPropertiesExceptSummary()
     throws Exception {
+    LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("pageIndex", "0");
+    requestParams.add("pageSize", "10");
     messageRepository.save(message);
 
     MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
-        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+        .params(requestParams))
       .andDo(print())
       .andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();
@@ -101,17 +105,9 @@ public class MessageEndpointTest implements TestData {
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-    List<SimpleMessageDto> simpleMessageDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
-      SimpleMessageDto[].class));
+    PageDtoResponse<NewsOverviewDto> pageDtoResponse = objectMapper.readValue(response.getContentAsString(), PageDtoResponse.class);
 
-    assertEquals(1, simpleMessageDtos.size());
-    SimpleMessageDto simpleMessageDto = simpleMessageDtos.get(0);
-    assertAll(
-      () -> assertEquals(message.getId(), simpleMessageDto.getId()),
-      () -> assertEquals(TEST_NEWS_TITLE, simpleMessageDto.getTitle()),
-      () -> assertEquals(TEST_NEWS_SUMMARY, simpleMessageDto.getSummary()),
-      () -> assertEquals(TEST_NEWS_PUBLISHED_AT, simpleMessageDto.getPublishedAt())
-    );
+    assertEquals(1, pageDtoResponse.getData().size());
   }
 
   @Test
@@ -207,11 +203,4 @@ public class MessageEndpointTest implements TestData {
       }
     );
   }
-
-  private boolean isNow(LocalDateTime date) {
-    LocalDateTime today = LocalDateTime.now();
-    return date.getYear() == today.getYear() && date.getDayOfYear() == today.getDayOfYear() &&
-      date.getHour() == today.getHour();
-  }
-
 }

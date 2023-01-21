@@ -18,40 +18,40 @@
 </div>
 
 <div class="mt-4 container">
-  <div class="row">
+  <div class="row m-xl-4 m-lg-3">
 
-    <div class="col-xl-3 col-lg-4 p-2" *ngFor="let message of getMessage()">
+    <div class="p-2" *ngFor="let message of loadNews()">
 
       <div class="card">
 
         <div class="card-body">
-          <h5 class="card-title">{{message.title}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{message.publishedAt | date}}</h6>
-          <p class="card-text">{{message.summary}}</p>
-        </div>
+          <div class="row">
+            <div class="col-2">
+              <h4 class="card-title">{{message.title}}</h4>
+              <h5 class="card-subtitle mb-2 text-muted">{{message.publishedAt | date}}</h5>
+            </div>
 
-        <div [ngClass]="['modal', 'fade', 'message-modal-'+message.id]" tabindex="-1" role="dialog"
-             aria-labelledby="Message details modal"
-             aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">{{message.title}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p class="lead"><span class="font-italic">{{message.publishedAt | date}}</span> {{message.summary}}</p>
-                <p class="mt-2"> {{message.text}} </p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+            <div class="col-10">
+              <p class="card-text">{{message.summary}}</p>
+              <a href="/message/{{message.id}}">Read More...</a>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-flex justify-content-between p-2">
+      <div class="btn-group">
+        <button class="form-control btn btn-sm btn-outline-secondary" (click)="previousPage()"><<</button>
+        <button class="btn btn-outline-primary disabled">{{this.pagedProperties.pageIndex+1}}</button>
+        <button class="form-control btn btn-sm btn-outline-secondary" (click)="nextPage()">>></button>
+      </div>
+
+      <select class="form-select" style="width: auto" [(ngModel)]="this.pagedProperties.pageSize"
+              (ngModelChange)="refreshNews()">
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="10">10 items per page</option>
+      </select>
     </div>
   </div>
 </div>

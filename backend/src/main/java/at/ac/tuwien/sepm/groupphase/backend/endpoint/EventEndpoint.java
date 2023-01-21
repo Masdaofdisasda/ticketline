@@ -8,7 +8,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.exception.DateParseException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -66,12 +64,7 @@ public class EventEndpoint {
   @Transactional
   public PageDtoResponse<EventDtoExtended> filter(EventSearchRequest eventSearchRequest) {
     LOGGER.info("GET /api/v1/events/filter -> query parameters: {}", eventSearchRequest);
-    Page<Event> page;
-    try {
-      page = eventService.filter(eventSearchRequest);
-    } catch (InvalidDataAccessApiUsageException exception) {
-      throw new DateParseException(exception);
-    }
+    Page<Event> page = eventService.filter(eventSearchRequest);
 
     return buildResponseDto(eventSearchRequest.pageIndex(), page.getSize(), page.getTotalElements(), page.getTotalPages(),
       eventMapper.eventToExtendedEventDto(page.getContent()));

@@ -25,12 +25,7 @@ public interface TestData {
   String PERFORMANCE_BASE_URI = BASE_URI + "/performance";
 
   String ADMIN_USER = "admin@email.com";
-  List<String> ADMIN_ROLES = new ArrayList<>() {
-    {
-      add("ROLE_ADMIN");
-      add("ROLE_USER");
-    }
-  };
+  List<String> ADMIN_ROLES = List.of("ROLE_ADMIN", "ROLE_USER");
   String DEFAULT_USER = "user@email.com";
   List<String> USER_ROLES = new ArrayList<>() {
     {

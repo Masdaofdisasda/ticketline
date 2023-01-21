@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {ActivatedRoute} from '@angular/router';
-import {Seat, Sector} from '../../../dto/venue';
+import {Seat, SeatState, Sector} from '../../../dto/venue';
 import {MultiselectEvent} from '../../room-plan/multiselect-event';
 import {RoomPlanComponent} from '../../room-plan/room-plan.component';
 import {PerformanceService} from '../../../services/performance.service';
@@ -105,7 +105,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   private addSeatToCart(seat: Seat) {
     const sector = this.getSectorOfSeat(seat);
-    console.log(sector, this.performance);
 
     this.shoppingCartService.addToCart({
       performanceId: this.performanceId, sector: sector.name, row: seat.rowNumber, column: seat.colNumber,
@@ -121,6 +120,10 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   private toggle(seat: Seat) {
+    if (!(seat.state === SeatState.free || seat.state === SeatState.unset)) {
+      return;
+    }
+
     const filtered = this.shoppingCartService.getItems().filter((ticket: Ticket) =>
       ticket.row === seat.rowNumber && ticket.column === seat.colNumber)[0];
     if (!filtered) {
@@ -131,7 +134,10 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   private selectSeat(seat: Seat) {
-    this.roomPlan.setOutline(this.colors.offsetHue(this.getSectorOfSeat(seat).priceCategory.color, 90) + 'aa',
+    if (!(seat.state === SeatState.free || seat.state === SeatState.unset)) {
+      return;
+    }
+    this.roomPlan.setOutline(this.colors.offsetHue(this.getSectorOfSeat(seat).priceCategory.color, 110) + 'aa',
       this.selectionOutlineStrength, seat.colNumber, seat.rowNumber);
   }
 }
