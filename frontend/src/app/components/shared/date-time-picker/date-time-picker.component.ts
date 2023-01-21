@@ -129,6 +129,7 @@ export class DateTimePickerComponent
   }
 
   parseDate(input: string) {
+    input = input.trim();
     if (input.length !== this.inputDatetimeFormat.length + 1) {
       return null;
     }
