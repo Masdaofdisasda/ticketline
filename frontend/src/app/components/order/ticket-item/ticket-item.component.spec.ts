@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TicketItemComponent } from './ticket-item.component';
+import {TicketItemComponent} from './ticket-item.component';
 import {Ticket} from '../../../dto/ticket';
 
 describe('TicketItemComponent', () => {
@@ -16,6 +16,7 @@ describe('TicketItemComponent', () => {
     fixture = TestBed.createComponent(TicketItemComponent);
     component = fixture.componentInstance;
     component.ticket = {
+      performanceId: null,
       performance: 'performance',
       sector: 'hall A',
       row: 1,

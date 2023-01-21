@@ -33,7 +33,7 @@ public abstract class SectorMapper {
     }
 
     for (Pricing p : sector.getPriceCategory().getPricingList()) {
-      if (Objects.equals(p.getPerformance().getId(), performanceId)) {
+      if (p.getPerformance() != null && Objects.equals(p.getPerformance().getId(), performanceId)) {
         sectorGen.getPriceCategory().setPricing(p.getPricing());
       }
     }

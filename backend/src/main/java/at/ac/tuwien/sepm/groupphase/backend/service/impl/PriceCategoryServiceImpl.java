@@ -1,10 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.PriceCategoryMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.PriceCategoryService;
 import org.springframework.stereotype.Service;
@@ -17,8 +15,11 @@ public class PriceCategoryServiceImpl implements PriceCategoryService {
 
   private final PriceCategoryRepository repository;
 
-  public PriceCategoryServiceImpl(PriceCategoryRepository repository) {
+  private final PerformanceRepository performanceRepository;
+
+  public PriceCategoryServiceImpl(PriceCategoryRepository repository, PerformanceRepository performanceRepository) {
     this.repository = repository;
+    this.performanceRepository = performanceRepository;
   }
 
   @Override
@@ -38,5 +39,17 @@ public class PriceCategoryServiceImpl implements PriceCategoryService {
   @Override
   public List<PriceCategory> getAllPriceCategories() {
     return this.repository.findAll();
+  }
+
+  @Override
+  public List<PriceCategory> getByPerformanceId(long id) {
+    return repository.getPriceCategoriesByPerformance(performanceRepository.findById(id)
+      .orElseThrow(() -> new NotFoundException("Performance with id " + " id could not be found")));
+  }
+
+  @Override
+  public List<PriceCategory> getByRoomId(long id) {
+    return repository.findAll().stream().filter(pc ->
+      pc.getSectorList().stream().anyMatch(sector -> sector.getRoom().getId().equals(id))).toList();
   }
 }

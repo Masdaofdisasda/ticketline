@@ -57,8 +57,6 @@ export class EventService {
   }
 
   create(event: EventDto): Observable<EventDto> {
-    console.log('Sending to : ' + this.eventBaseUri + '/create');
-    console.log(event);
     return this.httpClient.post<EventDto>(this.eventBaseUri + '/create', event);
   }
 

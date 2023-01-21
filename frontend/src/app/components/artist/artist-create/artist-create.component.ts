@@ -25,21 +25,8 @@ export class ArtistCreateComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    const observable = this.artistService.create({
+    this.artistService.create({
       name: this.createFormGroup.get('artistName').value,
-    } as ArtistDto);
-
-    observable.subscribe({
-      next: data => {
-        this.notification.success(`Artist: \'${data.name}\' successfully created.`);
-        this.router.navigate(['/artist']);
-      },
-      error: err => {
-        console.log('Error creating Artist', err);
-        console.log(err);
-        this.notification.error('Error creating artist: \n' + err.error.errors);
-      }
-    });
+    } as ArtistDto).subscribe(() => this.router.navigate(['/artist']));
   }
-
 }

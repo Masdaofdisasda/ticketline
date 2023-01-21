@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { CreateUserRequest } from 'src/app/dto/create-user-request.dto';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import {UserService} from 'src/app/services/user.service';
+import {CreateUserRequest} from 'src/app/dto/create-user-request.dto';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-user',
@@ -72,14 +68,8 @@ export class CreateUserComponent implements OnInit {
    */
   private create(createUserRequest: CreateUserRequest) {
     console.log('Try to create user: ' + createUserRequest.email);
-    this.userService.createUser(createUserRequest).subscribe({
-      next: () => {
-        console.log('Successfully created user: ' + createUserRequest.email);
-        this.toastr.success(
-          'Successfully created user: ' + createUserRequest.email
-        );
-        this.router.navigate(['admin/users']);
-      },
-    });
+    this.userService.createUser(createUserRequest).subscribe(() =>
+      this.router.navigate(['admin/users'])
+    );
   }
 }

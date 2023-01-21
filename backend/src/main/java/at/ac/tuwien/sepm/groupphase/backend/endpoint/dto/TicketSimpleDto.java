@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PerformanceRoomDto {
-  Long id;
-  RoomDto room;
-  @Builder.Default
-  List<TicketSimpleDto> tickets = new ArrayList<>();
+public class TicketSimpleDto {
+  private Long id;
+  private BigDecimal price;
+
 }

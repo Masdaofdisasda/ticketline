@@ -30,4 +30,21 @@ public interface PriceCategoryService {
    * @return a list of all price categories
    */
   List<PriceCategory> getAllPriceCategories();
+
+  /**
+   * Get all PriceCategories associated with a performance with id.
+   *
+   * @param id The id of the performance to get associated PriceCategories
+   * @return A list of all PriceCategories that are associated with the given Performance
+   */
+  List<PriceCategory> getByPerformanceId(long id);
+
+
+  /**
+   * Get all PriceCategories associated with a room with id.
+   *
+   * @param id The id of the performance to get associated PriceCategories
+   * @return A list of all PriceCategories that are associated with the given Room
+   */
+  List<PriceCategory> getByRoomId(long id);
 }

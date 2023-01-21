@@ -1,21 +1,16 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  flush,
-  TestBed,
-} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed,} from '@angular/core/testing';
 
-import { EventCreateComponent } from './event-create.component';
-import { EventService } from '../../../services/event.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { EventDto } from '../../../dto/event.dto';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DateTimePickerComponent } from '../../shared/date-time-picker/date-time-picker.component';
-import { ToastrModule } from 'ngx-toastr';
-import { of } from 'rxjs/internal/observable/of';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {EventCreateComponent} from './event-create.component';
+import {EventService} from '../../../services/event.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {EventDto} from '../../../dto/event.dto';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DateTimePickerComponent} from '../../shared/date-time-picker/date-time-picker.component';
+import {ToastrModule} from 'ngx-toastr';
+import {of} from 'rxjs/internal/observable/of';
+import {RouterTestingModule} from '@angular/router/testing';
+import {Router} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('EventCreateComponent', () => {
@@ -79,7 +74,7 @@ describe('EventCreateComponent', () => {
       .get('endTime')
       .setValue(new Date(2022, 11, 23, 12, 0));
 
-    component.onSubmit();
+    component.createEvent();
 
     expect(eventService.create).toHaveBeenCalledWith({
       name: 'newEvent',

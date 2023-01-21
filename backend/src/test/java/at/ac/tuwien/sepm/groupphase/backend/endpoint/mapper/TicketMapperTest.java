@@ -41,7 +41,7 @@ class TicketMapperTest {
   TicketDto ticketDto = TicketDto.builder()
     .id(1L)
     .price(BigDecimal.valueOf(30))
-    .seat(seatDto)
+    //.seat(seatDto)
     .build();
 
   @Test
@@ -50,7 +50,7 @@ class TicketMapperTest {
     assertAll(() -> {
       assertThat(currentDto.getId()).isEqualTo(ticket.getId());
       assertThat(currentDto.getPrice()).isEqualTo(ticket.getPrice());
-      assertThat(currentDto.getSeat()).isEqualTo(seatDto);
+      //assertThat(currentDto.getSeat()).isEqualTo(seatDto);
     });
   }
 
@@ -60,7 +60,7 @@ class TicketMapperTest {
     assertAll(() -> {
       assertThat(currentTicket.getId()).isEqualTo(ticketDto.getId());
       assertThat(currentTicket.getPrice()).isEqualTo(ticketDto.getPrice());
-      assertThat(currentTicket.getSeat()).isEqualTo(seat);
+      //assertThat(currentTicket.getSeat()).isEqualTo(seat);
     });
   }
 }

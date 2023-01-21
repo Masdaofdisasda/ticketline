@@ -91,18 +91,16 @@ export class CreateVenueComponent implements OnInit, AfterViewInit {
     if (this.createVenueForm.valid) {
       this.resetStoredVenue();
       const navigation = () => {
-        this.router.navigateByUrl('/admin/venue').then(() => this.notification.info(`${this.confirmText}ed ${this.venue.name}`));
+        this.router.navigateByUrl('/admin/venue');
       };
 
       if (this.isEditMode) {
         this.venueService.editVenue(this.venue).subscribe({
-          next: navigation,
-          error: err => this.notification.error(err)
+          next: navigation
         });
       } else {
         this.venueService.createVenue(this.venue).subscribe({
-          next: navigation,
-          error: err => this.notification.error(err)
+          next: navigation
         });
       }
     }

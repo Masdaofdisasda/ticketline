@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.SeatRepository;
@@ -196,17 +197,12 @@ public class BookingServiceImpl implements BookingService {
       Seat seat = seatRepository.findById(t.getSeat().getId())
         .orElseThrow(() -> new NotFoundException("Seat with id " + t.getSeat().getId() + " could not be found"));
       SeatDto.State seatState = seatMapper.seatToSeatDtoForPerformance(seat, t.getPerformanceId()).getState();
-      /*
-      Needs to be commented out because SeatState is not sensible yet
+
       if (seatState != SeatDto.State.FREE) {
         throw new SeatNotAvailableException(seat, seatState);
       }
-      */
-    });
 
-    if (false) {
-      throw new RuntimeException();
-    }
+    });
   }
 
 

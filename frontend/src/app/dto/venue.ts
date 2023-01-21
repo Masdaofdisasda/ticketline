@@ -38,9 +38,11 @@ export class Seat {
 }
 
 export const enum SeatState {
-  free = 0,
-  reserved = 1,
-  taken = 2
+  unset = 'UNSET',
+  free = 'FREE',
+  reserved = 'RESERVED',
+  taken = 'TAKEN',
+  blocked = 'BLOCKED'
 }
 
 export class PriceCategory {
