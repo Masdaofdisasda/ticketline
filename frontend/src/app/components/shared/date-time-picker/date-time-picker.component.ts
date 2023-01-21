@@ -101,7 +101,6 @@ export class DateTimePickerComponent
   ngAfterViewInit(): void {}
 
   writeValue(newModel: string) {
-    console.log(newModel);
     if (newModel) {
       const myDate = moment(newModel).toDate();
 
@@ -159,7 +158,6 @@ export class DateTimePickerComponent
       return null;
     }
     const a = input.substring(17, 19);
-    console.log(a);
     if (a !== 'AM' && a !== 'PM') {
       console.error('AM or PM could not be parsed');
     }
@@ -172,7 +170,6 @@ export class DateTimePickerComponent
     } catch (error) {
       date = null;
     }
-    console.log(year, month, day, hours, minutes);
     return date;
   }
 
