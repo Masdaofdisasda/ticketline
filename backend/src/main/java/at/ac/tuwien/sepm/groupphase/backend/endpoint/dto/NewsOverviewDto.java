@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link at.ac.tuwien.sepm.groupphase.backend.entity.News} entity.
@@ -18,5 +18,5 @@ public class NewsOverviewDto {
   private Long id;
   private String title;
   private String summary;
-  private LocalDate publishedAt;
+  private LocalDateTime publishedAt;
 }
