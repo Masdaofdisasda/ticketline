@@ -34,11 +34,11 @@ public class MessageDataGenerator {
     } else {
       LOGGER.debug("generating {} message entries", NUMBER_OF_MESSAGES_TO_GENERATE);
       for (int i = 0; i < NUMBER_OF_MESSAGES_TO_GENERATE; i++) {
-        Message message = Message.MessageBuilder.aMessage()
-          .withTitle(TEST_NEWS_TITLE + " " + i)
-          .withSummary(TEST_NEWS_SUMMARY + " " + i)
-          .withText(TEST_NEWS_TEXT + " " + i)
-          .withPublishedAt(LocalDateTime.now().minusMonths(i))
+        Message message = Message.builder()
+          .title(TEST_NEWS_TITLE + " " + i)
+          .summary(TEST_NEWS_SUMMARY + " " + i)
+          .text(TEST_NEWS_TEXT + " " + i)
+          .publishedAt(LocalDateTime.now().minusMonths(i))
           .build();
         LOGGER.debug("saving message {}", message);
         messageRepository.save(message);

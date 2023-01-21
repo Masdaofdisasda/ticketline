@@ -1,0 +1,18 @@
+<div class="body">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">#</span>
+        </div>
+        <input type="text" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1"
+               (focus)="$event.stopPropagation()" [(ngModel)]="color" [(colorPicker)]="'#' + color"
+               [cpAlphaChannel]="'disabled'" [cpPosition]="'left'" [cpIgnoredElements]="[colorPickerInput]"
+               (colorPickerChange)="update($event)" (ngModelChange)="update()" [cpOKButton]="true"
+               [cpCancelButton]="true" #colorPickerInput>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" (click)="openPicker()">
+              <i class="bi bi-square-fill colorIndicator" [ngStyle]="{color: '#'+color}"></i>
+              <i class="bi bi-caret-down"></i>
+        </button>
+        </div>
+    </div>
+</div>

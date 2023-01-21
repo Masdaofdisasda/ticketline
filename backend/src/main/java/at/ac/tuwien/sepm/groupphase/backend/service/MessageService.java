@@ -1,18 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface MessageService {
 
-  /**
-   * Find all message entries ordered by published at date (descending).
-   *
-   * @return ordered list of al message entries
-   */
-  List<Message> findAll();
-
+  Page<Message> findAllPaginated(PageDto pageDto);
 
   /**
    * Find a single message entry by id.
@@ -21,6 +15,15 @@ public interface MessageService {
    * @return the message entry
    */
   Message findOne(Long id);
+
+  /**
+   * Mark a message as seen by a userID.
+   *
+   * @param userId    the userId of the messageRead entry
+   * @param messageId the id of the message
+   * @return the message entry
+   */
+  Message hasSeen(Long userId, Long messageId);
 
   /**
    * Publish a single message entry.

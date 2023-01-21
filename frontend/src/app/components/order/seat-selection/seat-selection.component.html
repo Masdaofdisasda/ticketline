@@ -1,0 +1,22 @@
+<h1 class="display-1 py-4">Select seats</h1>
+
+<div class="row">
+  <div class="col-3 shopping-cart-wrapper d-flex flex-grow-1 h-100">
+    <app-shopping-cart (hoverStart)="shoppingCartHoverStart($event)"
+                       (hoverEnd)="shoppingCardHoverEnd($event)"
+                       [ngStyle]="{'max-height': shoppingCartHeight + 'px'}"></app-shopping-cart>
+  </div>
+  <div class="room-view-wrapper col-12 col-md-9 card overflow-hidden">
+    <app-room-plan
+      class="h-100"
+      *ngIf="performance && performance.room"
+      (multiSelectEnd)="onMultiSelectEnd($event)"
+      (multiSelectChange)="onMultiSelectChange($event)"
+      [width]="300"
+      [height]="150"
+      [room]="performance.room"></app-room-plan>
+    <ngx-spinner type="line-scale" size="md" name="room-plan-spinner" bdColor="#8888"
+                 [fullScreen]="false"></ngx-spinner>
+  </div>
+</div>
+
