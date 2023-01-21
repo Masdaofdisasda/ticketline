@@ -7,6 +7,7 @@ import {
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -15,6 +16,8 @@ import {DatePipe} from '@angular/common';
 import {NgbDatepicker, NgbDateStruct, NgbPopover, NgbPopoverConfig, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {noop} from 'rxjs';
 import * as moment from 'moment/moment';
+import { isNaN } from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 
 /*
  * is an extern module from npm, couldn't load over npm i because this library was
@@ -34,7 +37,6 @@ import * as moment from 'moment/moment';
 })
 export class DateTimePickerComponent implements ControlValueAccessor, OnInit, OnChanges, AfterViewInit {
 
-  @Input() inputDatetimeFormat = 'dd/MM/yyyy H:mm:ss';
   @Input() placeholder = '';
   @Input() hourStep = 1;
   @Input() minuteStep = 15;
@@ -46,6 +48,8 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, On
   @Input() clear = new EventEmitter<boolean>();
 
   public ngControl: NgControl;
+
+  inputDatetimeFormat = 'dd/MM/yyyy hh:mm a';
 
   dateStruct: NgbDateStruct;
   timeStruct: NgbTimeStruct;
@@ -62,7 +66,9 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, On
   private onTouched: () => void = noop;
   private onChange: (_: any) => void = noop;
 
-  constructor(private config: NgbPopoverConfig, private inj: Injector) {
+  constructor(private config: NgbPopoverConfig, private inj: Injector, 
+    private toastr: ToastrService
+  ) {
     config.autoClose = 'outside';
     config.placement = 'auto';
   }
@@ -84,6 +90,7 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, On
   }
 
   writeValue(newModel: string) {
+    console.log(newModel)
     if (newModel) {
       const myDate = moment(newModel).toDate();
 
@@ -111,7 +118,79 @@ export class DateTimePickerComponent implements ControlValueAccessor, OnInit, On
     this.onTouched = fn;
   }
 
+  parseDate(input: String){
+    if(input.length != this.inputDatetimeFormat.length+1){
+      return null
+    }
+    let day = parseInt(input.substring(0,2))
+    if(isNaN(day)){
+      console.error("day is not a number")
+      return null
+    }
+    let month = parseInt(input.substring(3,5))
+    if(isNaN(month)){
+      console.error("month is not a number")
+      return null
+    }
+    let year = parseInt(input.substring(6,10))
+    if(isNaN(year)){
+      console.error("month is not a number")
+      return null
+    }
+    let hours = parseInt(input.substring(11,13))
+    if(isNaN(hours)){
+      console.error("hours is not a number")
+      return null
+    }
+    let minutes = parseInt(input.substring(14,16))
+    if(isNaN(minutes)){
+      console.error("hours is not a number")
+      return null
+    }
+    let a = input.substring(17,19)
+    console.log(a)
+    if(a !== "AM" && a !== "PM"){
+      console.error("AM or PM could not be parsed")
+    }
+    if(a === 'PM'){
+      hours += 12
+    }
+    let date: Date
+    try {
+      date = new Date(year, month-1, day, hours, minutes)
+    } catch (error) {
+      date = null
+    }
+    console.log(year, month, day, hours, minutes)
+    return date
+  }
+
   onInputChange($event: any) {
+    if($event.target.value.length === 0){
+      this.date = null
+      this.onChange(this.date)
+    }
+    else {
+      let newDate = this.parseDate($event.target.value)
+      if(newDate){
+        this.date = newDate
+        this.dateStruct = {
+          year: newDate.getFullYear(),
+          month: newDate.getMonth() + 1,
+          day: newDate.getDate()
+        };
+
+        this.timeStruct = {
+          hour: newDate.getHours(),
+          minute: newDate.getMinutes(),
+          second: newDate.getSeconds()
+        };
+        this.setDateStringModel()
+      }
+      else {
+        this.toastr.error("Could not understand given date: " + $event.target.value + " Please use the following date format: " + this.inputDatetimeFormat + " E.g. 01/01/2022 02:00 PM")
+      }
+    }
   }
 
   onDateChange(event: NgbDateStruct) {
