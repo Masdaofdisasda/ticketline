@@ -27,6 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -42,7 +43,6 @@ import javax.annotation.security.RolesAllowed;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -130,8 +130,7 @@ public class SecurityTest implements TestData {
       .filter(clazz -> clazz.getAnnotation(RestController.class) != null) // limit to classes annotated with @RestController
       .flatMap(clazz -> Arrays.stream(clazz.getDeclaredMethods()).map(method -> new ImmutablePair<Class<?>, Method>(clazz, method))) // get all class -> method pairs
       .filter(pair -> Arrays.stream(pair.getRight().getAnnotations()).anyMatch(annotation -> mappingAnnotations.contains(annotation.annotationType()))) // keep only the pairs where the method has a "mapping annotation"
-      .filter(pair -> Arrays.stream(pair.getRight().getAnnotations()).noneMatch(annotation -> securityAnnotations.contains(annotation.annotationType()))) // keep only the pairs where the method does not have a "security annotation"
-      .collect(Collectors.toList());
+      .filter(pair -> Arrays.stream(pair.getRight().getAnnotations()).noneMatch(annotation -> securityAnnotations.contains(annotation.annotationType()))).toList();
 
     assertThat(notSecured.size())
       .as("Most rest methods should be secured. If one is really intended for public use, explicitly state that with @PermitAll. "
@@ -142,8 +141,12 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenUserLoggedIn_whenFindAll_then200() throws Exception {
+    LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("pageIndex", "0");
+    requestParams.add("pageSize", "10");
     MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
-        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES)))
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
+        .params(requestParams))
       .andDo(print())
       .andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();
@@ -156,7 +159,10 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenNoOneLoggedIn_whenFindAll_then401() throws Exception {
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI))
+    LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    requestParams.add("pageIndex", "0");
+    requestParams.add("pageSize", "10");
+    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI).params(requestParams))
       .andDo(print())
       .andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();

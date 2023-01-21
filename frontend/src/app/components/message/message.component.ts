@@ -1,10 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MessageService} from '../../services/message.service';
 import {MessageDto} from '../../dto/messageDto';
 import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {PageResponseDto} from '../../dto/page-response.dto';
+import {PageDto} from '../../dto/page.dto';
+import {NewsOverviewDto} from '../../dto/newsOverviewDto';
 
 @Component({
   selector: 'app-message',
@@ -20,7 +23,9 @@ export class MessageComponent implements OnInit {
 
   currentMessage: MessageDto;
 
-  private message: MessageDto[];
+  pagedProperties = PageResponseDto.getPageResponseDto();
+
+  private news: NewsOverviewDto[];
 
   constructor(private messageService: MessageService,
               private ngbPaginationConfig: NgbPaginationConfig,
@@ -32,15 +37,33 @@ export class MessageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadMessage();
+    this.refreshNews();
   }
 
   navigateCreatePage() {
     this.router.navigateByUrl('/message/create');
   }
 
-  getMessage(): MessageDto[] {
-    return this.message;
+  nextPage(){
+    if (this.pagedProperties.pageIndex < this.pagedProperties.pagesTotal-1){
+      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex++, ...this.pagedProperties};
+      this.refreshNews();
+    }
+  }
+
+  previousPage(){
+    if (this.pagedProperties.pageIndex > 0){
+      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex--, ...this.pagedProperties};
+      this.refreshNews();
+    }
+  }
+
+  loadNews(): NewsOverviewDto[] {
+    return this.news;
+  }
+
+  refreshNews() {
+    this.loadOldNews(this.pagedProperties);
   }
 
   /**
@@ -51,29 +74,17 @@ export class MessageComponent implements OnInit {
   }
 
   /**
-   * Sends message creation request
-   *
-   * @param message the message which should be created
+   * Loads the specified page of messages from the backend
    */
-  private createMessage(message: MessageDto) {
-    this.messageService.createMessage(message).subscribe({
-        next: () => {
-          this.loadMessage();
-        },
-        error: error => {
-          this.defaultServiceErrorHandling(error);
+  private loadOldNews(pageDto: PageDto) {
+    this.messageService.getPaginatedMessage(pageDto).subscribe({
+      next: (news: PageResponseDto<NewsOverviewDto>) => {
+        this.pagedProperties = news;
+        this.news = news.data;
+        if (this.pagedProperties.pagesTotal < this.pagedProperties.pageIndex){
+          this.pagedProperties.pageIndex = this.pagedProperties.pagesTotal - 1;
+          this.refreshNews();
         }
-      }
-    );
-  }
-
-  /**
-   * Loads the specified page of message from the backend
-   */
-  private loadMessage() {
-    this.messageService.getMessage().subscribe({
-      next: (message: MessageDto[]) => {
-        this.message = message;
       },
       error: error => {
         this.defaultServiceErrorHandling(error);

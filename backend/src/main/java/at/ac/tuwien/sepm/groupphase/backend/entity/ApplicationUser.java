@@ -15,12 +15,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -53,6 +55,9 @@ public class ApplicationUser {
 
   @Column(name = "lock_time")
   private Date lockTime;
+
+  @ManyToMany
+  private Set<Message> hasSeen;
 
   private Boolean admin;
 
