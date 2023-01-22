@@ -1,15 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UploadResponseDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
-import at.ac.tuwien.sepm.groupphase.backend.service.MessageService;
+import at.ac.tuwien.sepm.groupphase.backend.service.NewsService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,19 +37,17 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/messages")
-public class MessageEndpoint {
+@RequestMapping(value = "/api/v1/news")
+public class NewsEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-  private final MessageService messageService;
-  private final UserService userService;
-  private final MessageMapper messageMapper;
+  private final NewsService newsService;
+  private final NewsMapper newsMapper;
 
   @Autowired
-  public MessageEndpoint(MessageService messageService, UserService userService, MessageMapper messageMapper) {
-    this.messageService = messageService;
-    this.userService = userService;
-    this.messageMapper = messageMapper;
+  public NewsEndpoint(NewsService newsService, NewsMapper newsMapper) {
+    this.newsService = newsService;
+    this.newsMapper = newsMapper;
   }
 
   @Secured("ROLE_USER")
@@ -57,29 +55,28 @@ public class MessageEndpoint {
   @ResponseStatus(code = HttpStatus.OK)
   @Operation(summary = "Get list of news")
   public PageDtoResponse<NewsOverviewDto> findAllPaginated(PageDto pageDto) {
-    LOGGER.info("GET /api/v1/messages/paginated");
-    Page<Message> page = messageService.findAllPaginated(pageDto);
+    LOGGER.info("GET /api/v1/news");
+    Page<News> page = newsService.findAllPaginated(pageDto);
     return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
-      messageMapper.messageToNewsOverviewDto(page.getContent()));
+      newsMapper.newsToNewsOverviewDto(page.getContent()));
   }
 
   @Secured("ROLE_USER")
   @GetMapping(value = "/{id}")
   @Operation(summary = "Get detailed information about a specific message", security = @SecurityRequirement(name = "apiKey"))
-  public DetailedMessageDto find(@PathVariable Long id) {
-    LOGGER.info("GET /api/v1/messages/{}", id);
-    DetailedMessageDto detailedMessageDto = messageMapper.messageToDetailedMessageDto(messageService.findOne(id));
-    return detailedMessageDto;
+  public DetailedNewsDto find(@PathVariable Long id) {
+    LOGGER.info("GET /api/v1/news/{}", id);
+    return newsMapper.newsToDetailedNewsDto(newsService.findOne(id));
   }
 
   @Secured("ROLE_ADMIN")
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  @Operation(summary = "Publish a new message", security = @SecurityRequirement(name = "apiKey"))
-  public DetailedMessageDto create(@Valid @RequestBody MessageCreationDto messageDto) {
-    LOGGER.info("POST /api/v1/messages body: {}", messageDto);
-    return messageMapper.messageToDetailedMessageDto(
-      messageService.publishMessage(messageMapper.messageCreationDtoToMessage(messageDto)));
+  @Operation(summary = "Publish a new news entry", security = @SecurityRequirement(name = "apiKey"))
+  public DetailedNewsDto create(@Valid @RequestBody NewsCreationDto newsDto) {
+    LOGGER.info("POST /api/v1/news body: {}", newsDto);
+    return newsMapper.newsToDetailedNewsDto(
+      newsService.publishMessage(newsMapper.newsCreationDtoToNews(newsDto)));
   }
 
   @Secured("ROLE_ADMIN")
@@ -87,7 +84,7 @@ public class MessageEndpoint {
   @PostMapping(value = "/picture")
   @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
   public UploadResponseDto uploadPicture(@RequestParam MultipartFile imageFile) throws ValidationException {
-    LOGGER.info("POST /api/v1/messages/picture body: {}", imageFile);
+    LOGGER.info("POST /api/v1/news/picture body: {}", imageFile);
     String generatedFilename = generateFilename(imageFile.getOriginalFilename());
     ClassLoader classLoader = getClass().getClassLoader();
     if (imageFile.getContentType() != null && imageFile.getContentType().startsWith("image/")) {

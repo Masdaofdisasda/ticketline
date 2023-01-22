@@ -1,24 +1,24 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {MessageCreateComponent} from './message-create.component';
+import {NewsCreateComponent} from './news-create.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 
 describe('MessageComponent', () => {
-  let component: MessageCreateComponent;
-  let fixture: ComponentFixture<MessageCreateComponent>;
+  let component: NewsCreateComponent;
+  let fixture: ComponentFixture<NewsCreateComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule],
-      declarations: [ MessageCreateComponent ]
+      declarations: [ NewsCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MessageCreateComponent);
+    fixture = TestBed.createComponent(NewsCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

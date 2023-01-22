@@ -8,7 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { MessageComponent } from './components/message/message.component';
+import { NewsComponent } from './components/news/news.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { httpInterceptorProviders } from './interceptors';
 import { CreateVenueComponent } from './components/venue-admin/create-venue/create-venue.component';
@@ -50,7 +50,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPopperModule } from 'ngx-popper';
 import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
-import { MessageCreateComponent } from './components/message/message-create/message-create.component';
+import { NewsCreateComponent } from './components/news/news-create/news-create.component';
 
 @NgModule({
   declarations: [
@@ -59,8 +59,8 @@ import { MessageCreateComponent } from './components/message/message-create/mess
     FooterComponent,
     HomeComponent,
     LoginComponent,
-    MessageComponent,
-    MessageCreateComponent,
+    NewsComponent,
+    NewsCreateComponent,
     CreateVenueComponent,
     CreateVenueComponent,
     ColorInputFieldComponent,

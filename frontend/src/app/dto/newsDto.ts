@@ -1,4 +1,4 @@
-export class MessageDto {
+export class NewsDto {
   id: string;
   title: string;
   summary: string;

@@ -46,9 +46,4 @@ public class Event {
   @Builder.Default
   @ToString.Exclude
   private List<Performance> performances = new ArrayList<>();
-
-  @OneToMany(mappedBy = "event")
-  @Builder.Default
-  @ToString.Exclude
-  private List<News> news = new ArrayList<>();
 }

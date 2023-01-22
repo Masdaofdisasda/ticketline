@@ -15,8 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ApplicationUser {
   private Date lockTime;
 
   @ManyToMany
-  private Set<Message> hasSeen;
+  private Set<News> hasSeen;
 
   private Boolean admin;
 
