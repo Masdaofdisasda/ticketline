@@ -26,4 +26,10 @@ public class RoomServiceImpl implements RoomService {
     toEdit.setId(id);
     return this.repository.save(toEdit);
   }
+
+  @Override
+  public Room getById(long id) throws NotFoundException {
+    return this.repository.findById(id)
+      .orElseThrow(() -> new NotFoundException("Room with the id " + id + " could not be found"));
+  }
 }

@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventSearchRequest;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ArtistMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
@@ -15,11 +14,9 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.PricingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.RoomRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TicketRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
-import at.ac.tuwien.sepm.groupphase.backend.service.PerformanceService;
 import at.ac.tuwien.sepm.groupphase.backend.service.validator.EventValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,33 +37,24 @@ public class DefaultEventService implements EventService {
   private final EventRepository eventRepository;
   private final EventMapper eventMapper;
   private final EventValidator eventValidator;
-
-  private final PerformanceService performanceService;
   private final ArtistMapper artistMapper;
-  private final PerformanceRepository performanceRepository;
-  private final RoomMapper roomMapper;
-  private final PricingRepository pricingRepository;
   private final PriceCategoryRepository priceCategoryRepository;
 
   private final TicketRepository ticketRepository;
 
   private final RoomRepository roomRepository;
+  private final PerformanceRepository performanceRepository;
 
-  public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper, EventValidator eventValidator, PerformanceService performanceService,
-                             ArtistMapper artistMapper, PerformanceRepository performanceRepository, RoomMapper roomMapper,
-                             PricingRepository pricingRepository,
-                             PriceCategoryRepository priceCategoryRepository, TicketRepository ticketRepository, RoomRepository roomRepository) {
+  public DefaultEventService(EventRepository eventRepository, EventMapper eventMapper, EventValidator eventValidator, ArtistMapper artistMapper, PriceCategoryRepository priceCategoryRepository, TicketRepository ticketRepository,
+                             RoomRepository roomRepository, PerformanceRepository performanceRepository) {
     this.eventRepository = eventRepository;
     this.eventMapper = eventMapper;
     this.eventValidator = eventValidator;
-    this.performanceService = performanceService;
     this.artistMapper = artistMapper;
-    this.performanceRepository = performanceRepository;
-    this.roomMapper = roomMapper;
-    this.pricingRepository = pricingRepository;
     this.priceCategoryRepository = priceCategoryRepository;
     this.ticketRepository = ticketRepository;
     this.roomRepository = roomRepository;
+    this.performanceRepository = performanceRepository;
   }
 
   /**
@@ -108,47 +96,29 @@ public class DefaultEventService implements EventService {
     eventValidator.validateEvent(eventDto);
 
     Event event = eventMapper.eventDtoToEvent(eventDto);
-    event.setPerformances(eventDto.getPerformances().stream()
-      .map(performanceDto -> {
-        Performance perf = Performance.builder()
-          .startDate(performanceDto.getStartDate().plusHours(1))
-          .endDate(performanceDto.getEndDate().plusHours(1))
-          .artists(artistMapper.artistDtoToArtist(performanceDto.getArtists()))
-          .event(event)
-          .room(roomRepository.findById(performanceDto.getRoomId())
-            .orElseThrow(() -> new NotFoundException("Room with id " + performanceDto.getRoomId() + " could not be found")))
-          .build();
-        perf.setPricing(performanceDto.getPriceCategoryPricingMap().entrySet().stream()
-          .map(entry -> Pricing.builder()
-            .priceCategory(priceCategoryRepository.findById(entry.getKey())
-              .orElseThrow(() -> new NotFoundException("PriceCategory with id " + entry.getKey() + " could not be found, source priceCategoryPricingMap")))
-            .performance(perf)
-            .pricing(entry.getValue())
-            .build()
-          ).collect(Collectors.toList())
-        );
-        return perf;
-      }).collect(Collectors.toList())
-    );
-
-    Event saved = eventRepository.save(event);
+    eventRepository.save(event);
 
     List<Ticket> tickets = new ArrayList<>();
 
-    saved.getPerformances().forEach(performance -> {
-      performance.getRoom().getSectors().forEach(sector -> {
-        sector.getSeats().forEach(seat -> {
-          tickets.add(Ticket.builder()
-            .price(performance.getPricing().stream()
-              .filter(pricing -> pricing.getPriceCategory().getId().equals(sector.getPriceCategory().getId()))
-              .findFirst().orElseThrow().getPricing())
-            .seat(seat)
-            .performance(performance)
-            .build());
-        });
-      });
-    });
+    event.setPerformances(eventDto.getPerformances().stream().map(performanceDto -> {
+      Performance perf = performanceRepository.save(
+        Performance.builder().startDate(performanceDto.getStartDate().plusHours(1)).endDate(performanceDto.getEndDate().plusHours(1)).artists(artistMapper.artistDtoToArtist(performanceDto.getArtists())).event(event)
+          .room(roomRepository.findById(performanceDto.getRoomId()).orElseThrow(() -> new NotFoundException("Room with id " + performanceDto.getRoomId() + " could not be found"))).build());
+      perf.setPricing(performanceDto.getPriceCategoryPricingMap().entrySet().stream().map(
+        entry -> Pricing.builder().priceCategory(priceCategoryRepository.findById(entry.getKey()).orElseThrow(() -> new NotFoundException("PriceCategory with id " + entry.getKey() + " could not be found, source priceCategoryPricingMap")))
+          .performance(perf).pricing(entry.getValue()).build()).collect(Collectors.toList()));
+      perf.getRoom().getSectors().forEach(sector -> sector.getSeats().forEach(seat -> {
+        if (performanceDto.getBlockedSeats().contains(seat.getId())) {
+          return;
+        }
+        tickets.add(
+          Ticket.builder().price(perf.getPricing().stream().filter(pricing -> pricing.getPriceCategory().getId().equals(sector.getPriceCategory().getId())).findFirst().orElseThrow().getPricing()).seat(seat).performance(perf).build());
+      }));
 
+      return perf;
+    }).collect(Collectors.toList()));
+
+    Event saved = eventRepository.save(event);
     ticketRepository.saveAll(tickets);
     return saved.getId();
   }

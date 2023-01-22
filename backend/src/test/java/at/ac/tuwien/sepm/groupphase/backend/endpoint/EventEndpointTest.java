@@ -13,7 +13,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ArtistMapper;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
@@ -74,9 +73,6 @@ class EventEndpointTest implements TestData {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private EventMapper eventMapper;
-
-  @Autowired
   private ArtistMapper artistMapper;
 
   @Autowired
@@ -100,6 +96,7 @@ class EventEndpointTest implements TestData {
   private VenueRepository venueRepository;
   @Autowired
   private EventRepository eventRepository;
+
   @Test
   void findAll_shouldReturnEmptyPage() throws Exception {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
@@ -257,28 +254,32 @@ class EventEndpointTest implements TestData {
       List.of(artistDto1),
       1L,
       null,
-      Collections.singletonMap(2L, BigDecimal.ZERO));
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
     PerformanceCreateDto performanceDto2 = new PerformanceCreateDto(null,
       LocalDateTime.now().plusHours(2),
       LocalDateTime.now().plusHours(3),
       List.of(artistDto1, artistDto2),
       1L,
       null,
-      Collections.singletonMap(2L, BigDecimal.ZERO));
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
     PerformanceCreateDto performanceDto3 = new PerformanceCreateDto(null,
       LocalDateTime.now().plusHours(1),
       LocalDateTime.now().plusHours(2),
       List.of(artistDto2),
       1L,
       null,
-      Collections.singletonMap(2L, BigDecimal.ZERO));
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
     PerformanceCreateDto performanceDto4 = new PerformanceCreateDto(null,
       LocalDateTime.now().plusHours(2),
       LocalDateTime.now().plusHours(3),
       List.of(artistDto2, artistDto1),
       1L,
       null,
-      Collections.singletonMap(2L, BigDecimal.ZERO));
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
     EventCreateDto eventDto1 =
       new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1, performanceDto2));
     EventCreateDto eventDto2 =
@@ -319,6 +320,223 @@ class EventEndpointTest implements TestData {
     assertThat(events.get(1).getName()).isEqualTo(eventDto2.getName());
     assertThat(events.get(1).getPerformances().size()).isEqualTo(eventDto2.getPerformances().size());
     assertThat(events.get(1).getId()).isEqualTo(eventDto2.getId());
+  }
+
+  @Test
+  public void createWithOverlapping_shouldThrowValidationError() throws Exception {
+    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    SectorFixture.repository = priceCategoryRepository;
+    Room room = RoomFixture.buildRoom7();
+    // venueRepository.save(room.getVenue());
+    roomRepository.save(room);
+
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+    ArtistDto artistDto2 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(2L, "Artist2", null)));
+
+    PerformanceCreateDto performanceDto1 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(1),
+      LocalDateTime.now().plusHours(3),
+      List.of(artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    PerformanceCreateDto performanceDto2 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(2),
+      LocalDateTime.now().plusHours(5),
+      List.of(artistDto1, artistDto2),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1, performanceDto2));
+    String response = mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isUnprocessableEntity())
+      .andReturn().getResponse().getContentAsString();
+
+    assertThat(response).contains("overlaps");
+  }
+
+  @Test
+  public void createWithoutPerformance_shouldThrowValidationError() throws Exception {
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of());
+    String response = mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isUnprocessableEntity())
+      .andReturn().getResponse().getContentAsString();
+
+    assertThat(response).contains("has to have at least one");
+  }
+
+  @Test
+  public void createTwoWithSameName_shouldThrowValidationError() throws Exception {
+    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    SectorFixture.repository = priceCategoryRepository;
+    Room room = RoomFixture.buildRoom7();
+    // venueRepository.save(room.getVenue());
+    roomRepository.save(room);
+
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+    ArtistDto artistDto2 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(2L, "Artist2", null)));
+
+    PerformanceCreateDto performanceDto1 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(1),
+      LocalDateTime.now().plusHours(2),
+      List.of(artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    PerformanceCreateDto performanceDto2 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(2),
+      LocalDateTime.now().plusHours(3),
+      List.of(artistDto1, artistDto2),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    PerformanceCreateDto performanceDto3 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(1),
+      LocalDateTime.now().plusHours(2),
+      List.of(artistDto2),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    PerformanceCreateDto performanceDto4 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(2),
+      LocalDateTime.now().plusHours(3),
+      List.of(artistDto2, artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1, performanceDto2));
+    EventCreateDto eventDto2 =
+      new EventCreateDto(2L, "NewEvent", "newCategory2", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto3, performanceDto4));
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isCreated())
+      .andReturn().getResponse().getContentAsByteArray();
+
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto2)
+        )).andExpect(status().isUnprocessableEntity())
+      .andReturn().getResponse().getContentAsByteArray();
+  }
+
+  @Test
+  public void createPerformanceEndBeforeStart_shouldThrowValidationError() throws Exception {
+    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    SectorFixture.repository = priceCategoryRepository;
+    Room room = RoomFixture.buildRoom7();
+    // venueRepository.save(room.getVenue());
+    roomRepository.save(room);
+
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+
+    PerformanceCreateDto performanceDto1 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(5),
+      LocalDateTime.now().plusHours(2),
+      List.of(artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1));
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isUnprocessableEntity());
+  }
+
+  @Test
+  public void createEventEndBeforeStart_shouldThrowValidationError() throws Exception {
+    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    SectorFixture.repository = priceCategoryRepository;
+    Room room = RoomFixture.buildRoom7();
+    // venueRepository.save(room.getVenue());
+    roomRepository.save(room);
+
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+
+    PerformanceCreateDto performanceDto1 = new PerformanceCreateDto(null,
+      LocalDateTime.now().plusHours(1),
+      LocalDateTime.now().plusHours(2),
+      List.of(artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().minusHours(5), List.of(performanceDto1));
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isUnprocessableEntity());
+  }
+
+  @Test
+  public void createPerformanceStartBeforeEventStart_shouldThrowValidationError() throws Exception {
+    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    SectorFixture.repository = priceCategoryRepository;
+    Room room = RoomFixture.buildRoom7();
+    // venueRepository.save(room.getVenue());
+    roomRepository.save(room);
+
+    ArtistDto artistDto1 = artistMapper.artistToArtistDto(artistRepository.save(new Artist(1L, "Artist1", null)));
+
+    PerformanceCreateDto performanceDto1 = new PerformanceCreateDto(null,
+      LocalDateTime.now().minusHours(5),
+      LocalDateTime.now().plusHours(2),
+      List.of(artistDto1),
+      1L,
+      null,
+      Collections.singletonMap(2L, BigDecimal.ZERO),
+      List.of());
+    EventCreateDto eventDto1 =
+      new EventCreateDto(1L, "NewEvent", "newCategory", LocalDateTime.now(), LocalDateTime.now().plusHours(5), List.of(performanceDto1));
+    mockMvc
+      .perform(MockMvcRequestBuilders
+        .post(EVENT_BASE_URI + "/create")
+        .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, List.of("ROLE_ADMIN", "ROLE_USER")))
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(eventDto1)
+        )).andExpect(status().isUnprocessableEntity());
   }
 
   @Test

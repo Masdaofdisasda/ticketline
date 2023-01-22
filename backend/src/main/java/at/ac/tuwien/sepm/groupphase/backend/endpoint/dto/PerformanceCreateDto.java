@@ -26,4 +26,6 @@ public class PerformanceCreateDto {
   @Builder.Default
   List<TicketDto> tickets = new ArrayList<>();
   Map<Long, BigDecimal> priceCategoryPricingMap = new HashMap<>();
+  @Builder.Default
+  List<Long> blockedSeats = new ArrayList<>();
 }

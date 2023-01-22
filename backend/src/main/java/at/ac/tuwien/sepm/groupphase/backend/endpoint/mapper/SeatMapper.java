@@ -42,7 +42,7 @@ public interface SeatMapper {
       return seatGen;
     }
 
-    SeatDto.State state = SeatDto.State.UNSET;
+    SeatDto.State state = SeatDto.State.BLOCKED;
 
     if (seat.getTicketList().size() > 0) {
       for (Ticket ticket : seat.getTicketList()) {

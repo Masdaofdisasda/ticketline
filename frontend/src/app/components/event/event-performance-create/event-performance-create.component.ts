@@ -1,29 +1,30 @@
-import {Component, Input} from '@angular/core';
-import {
-  AbstractControl,
-  AsyncValidatorFn,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators
-} from '@angular/forms';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ArtistService} from '../../../services/artist.service';
 import {VenueService} from '../../../services/venue.service';
 import {PriceCategoryService} from '../../../services/price-category.service';
-import {map, Observable} from 'rxjs';
-import {PriceCategory} from '../../../dto/venue';
+import {Observable} from 'rxjs';
+import {PriceCategory, Room, Seat, Sector} from '../../../dto/venue';
+import {RoomService} from '../../../services/room.service';
+import {MultiselectEvent} from '../../room-plan/multiselect-event';
+import {RoomPlanComponent} from '../../room-plan/room-plan.component';
 
 @Component({
   selector: 'app-event-performance-create',
   templateUrl: './event-performance-create.component.html',
   styleUrls: ['./event-performance-create.component.scss'],
 })
-export class EventPerformanceCreateComponent {
+export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
 
-  @Input() eventCreateFormGroup: FormGroup = new FormGroup<any>({});
-  performanceFormArray: FormArray = new FormArray<any>([]);
+  @ViewChild(RoomPlanComponent)
+  roomPlan: RoomPlanComponent;
+  // @Input() eventCreateFormGroup: FormGroup = new FormGroup<any>({});
+  @Input()
+  performanceFormGroup: AbstractControl;
+
+  @Input()
+  index: number;
+
 
   artists = this.artistService.findAll();
 
@@ -31,65 +32,102 @@ export class EventPerformanceCreateComponent {
 
   priceCategories: Observable<Array<PriceCategory>>;
 
-  artiste = [];
+  selectedRoom$: Observable<Room>;
+  selectedRoom: Room;
+  seatSelection = [] as Array<number>;
+
+  readonly blockedSeatColor = '#aaa';
 
   constructor(private fb: FormBuilder,
               private artistService: ArtistService,
               private venueService: VenueService,
+              private roomService: RoomService,
               private priceCategoryService: PriceCategoryService) {
-    this.eventCreateFormGroup.valueChanges.subscribe(value => console.warn(value));
   }
 
-  get performances() {
-    return this.eventCreateFormGroup.controls['performances'] as FormArray;
+  get controls() {
+    return this.form.controls;
   }
 
-  addPerformance(): void {
-    this.performanceFormArray = this.eventCreateFormGroup.get('performances') as FormArray;
-    const roomControl = new FormControl(null, Validators.required);
-    const pricingsControl = new FormControl({});
+  get form() {
+    return this.performanceFormGroup as FormGroup;
+  }
 
-    roomControl.valueChanges.subscribe((roomId) => {
+  ngOnInit(): void {
+    const roomSelected = (roomId) => {
       this.priceCategories = this.priceCategoryService.getByRoomId(roomId);
-      pricingsControl.setAsyncValidators(this.validatePricings(this.priceCategories));
-    });
-
-    this.performanceFormArray.push(this.fb.group({
-      startDateControl: new FormControl(new Date(), Validators.required),
-      endDateControl: new FormControl(new Date(), Validators.required),
-      artistsControl: new FormControl([], Validators.required),
-      venueControl: new FormControl(null, Validators.required),
-      roomControl,
-      pricingsControl
-    }));
-
-    console.log(this.eventCreateFormGroup);
-  }
-
-  validatePricings(priceCategoryObs: Observable<Array<PriceCategory>>): AsyncValidatorFn {
-    return (pricingsControl: FormControl): Observable<ValidationErrors | null> => {
-      if (!priceCategoryObs) {
-        return null;
-      }
-      return priceCategoryObs.pipe(
-        map((priceCategories) => {
-          const assignedValues = priceCategories.map(priceCategory => pricingsControl.value[priceCategory.id])
-            .filter(value => value !== undefined && value !== null && value !== '');
-          return assignedValues.length === priceCategories.length ? null : {missingValue: true};
-        })
+      this.priceCategories.subscribe((pcs) =>
+        pcs.forEach(pc =>
+          (this.form.get('pricingsGroup') as FormGroup).addControl(pc.id.toString(), new FormControl(null, Validators.required)))
       );
+      this.selectedRoom$ = this.roomService.getById(roomId);
+      this.selectedRoom$.subscribe((room) => {
+        this.selectedRoom = room;
+      });
     };
+    this.form.controls.roomControl.valueChanges.subscribe(roomSelected);
+    if (this.form.controls.roomControl.value) {
+      roomSelected(this.form.controls.roomControl.value);
+    }
   }
 
-  removePerformance(index: number) {
-    this.performanceFormArray.removeAt(index);
-    console.log(this.eventCreateFormGroup);
+  ngAfterViewInit(): void {
+    if (this.form.controls.blockedSeatsControl.value) {
+      this.selectedRoom$?.subscribe(() => this.updateRoomPlan());
+    }
   }
 
-  updatePricingMap(_event: Event, id: number, _form: AbstractControl) {
-    const event = _event as InputEvent;
+  multiSelectEnd(seats: Array<Seat>, _form: AbstractControl) {
     const form = _form as FormGroup;
-    form.controls.pricingsControl.value[id] = (event.target as HTMLInputElement).value;
-    form.controls.pricingsControl.updateValueAndValidity();
+    this.seatSelection = [];
+    seats.forEach(seat => this.toggleSeat(seat, form));
+  }
+
+  toggleSeat(seat: Seat, form: FormGroup) {
+    if (form.value.includes(seat.id)) {
+      form.value.splice(form.value.indexOf(seat.id), 1);
+    } else {
+      form.value.push(seat.id);
+    }
+    this.resetColor(seat, form);
+  }
+
+  getSectorOfSeat(seat: Seat): Sector {
+    return this.selectedRoom.sectors.filter(sector => sector.seats.map(seat_ => seat_.id).includes(seat.id))[0];
+  }
+
+  resetColor(seat: Seat, _form: AbstractControl) {
+    const form = _form as FormGroup;
+    if (this.seatSelection.includes(seat.id)) {
+      this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
+    } else if (form.value.includes(seat.id)) {
+      this.roomPlan.setColor(this.blockedSeatColor, seat.colNumber, seat.rowNumber);
+    } else {
+      this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color, seat.colNumber, seat.rowNumber);
+    }
+  }
+
+  hover(seat: Seat) {
+    this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
+  }
+
+  multiSelectChange(event: MultiselectEvent, form: AbstractControl) {
+    event.removed.forEach(seat => this.resetColor(seat, form));
+    event.added.forEach(seat => this.hover(seat));
+    this.seatSelection = event.all.map(seat => seat.id);
+  }
+
+  updateRoomPlan() {
+    this.selectedRoom?.sectors.forEach(sector => {
+      sector.seats.forEach(seat => {
+        if (this.seatSelection.includes(seat.id)) {
+          this.roomPlan.setColor(sector.priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
+        } else if (this.form.get('blockedSeatsControl').value.includes(seat.id)) {
+          this.roomPlan.setColor(this.blockedSeatColor, seat.colNumber, seat.rowNumber);
+        } else {
+          this.roomPlan.setColor(sector.priceCategory.color, seat.colNumber, seat.rowNumber);
+        }
+      });
+    });
   }
 }
