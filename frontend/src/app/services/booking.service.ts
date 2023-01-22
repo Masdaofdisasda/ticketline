@@ -44,7 +44,33 @@ export class BookingService {
     return this.http.put<any>(this.baseUri + '/' + bookingId, {});
   }
 
-  downloadPDF(bookingId: number): Observable<Blob> {
-    return this.http.get(`${this.baseUri}/${bookingId}/pdf`, {responseType: 'blob'});
+  downloadTickets(bookingId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUri}/${bookingId}/ticketsPdf`, {responseType: 'blob'});
+  }
+  downloadReceipt(bookingId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUri}/${bookingId}/receiptPdf`, {responseType: 'blob'});
+  }
+  downloadCancellation(bookingId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUri}/${bookingId}/cancellationPdf`, {responseType: 'blob'});
+  }
+
+  downloadAndSave(download: Observable<Blob>, filename: string): void {
+    download.subscribe({
+      next: value => {
+        this.saveData(value, 'application/pdf', 'Ticketline - ' + filename + '.pdf');
+      }
+    });
+  }
+
+  private saveData(content, type, fileName) {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = 'none';
+    const blob = new Blob([content], {type});
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }

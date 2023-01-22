@@ -85,24 +85,11 @@ export class ShoppingCartComponent implements OnInit {
       });
   }
 
-  download(orderId): void {
-    this.bookingService.downloadPDF(orderId).subscribe({
-      next: value => {
-        this.saveData(value, 'application/pdf', `order_${orderId}.pdf`);
-      }
-    });
-  }
-
-  saveData(content, type, fileName) {
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.style.display = 'none';
-    const blob = new Blob([content], {type});
-    const url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
+  download(bookingId): void {
+    this.bookingService.downloadAndSave(
+      this.bookingService.downloadTickets(bookingId),
+      'tickets for booking ' + bookingId
+    );
   }
 
   onHoverStart(ticket: Ticket): void {

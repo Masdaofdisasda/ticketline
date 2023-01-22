@@ -85,4 +85,12 @@ public class ApplicationUser {
     bookings.add(booking);
     booking.setUser(this);
   }
+
+  public void removeBooking(Booking booking) {
+    if (!bookings.contains(booking)) {
+      return;
+    }
+    bookings.remove(booking);
+    booking.setUser(null);
+  }
 }

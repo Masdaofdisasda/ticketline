@@ -5,7 +5,11 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
+import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
+import com.google.zxing.WriterException;
+import com.itextpdf.text.DocumentException;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,9 +42,9 @@ public interface BookingService {
   List<BookingItemDto> fetchBookings();
 
   /**
-   * Removes a booking made by the current user.
+   * Sets purchase made by the user to the status canceled, and reservations will be deleted.
    *
-   * @param bookingId to remove
+   * @param bookingId to cancel
    */
   void cancelBooking(Long bookingId);
 
@@ -52,12 +56,14 @@ public interface BookingService {
   void purchaseReservation(Long bookingId);
 
   /**
-   * Creates a PDF that contains information about the booking.
+   * Creates a PDF of given type for a booking.
    *
-   * @param booking The booking the PDF should be created for
+   * @param bookingId The booking the PDF should be created for
+   * @param domain    of the server
+   * @param type      of the PDF to create
    * @return The bytes that make up the PDF file
    */
-  byte[] createPdfForBooking(Booking booking, String domain);
+  byte[] createPdfForBooking(Long bookingId, String domain, DocumentType type) throws DocumentException, IOException, WriterException;
 
   /**
    * Gets a single Booking by its id.
