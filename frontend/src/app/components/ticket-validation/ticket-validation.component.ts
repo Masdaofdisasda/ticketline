@@ -26,7 +26,7 @@ export class TicketValidationComponent implements OnInit {
   }
 
   updateStatus(): void {
-    this.ticketService.validateTicket(this.hash).subscribe((value) => {
+    this.ticketService.checkTicketValidation(this.hash).subscribe((value) => {
       this.status = value.status;
     });
     console.log(this.status);

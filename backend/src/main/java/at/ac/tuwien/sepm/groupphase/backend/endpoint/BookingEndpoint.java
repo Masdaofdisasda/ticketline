@@ -58,11 +58,11 @@ public class BookingEndpoint {
   }
 
   @GetMapping("/{bookingId}/ticketsPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
   public ResponseEntity<byte[]> generateTicketsPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
@@ -71,11 +71,11 @@ public class BookingEndpoint {
   }
 
   @GetMapping("/{bookingId}/receiptPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
   public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
@@ -84,11 +84,11 @@ public class BookingEndpoint {
   }
 
   @GetMapping("/{bookingId}/cancellationPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
   public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)

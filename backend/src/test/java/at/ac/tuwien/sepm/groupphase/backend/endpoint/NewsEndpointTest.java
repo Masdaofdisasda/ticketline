@@ -123,7 +123,7 @@ public class NewsEndpointTest implements TestData {
       .firstName("a")
       .lastName("m")
       .password("password").build();
-    userService.register(userRegistrationDto);
+    //userService.register(userRegistrationDto);
     MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI + "/{id}", news.getId())
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
       .andDo(print())

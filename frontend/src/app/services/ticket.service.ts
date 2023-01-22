@@ -13,7 +13,7 @@ export class TicketService {
 
   constructor(private http: HttpClient, private globals: Globals) {}
 
-  validateTicket(hash: string): Observable<TicketValidationDto> {
+  checkTicketValidation(hash: string): Observable<TicketValidationDto> {
     const params = new HttpParams().append('hash', hash);
 
     console.log('calling ' + this.baseUri + '/validate with param: ' + hash);
