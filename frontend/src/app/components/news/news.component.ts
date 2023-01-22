@@ -20,12 +20,13 @@ export class NewsComponent implements OnInit {
   errorMessage = '';
   // After first submission attempt, form validation will start
   submitted = false;
+  archive: boolean;
 
   pagedProperties = PageResponseDto.getPageResponseDto();
 
   private news: NewsOverviewDto[];
 
-  constructor(private messageService: NewsService,
+  constructor(private newsService: NewsService,
               private ngbPaginationConfig: NgbPaginationConfig,
               private formBuilder: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
@@ -34,11 +35,22 @@ export class NewsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.archive = false;
     this.refreshNews();
   }
 
   navigateCreatePage() {
     this.router.navigateByUrl('/news/create');
+  }
+
+  navigateArchivePage() {
+    this.archive = true;
+    this.refreshNews();
+  }
+
+  navigateLatestPage() {
+    this.archive = false;
+    this.refreshNews();
   }
 
   nextPage(){
@@ -60,7 +72,11 @@ export class NewsComponent implements OnInit {
   }
 
   refreshNews() {
-    this.loadOldNews(this.pagedProperties);
+    if (this.archive){
+      this.loadOldNews(this.pagedProperties);
+    } else {
+      this.loadUnreadNews(this.pagedProperties);
+    }
   }
 
   /**
@@ -73,8 +89,27 @@ export class NewsComponent implements OnInit {
   /**
    * Loads the specified page of messages from the backend
    */
+  private loadUnreadNews(pageDto: PageDto) {
+    this.newsService.getPaginatedNews(pageDto).subscribe({
+      next: (news: PageResponseDto<NewsOverviewDto>) => {
+        this.pagedProperties = news;
+        this.news = news.data;
+        if (this.pagedProperties.pagesTotal < this.pagedProperties.pageIndex){
+          this.pagedProperties.pageIndex = this.pagedProperties.pagesTotal - 1;
+          this.refreshNews();
+        }
+      },
+      error: error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    });
+  }
+
+  /**
+   * Loads the specified page of messages from the backend
+   */
   private loadOldNews(pageDto: PageDto) {
-    this.messageService.getPaginatedMessage(pageDto).subscribe({
+    this.newsService.getPaginatedNewsArchive(pageDto).subscribe({
       next: (news: PageResponseDto<NewsOverviewDto>) => {
         this.pagedProperties = news;
         this.news = news.data;

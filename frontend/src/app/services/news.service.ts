@@ -20,10 +20,26 @@ export class NewsService {
   }
 
 
-  /*
+  /**
    * Load all messages from the backend
+   *
+   * @param pageDto information about currently loaded Page
    */
-  getPaginatedMessage(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
+  getPaginatedNews(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
+    const params = new HttpParams()
+      .set('pageIndex', pageDto.pageIndex)
+      .set('pageSize', pageDto.pageSize);
+
+    return this.httpClient.get<PageResponseDto<NewsOverviewDto>>(this.newsBaseUri+'/unread', {params});
+  }
+
+
+  /**
+   * Load all messages from the backend
+   *
+   * @param pageDto information about currently loaded Page
+   */
+  getPaginatedNewsArchive(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
     const params = new HttpParams()
       .set('pageIndex', pageDto.pageIndex)
       .set('pageSize', pageDto.pageSize);

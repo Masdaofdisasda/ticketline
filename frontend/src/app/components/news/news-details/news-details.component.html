@@ -1,8 +1,15 @@
 <div>
   <br>
-  <div>
-    <h2>{{this.news.title}}</h2>
-    <h5>{{this.news.publishedAt | date}}</h5>
+  <div class="fourXone">
+    <div>
+      <h2>{{this.news.title}}</h2>
+      <h5>{{this.news.publishedAt | date}}</h5>
+    </div>
+
+    <span style="width: 80%"></span>
+    <button type="button" class="btn btn-secondary btn-sm mr-4"
+            (click)="navigateLatestPage()">View Latest News
+    </button>
   </div>
   <br>
   <div class="h-25 row align-items-center">

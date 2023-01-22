@@ -6,7 +6,22 @@ import org.springframework.data.domain.Page;
 
 public interface NewsService {
 
+  /**
+   * Finds a page of news entries.
+   *
+   * @param pageDto describing which page to fetch
+   * @return Page of news
+   */
   Page<News> findAllPaginated(PageDto pageDto);
+
+  /**
+   * Finds a page of news entries which the user hasn't seen.
+   *
+   * @param pageDto describing which page to fetch
+   * @param userId  id of the current user
+   * @return Page of news
+   */
+  Page<News> findAllUnreadPaginated(Long userId, PageDto pageDto);
 
   /**
    * Find a single message entry by id.
