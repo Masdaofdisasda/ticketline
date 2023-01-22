@@ -70,6 +70,18 @@ public class NewsEndpoint {
   }
 
   @Secured("ROLE_USER")
+  @GetMapping(value = "/unread")
+  @ResponseStatus(code = HttpStatus.OK)
+  @Operation(summary = "Get list of news the current user hasnt seen yet")
+  public PageDtoResponse<NewsOverviewDto> findAllUnreadPaginated(PageDto pageDto) {
+    LOGGER.info("GET /api/v1/news/unread");
+    Long userId = userService.getUser().getId();
+    Page<News> page = newsService.findAllUnreadPaginated(userId, pageDto);
+    return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
+      newsMapper.newsToNewsOverviewDto(page.getContent()));
+  }
+
+  @Secured("ROLE_USER")
   @GetMapping(value = "/{id}")
   @Operation(summary = "Get detailed information about a specific message", security = @SecurityRequirement(name = "apiKey"))
   public DetailedNewsDto find(@PathVariable Long id) {

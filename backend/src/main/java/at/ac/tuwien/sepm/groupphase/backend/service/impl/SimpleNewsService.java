@@ -35,6 +35,12 @@ public class SimpleNewsService implements NewsService {
   }
 
   @Override
+  public Page<News> findAllUnreadPaginated(Long userId, PageDto pageDto) {
+    LOGGER.debug("Find all unread news paginated");
+    return newsRepository.findAllUnreadPagable(userId, PageRequest.of(pageDto.pageIndex(), pageDto.pageSize()));
+  }
+
+  @Override
   public News findOne(Long id) {
     LOGGER.debug("Find news entry with id {}", id);
     Optional<News> message = newsRepository.findById(id);

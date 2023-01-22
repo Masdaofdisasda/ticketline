@@ -57,4 +57,10 @@ export class NewsDetailsComponent implements OnInit {
     });
   }
 
+
+
+  navigateLatestPage() {
+    this.router.navigateByUrl('/news');
+  }
+
 }

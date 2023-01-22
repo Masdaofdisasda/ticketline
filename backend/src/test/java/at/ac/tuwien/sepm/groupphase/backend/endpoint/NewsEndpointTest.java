@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +49,9 @@ public class NewsEndpointTest implements TestData {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -117,6 +121,7 @@ public class NewsEndpointTest implements TestData {
 
   @Test
   public void givenOneMessage_whenFindById_thenMessageWithAllProperties() throws Exception {
+    userRepository.deleteAll();
     newsRepository.save(news);
     UserRegistrationDto userRegistrationDto = UserRegistrationDto.builder()
       .email(ADMIN_USER)

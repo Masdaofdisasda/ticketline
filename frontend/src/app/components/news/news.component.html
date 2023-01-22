@@ -8,10 +8,17 @@
 <div>
   <br>
   <div class="fourXone">
-    <h2>News</h2>
+    <h2 *ngIf="!this.archive">Latest News</h2>
+    <h2 *ngIf="this.archive">News Archive</h2>
     <span style="width: 80%"></span>
-    <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="authService.isAdmin()"
+    <button type="button" class="btn btn-primary btn-sm mr-4" *ngIf="authService.isAdmin()"
             (click)="navigateCreatePage()">Create News Entry
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="!this.archive"
+            (click)="navigateArchivePage()">View News Archive
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="this.archive"
+            (click)="navigateLatestPage()">View Latest News
     </button>
   </div>
   <br>
