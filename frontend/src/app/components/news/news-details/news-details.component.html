@@ -1,0 +1,23 @@
+<div>
+  <br>
+  <div>
+    <h2>{{this.news.title}}</h2>
+    <h5>{{this.news.publishedAt | date}}</h5>
+  </div>
+  <br>
+  <div class="h-25 row align-items-center">
+    <div class="col-3">
+      <img id="newsImage" class="h-100 img-fluid" src="{{this.imageUrl}}">
+    </div>
+
+    <div class="col-9">
+      <p id="summary">{{this.news.summary}}</p>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <p id="text">{{this.news.text}}</p>
+  </div>
+</div>
+
+

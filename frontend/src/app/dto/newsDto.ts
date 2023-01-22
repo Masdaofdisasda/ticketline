@@ -3,7 +3,6 @@ export class NewsDto {
   title: string;
   summary: string;
   text: string;
-  publishedAt: string;
+  publishedAt: Date;
   fileName: string;
-  picture: File;
 }
