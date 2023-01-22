@@ -16,8 +16,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +33,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -42,11 +47,14 @@ public class NewsEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final NewsService newsService;
+
+  private final UserService userService;
   private final NewsMapper newsMapper;
 
   @Autowired
-  public NewsEndpoint(NewsService newsService, NewsMapper newsMapper) {
+  public NewsEndpoint(NewsService newsService, NewsMapper newsMapper, UserService userService) {
     this.newsService = newsService;
+    this.userService = userService;
     this.newsMapper = newsMapper;
   }
 
@@ -66,7 +74,10 @@ public class NewsEndpoint {
   @Operation(summary = "Get detailed information about a specific message", security = @SecurityRequirement(name = "apiKey"))
   public DetailedNewsDto find(@PathVariable Long id) {
     LOGGER.info("GET /api/v1/news/{}", id);
-    return newsMapper.newsToDetailedNewsDto(newsService.findOne(id));
+    News news = newsService.findOne(id);
+    DetailedNewsDto detailedNewsDto = newsMapper.newsToDetailedNewsDto(newsService.findOne(id));
+    newsService.markAsSeen(userService.getUser().getId(), news);
+    return detailedNewsDto;
   }
 
   @Secured("ROLE_ADMIN")
@@ -101,6 +112,17 @@ public class NewsEndpoint {
       .originalFilename(imageFile.getOriginalFilename())
       .generatedFilename(generatedFilename)
       .build();
+  }
+
+  @PermitAll
+  @ResponseBody
+  @GetMapping(value = "/picture")
+  @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
+  public ResponseEntity<InputStreamResource> downloadPicture(@RequestParam String path) throws IOException {
+    LOGGER.info("GET /api/v1/news/picture body: {}", path);
+    ClassLoader classLoader = getClass().getClassLoader();
+    InputStream in = classLoader.getResourceAsStream(path);
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(in));
   }
 
   private String generateFilename(String originalFilename) {

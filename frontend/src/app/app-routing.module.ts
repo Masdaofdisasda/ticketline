@@ -25,6 +25,7 @@ import { PasswordForgotComponent } from './components/password-forgot/password-f
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
 import { NewsCreateComponent } from './components/news/news-create/news-create.component';
+import {NewsDetailsComponent} from './components/news/news-details/news-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/event', pathMatch: 'full' },
@@ -46,6 +47,7 @@ const routes: Routes = [
   },
   {path: 'news', component: NewsComponent},
   {path: 'news/create', component: NewsCreateComponent, canActivate: [AdminGuard]},
+  {path: 'news/details/:newsId', component: NewsDetailsComponent, canActivate: [AuthGuard]},
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
 
