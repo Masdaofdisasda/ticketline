@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,42 +58,42 @@ public class BookingEndpoint {
   }
 
   @GetMapping("/{bookingId}/ticketsPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateTicketsPdf(HttpServletRequest request, @PathVariable long bookingId)
+  public ResponseEntity<byte[]> generateTicketsPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
       .body(bookingService.createPdfForBooking(bookingId,
-        request.getServerName() + ":" + request.getServerPort(), DocumentType.TICKETS));
+        senderUri, DocumentType.TICKETS));
   }
 
   @GetMapping("/{bookingId}/receiptPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId)
+  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
       .body(bookingService.createPdfForBooking(bookingId,
-        request.getServerName() + ":" + request.getServerPort(), DocumentType.RECEIPT));
+        senderUri, DocumentType.RECEIPT));
   }
 
   @GetMapping("/{bookingId}/cancellationPdf")
-  @PermitAll
+  @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId)
+  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
-    LOGGER.info("POST /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
+    LOGGER.info("GET /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
       .body(bookingService.createPdfForBooking(bookingId,
-        request.getServerName() + ":" + request.getServerPort(), DocumentType.CANCELLATION));
+        senderUri, DocumentType.CANCELLATION));
   }
 
   /**

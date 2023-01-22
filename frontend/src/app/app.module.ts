@@ -52,6 +52,7 @@ import { NgxPopperModule } from 'ngx-popper';
 import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
 import { NewsCreateComponent } from './components/news/news-create/news-create.component';
 import {NewsDetailsComponent} from './components/news/news-details/news-details.component';
+import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import {NewsDetailsComponent} from './components/news/news-details/news-details.
     ChangePasswordComponent,
     PasswordForgotComponent,
     CreateUserComponent,
+    TicketValidationComponent,
   ],
   imports: [
     BrowserModule,
