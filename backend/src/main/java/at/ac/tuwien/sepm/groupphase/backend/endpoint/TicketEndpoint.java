@@ -29,8 +29,6 @@ public class TicketEndpoint {
   public TicketValidationDto validateTicket(@RequestParam("hash") String validationHash) {
     LOGGER.info("POST /api/v1/ticket/validate: validateTicket({})", validationHash);
     TicketValidationDto validation = new TicketValidationDto(this.ticketValidationService.validateTicket(Base64.getUrlDecoder().decode(validationHash)).toString());
-    //return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.ticketValidationService.validateTicket(Base64.getDecoder().decode(validationHash)).toString());
-    //return this.ticketValidationService.validateTicket(Base64.getDecoder().decode(validationHash)).toString();
     return validation;
   }
 }

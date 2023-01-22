@@ -73,27 +73,27 @@ public class BookingEndpoint {
   @GetMapping("/{bookingId}/receiptPdf")
   @PermitAll
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId)
+  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
     LOGGER.info("POST /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
       .body(bookingService.createPdfForBooking(bookingId,
-        request.getServerName() + ":" + request.getServerPort(), DocumentType.RECEIPT));
+        senderUri, DocumentType.RECEIPT));
   }
 
   @GetMapping("/{bookingId}/cancellationPdf")
   @PermitAll
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId)
+  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
     throws DocumentException, IOException, WriterException {
     LOGGER.info("POST /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
       .body(bookingService.createPdfForBooking(bookingId,
-        request.getServerName() + ":" + request.getServerPort(), DocumentType.CANCELLATION));
+        senderUri, DocumentType.CANCELLATION));
   }
 
   /**
