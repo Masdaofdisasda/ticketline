@@ -6,10 +6,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +45,9 @@ public class NewsEndpointTest implements TestData {
 
   @Autowired
   private NewsRepository newsRepository;
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -113,7 +118,12 @@ public class NewsEndpointTest implements TestData {
   @Test
   public void givenOneMessage_whenFindById_thenMessageWithAllProperties() throws Exception {
     newsRepository.save(news);
-
+    UserRegistrationDto userRegistrationDto = UserRegistrationDto.builder()
+      .email(ADMIN_USER)
+      .firstName("a")
+      .lastName("m")
+      .password("password").build();
+    userService.register(userRegistrationDto);
     MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI + "/{id}", news.getId())
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
       .andDo(print())

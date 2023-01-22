@@ -17,13 +17,12 @@ public interface NewsService {
   News findOne(Long id);
 
   /**
-   * Mark a message as seen by a userID.
+   * Mark a news entry as seen by a user.
    *
    * @param userId the userId of the newsRead entry
-   * @param newsId the id of the news
-   * @return the message entry
+   * @param news   the id of the news
    */
-  News hasSeen(Long userId, Long newsId);
+  void markAsSeen(Long userId, News news);
 
   /**
    * Publish a single message entry.

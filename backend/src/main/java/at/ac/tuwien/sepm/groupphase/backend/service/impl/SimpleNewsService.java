@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
@@ -45,13 +46,11 @@ public class SimpleNewsService implements NewsService {
   }
 
   @Override
-  public News hasSeen(Long userId, Long newsId) {
-    Optional<News> message = newsRepository.findById(newsId);
-    if (message.isPresent()) {
-      message.get().getSeenBy().add(userRepository.findUserById(userId));
-      return newsRepository.save(message.get());
-    } else {
-      throw new NotFoundException(String.format("Could not find news entry with id %s", newsId));
+  public void markAsSeen(Long userId, News news) {
+    ApplicationUser user = userRepository.findUserById(userId);
+    if (!news.getSeenBy().contains(user)) {
+      news.getSeenBy().add(user);
+      newsRepository.save(news);
     }
   }
 
