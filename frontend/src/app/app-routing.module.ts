@@ -25,6 +25,7 @@ import { PasswordForgotComponent } from './components/password-forgot/password-f
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
 import { NewsCreateComponent } from './components/news/news-create/news-create.component';
+import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/event', pathMatch: 'full' },
@@ -44,16 +45,26 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     component: UsersComponent,
   },
-  {path: 'news', component: NewsComponent},
-  {path: 'news/create', component: NewsCreateComponent, canActivate: [AdminGuard]},
+  { path: 'news', component: NewsComponent },
+  {
+    path: 'news/create',
+    component: NewsCreateComponent,
+    canActivate: [AdminGuard],
+  },
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
 
   { path: 'event', component: EventComponent },
   { path: 'event/create', component: EventCreateComponent },
   { path: 'event', component: EventComponent },
-  { path: 'event/:eventId/performances', component: SelectPerformanceComponent },
-  { path: 'event/performance/:performanceId/seats', component: SeatSelectionComponent },
+  {
+    path: 'event/:eventId/performances',
+    component: SelectPerformanceComponent,
+  },
+  {
+    path: 'event/performance/:performanceId/seats',
+    component: SeatSelectionComponent,
+  },
 
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
@@ -77,6 +88,7 @@ const routes: Routes = [
     component: VenueAdminComponent,
     pathMatch: 'full',
   },
+  { path: 'tickets/validate', component: TicketValidationComponent },
 ];
 
 @NgModule({
