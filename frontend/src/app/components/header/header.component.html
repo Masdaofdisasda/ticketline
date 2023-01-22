@@ -11,8 +11,8 @@
           <a class="nav-link" routerLink="/order/cart" routerLinkActive="active">Cart</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message"
-            routerLinkActive="active">Message</a>
+          <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/news"
+            routerLinkActive="active">News</a>
         </li>
         <li class="nav-item dropdown" *ngIf="authService.isLoggedIn() && authService.isAdmin()">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleMessageDto {
+public class NewsDto {
 
   private Long id;
 

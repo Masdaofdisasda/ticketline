@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DetailedMessageDto extends SimpleMessageDto {
+public class DetailedNewsDto extends NewsDto {
 
   private String text;
 }

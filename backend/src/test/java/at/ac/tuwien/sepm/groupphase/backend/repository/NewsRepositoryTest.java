@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +18,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 // the entire application context
 @DataJpaTest
 @ActiveProfiles("test")
-public class MessageRepositoryTest implements TestData {
+public class NewsRepositoryTest implements TestData {
 
   @Autowired
-  private MessageRepository messageRepository;
+  private NewsRepository newsRepository;
 
   @Test
   public void givenNothing_whenSaveMessage_thenFindListWithOneElementAndFindMessageById() {
-    Message message = Message.builder()
+    News news = News.builder()
       .title(TEST_NEWS_TITLE)
       .summary(TEST_NEWS_SUMMARY)
       .text(TEST_NEWS_TEXT)
       .publishedAt(TEST_NEWS_PUBLISHED_AT)
       .build();
 
-    messageRepository.save(message);
+    newsRepository.save(news);
 
     assertAll(
-      () -> assertEquals(1, messageRepository.findAll().size()),
-      () -> assertNotNull(messageRepository.findById(message.getId()))
+      () -> assertEquals(1, newsRepository.findAll().size()),
+      () -> assertNotNull(newsRepository.findById(news.getId()))
     );
   }
 

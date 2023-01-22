@@ -8,10 +8,10 @@
 <div>
   <br>
   <div class="fourXone">
-    <h2>Messages</h2>
+    <h2>News</h2>
     <span style="width: 80%"></span>
     <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="authService.isAdmin()"
-            (click)="navigateCreatePage()">Add message
+            (click)="navigateCreatePage()">Create News Entry
     </button>
   </div>
   <br>
@@ -20,20 +20,20 @@
 <div class="mt-4 container">
   <div class="row m-xl-4 m-lg-3">
 
-    <div class="p-2" *ngFor="let message of loadNews()">
+    <div class="p-2" *ngFor="let news of loadNews()">
 
       <div class="card">
 
         <div class="card-body">
           <div class="row">
             <div class="col-2">
-              <h4 class="card-title">{{message.title}}</h4>
-              <h5 class="card-subtitle mb-2 text-muted">{{message.publishedAt | date}}</h5>
+              <h4 class="card-title">{{news.title}}</h4>
+              <h5 class="card-subtitle mb-2 text-muted">{{news.publishedAt | date}}</h5>
             </div>
 
             <div class="col-10">
-              <p class="card-text">{{message.summary}}</p>
-              <a href="/message/{{message.id}}">Read More...</a>
+              <p class="card-text">{{news.summary}}</p>
+              <a href="/news/{{news.id}}">Read More...</a>
             </div>
           </div>
         </div>

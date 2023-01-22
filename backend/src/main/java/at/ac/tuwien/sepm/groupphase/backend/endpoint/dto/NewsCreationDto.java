@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageCreationDto {
+public class NewsCreationDto {
 
   @NotNull(message = "Title must not be null")
   @Size(max = 100)
@@ -28,7 +28,7 @@ public class MessageCreationDto {
   private String text;
 
   @NotNull
-  private LocalDate publishedAt;
+  private LocalDateTime publishedAt;
 
   private String fileName;
 }

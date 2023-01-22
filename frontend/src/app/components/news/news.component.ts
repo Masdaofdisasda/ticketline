@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MessageService} from '../../services/message.service';
-import {MessageDto} from '../../dto/messageDto';
+import {NewsService} from '../../services/news.service';
+import {NewsDto} from '../../dto/newsDto';
 import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
@@ -11,29 +11,26 @@ import {NewsOverviewDto} from '../../dto/newsOverviewDto';
 
 @Component({
   selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss']
+  templateUrl: './news.component.html',
+  styleUrls: ['./news.component.scss']
 })
-export class MessageComponent implements OnInit {
+export class NewsComponent implements OnInit {
 
   error = false;
   errorMessage = '';
   // After first submission attempt, form validation will start
   submitted = false;
 
-  currentMessage: MessageDto;
-
   pagedProperties = PageResponseDto.getPageResponseDto();
 
   private news: NewsOverviewDto[];
 
-  constructor(private messageService: MessageService,
+  constructor(private messageService: NewsService,
               private ngbPaginationConfig: NgbPaginationConfig,
               private formBuilder: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
               private router: Router,
-              public authService: AuthService,
-              private modalService: NgbModal) {
+              public authService: AuthService) {
   }
 
   ngOnInit() {
@@ -41,7 +38,7 @@ export class MessageComponent implements OnInit {
   }
 
   navigateCreatePage() {
-    this.router.navigateByUrl('/message/create');
+    this.router.navigateByUrl('/news/create');
   }
 
   nextPage(){
@@ -101,11 +98,6 @@ export class MessageComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
-  }
-
-  private clearForm() {
-    this.currentMessage = new MessageDto();
-    this.submitted = false;
   }
 
 }

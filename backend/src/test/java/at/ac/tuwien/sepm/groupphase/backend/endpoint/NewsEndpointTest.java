@@ -2,13 +2,13 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
-import at.ac.tuwien.sepm.groupphase.backend.repository.MessageRepository;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
+import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,19 +36,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class MessageEndpointTest implements TestData {
+public class NewsEndpointTest implements TestData {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
-  private MessageRepository messageRepository;
+  private NewsRepository newsRepository;
 
   @Autowired
   private ObjectMapper objectMapper;
 
   @Autowired
-  private MessageMapper messageMapper;
+  private NewsMapper newsMapper;
 
   @Autowired
   private JwtTokenizer jwtTokenizer;
@@ -56,7 +56,7 @@ public class MessageEndpointTest implements TestData {
   @Autowired
   private SecurityProperties securityProperties;
 
-  private final Message message = Message.builder()
+  private final News news = News.builder()
     .title(TEST_NEWS_TITLE)
     .summary(TEST_NEWS_SUMMARY)
     .text(TEST_NEWS_TEXT)
@@ -65,7 +65,7 @@ public class MessageEndpointTest implements TestData {
 
   @BeforeEach
   public void beforeEach() {
-    messageRepository.deleteAll();
+    newsRepository.deleteAll();
   }
 
   @Test
@@ -73,7 +73,7 @@ public class MessageEndpointTest implements TestData {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)).params(requestParams))
       .andDo(print())
       .andReturn();
@@ -93,9 +93,9 @@ public class MessageEndpointTest implements TestData {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
-    messageRepository.save(message);
+    newsRepository.save(news);
 
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
         .params(requestParams))
       .andDo(print())
@@ -112,9 +112,9 @@ public class MessageEndpointTest implements TestData {
 
   @Test
   public void givenOneMessage_whenFindById_thenMessageWithAllProperties() throws Exception {
-    messageRepository.save(message);
+    newsRepository.save(news);
 
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI + "/{id}", message.getId())
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI + "/{id}", news.getId())
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
       .andDo(print())
       .andReturn();
@@ -125,17 +125,17 @@ public class MessageEndpointTest implements TestData {
       () -> assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType())
     );
 
-    DetailedMessageDto detailedMessageDto = objectMapper.readValue(response.getContentAsString(),
-      DetailedMessageDto.class);
+    DetailedNewsDto detailedNewsDto = objectMapper.readValue(response.getContentAsString(),
+      DetailedNewsDto.class);
 
-    assertEquals(message, messageMapper.detailedMessageDtoToMessage(detailedMessageDto));
+    assertEquals(news, newsMapper.detailedNewsDtoToNews(detailedNewsDto));
   }
 
   @Test
   public void givenOneMessage_whenFindByNonExistingId_then404() throws Exception {
-    messageRepository.save(message);
+    newsRepository.save(news);
 
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI + "/{id}", -1)
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI + "/{id}", -1)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
       .andDo(print())
       .andReturn();
@@ -145,11 +145,11 @@ public class MessageEndpointTest implements TestData {
 
   @Test
   public void givenEmptyPublishedAtField_whenSubmittingMessage_then400() throws Exception {
-    message.setPublishedAt(null);
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    news.setPublishedAt(null);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
@@ -162,10 +162,10 @@ public class MessageEndpointTest implements TestData {
 
   @Test
   public void givenValidMessage_whenSubmittingMessage_then201() throws Exception {
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
@@ -178,13 +178,13 @@ public class MessageEndpointTest implements TestData {
 
   @Test
   public void givenNothing_whenPostInvalid_then400() throws Exception {
-    message.setTitle(null);
-    message.setSummary(null);
-    message.setText(null);
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    news.setTitle(null);
+    news.setSummary(null);
+    news.setText(null);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))

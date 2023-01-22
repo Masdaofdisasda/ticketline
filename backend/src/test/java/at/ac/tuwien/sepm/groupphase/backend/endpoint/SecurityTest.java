@@ -3,10 +3,10 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.BackendApplication;
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageCreationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
-import at.ac.tuwien.sepm.groupphase.backend.repository.MessageRepository;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
+import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -82,13 +82,13 @@ public class SecurityTest implements TestData {
   private MockMvc mockMvc;
 
   @Autowired
-  private MessageRepository messageRepository;
+  private NewsRepository newsRepository;
 
   @Autowired
   private ObjectMapper objectMapper;
 
   @Autowired
-  private MessageMapper messageMapper;
+  private NewsMapper newsMapper;
 
   @Autowired
   private JwtTokenizer jwtTokenizer;
@@ -99,7 +99,7 @@ public class SecurityTest implements TestData {
   @Autowired
   private List<Object> components;
 
-  private Message message = Message.builder()
+  private News news = News.builder()
     .title(TEST_NEWS_TITLE)
     .summary(TEST_NEWS_SUMMARY)
     .text(TEST_NEWS_TEXT)
@@ -108,8 +108,8 @@ public class SecurityTest implements TestData {
 
   @BeforeEach
   public void beforeEach() {
-    messageRepository.deleteAll();
-    message = Message.builder()
+    newsRepository.deleteAll();
+    news = News.builder()
       .title(TEST_NEWS_TITLE)
       .summary(TEST_NEWS_SUMMARY)
       .text(TEST_NEWS_TEXT)
@@ -144,7 +144,7 @@ public class SecurityTest implements TestData {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES))
         .params(requestParams))
       .andDo(print())
@@ -162,7 +162,7 @@ public class SecurityTest implements TestData {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
-    MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI).params(requestParams))
+    MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI).params(requestParams))
       .andDo(print())
       .andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();
@@ -172,10 +172,10 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenAdminLoggedIn_whenPost_then201() throws Exception {
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
@@ -188,10 +188,10 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenNoOneLoggedIn_whenPost_then403() throws Exception {
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body))
       .andDo(print())
@@ -203,10 +203,10 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenUserLoggedIn_whenPost_then403() throws Exception {
-    MessageCreationDto messageCreationDto = messageMapper.messageToMessageCreationDto(message);
-    String body = objectMapper.writeValueAsString(messageCreationDto);
+    NewsCreationDto newsCreationDto = newsMapper.newsToNewsCreationDto(news);
+    String body = objectMapper.writeValueAsString(newsCreationDto);
 
-    MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
+    MvcResult mvcResult = this.mockMvc.perform(post(NEWS_BASE_URI)
         .contentType(MediaType.APPLICATION_JSON)
         .content(body)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES)))

@@ -4,7 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
-import { MessageComponent } from './components/message/message.component';
+import { NewsComponent } from './components/news/news.component';
 import { CreateVenueComponent } from './components/venue-admin/create-venue/create-venue.component';
 import { VenueAdminComponent } from './components/venue-admin/venue-admin.component';
 import { ShowVenueComponent } from './components/venue-admin/show-venue/show-venue.component';
@@ -24,7 +24,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { PasswordForgotComponent } from './components/password-forgot/password-forgot.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { SelectPerformanceComponent } from './components/event/select-performance/select-performance.component';
-import { MessageCreateComponent } from './components/message/message-create/message-create.component';
+import { NewsCreateComponent } from './components/news/news-create/news-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/event', pathMatch: 'full' },
@@ -44,9 +44,8 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     component: UsersComponent,
   },
-  {path: 'message', component: MessageComponent},
-  {path: 'message/create', component: MessageCreateComponent},
-  { path: 'message', component: MessageComponent },
+  {path: 'news', component: NewsComponent},
+  {path: 'news/create', component: NewsCreateComponent, canActivate: [AdminGuard]},
   { path: 'artist', component: ArtistComponent },
   { path: 'artist/create', component: ArtistCreateComponent },
 
@@ -61,8 +60,6 @@ const routes: Routes = [
 
   { path: 'order/cart', component: CheckoutComponent, pathMatch: 'full' },
   { path: 'order/:bookingId', component: OrderCompleteComponent },
-  { path: 'message', canActivate: [AuthGuard], component: MessageComponent },
-  { path: 'message', canActivate: [AuthGuard], component: MessageComponent },
   {
     path: 'admin/venue/create',
     component: CreateVenueComponent,

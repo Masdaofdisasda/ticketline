@@ -34,7 +34,6 @@ public class EventFixture {
       .category("Wet T-Shirt Contest")
       .startDate(LocalDateTime.now().plusHours(1))
       .endDate(LocalDateTime.now().plusHours(4))
-      .news(new ArrayList<>())
       .performances(new ArrayList<>())
       .build();
   }
@@ -46,7 +45,6 @@ public class EventFixture {
       .category("Tutorial")
       .startDate(LocalDateTime.now().plusHours(1))
       .endDate(LocalDateTime.now().plusHours(4))
-      .news(new ArrayList<>())
       .performances(new ArrayList<>())
       .build();
   }
@@ -58,7 +56,6 @@ public class EventFixture {
       .category("Movie")
       .startDate(LocalDateTime.now().plusHours(1))
       .endDate(LocalDateTime.now().plusHours(4))
-      .news(new ArrayList<>())
       .performances(new ArrayList<>())
       .build();
   }
