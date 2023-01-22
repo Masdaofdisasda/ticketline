@@ -24,6 +24,10 @@ export class EventCreateComponent implements OnInit {
   ) {
   }
 
+  get performances() {
+    return (this.createFormGroup.get('performances') as FormArray);
+  }
+
   ngOnInit(): void {
     this.createFormGroup = this.formBuilder.group({
       eventName: new FormControl('', Validators.required),
@@ -62,9 +66,34 @@ export class EventCreateComponent implements OnInit {
         endDate: performanceForm.get('endDateControl').value,
         artists: performanceForm.get('artistsControl').value,
         roomId: performanceForm.get('roomControl').value,
-        priceCategoryPricingMap: performanceForm.get('pricingsControl').value
+        priceCategoryPricingMap: performanceForm.get('pricingsGroup').value,
+        blockedSeats: performanceForm.get('blockedSeatsControl').value
       } as unknown as PerformanceDto);
     }
     return eventDto;
+  }
+
+  addPerformance(): void {
+    const performances = this.createFormGroup.get('performances') as FormArray;
+    const roomControl = new FormControl(null, Validators.required);
+    const pricingsGroup = new FormGroup({});
+
+    performances.push(this.formBuilder.group({
+      startDateControl: new FormControl(new Date(), Validators.required),
+      endDateControl: new FormControl(new Date(), Validators.required),
+      artistsControl: new FormControl([], Validators.required),
+      venueControl: new FormControl(null, Validators.required),
+      roomControl,
+      pricingsGroup,
+      blockedSeatsControl: new FormControl([])
+    }));
+  }
+
+  removePerformance(index: number) {
+    (this.createFormGroup.get('performances') as FormArray).removeAt(index);
+  }
+
+  log(subject: any) {
+    console.log(subject);
   }
 }

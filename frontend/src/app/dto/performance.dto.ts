@@ -7,4 +7,6 @@ export class PerformanceDto {
   endDate: Date;
   room: Room;
   artists: ArtistDto[];
+
+  blockedSeats: number[];
 }

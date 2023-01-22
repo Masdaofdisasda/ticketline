@@ -12,15 +12,18 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Component
 @AllArgsConstructor
 public class EventValidator {
 
-  private EventRepository eventRepository;
-
   private static final Logger LOGGER =
     LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  private EventRepository eventRepository;
 
   public void validateEvent(EventCreateDto event) throws ValidationException {
     LOGGER.trace("validateEvent({})", event);
@@ -34,12 +37,36 @@ public class EventValidator {
       validationErrors.add("Event with the name: '" + event.getName() + "' already exists.");
     }
 
-    if (event.getPerformances() != null) {
-      event.getPerformances().forEach(performance -> {
-        validationErrors.addAll(validatePerformanceOfEvent(performance, event));
-      });
+    if (event.getPerformances() != null && event.getPerformances().size() > 0) {
+      event.getPerformances().forEach(performance -> validationErrors.addAll(validatePerformanceOfEvent(performance, event)));
+
+      Map<Long, List<PerformanceCreateDto>> longListMap = event.getPerformances().stream().collect(groupingBy(PerformanceCreateDto::getRoomId));
+      longListMap.forEach((key, value) ->
+        IntStream.range(0, longListMap.get(key).size()).forEach(idx0 -> {
+          PerformanceCreateDto dto0 = longListMap.get(key).get(idx0);
+          if (dto0.getStartDate().isBefore(event.getStartDate())) {
+            validationErrors.add("Performance #%d starts before events start date".formatted(idx0));
+          }
+          if (dto0.getEndDate().isAfter(event.getEndDate())) {
+            validationErrors.add("Performance #%d ends before events end date".formatted(idx0));
+          }
+          if (dto0.getStartDate().isAfter(dto0.getEndDate())) {
+            validationErrors.add("Performance #%d's end date is before its start date".formatted(idx0));
+          }
+          IntStream.range(0, value.size()).forEach(idx1 -> {
+            if (idx0 == idx1) {
+              return;
+            }
+            PerformanceCreateDto dto1 = value.get(idx1);
+            if (dto0.getEndDate().isAfter(dto1.getStartDate())
+              && dto0.getStartDate().isBefore(dto1.getEndDate())) {
+              validationErrors.add("Performance #%d time-window overlaps with Performance#%d"
+                .formatted(idx0, idx1));
+            }
+          });
+        }));
     } else {
-      validationErrors.add("Event hast to have at least one performance.");
+      validationErrors.add("Event has to have at least one performance.");
     }
 
     if (!validationErrors.isEmpty()) {

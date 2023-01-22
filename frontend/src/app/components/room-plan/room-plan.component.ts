@@ -252,8 +252,4 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     // add created rect to element
     this.svgRoot.nativeElement.appendChild(rect);
   }
-
-  update(): void {
-
-  }
 }

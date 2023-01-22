@@ -21,4 +21,11 @@ public interface RoomService {
    * @throws NotFoundException if no room with the given id was found
    */
   Room editRoom(long id, Room toEdit) throws NotFoundException;
+
+  /**
+   * Gets a single room by its id.
+   *
+   * @return The room with the given id
+   */
+  Room getById(long id) throws NotFoundException;
 }

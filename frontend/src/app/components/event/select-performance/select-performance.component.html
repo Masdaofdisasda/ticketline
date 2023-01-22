@@ -1,7 +1,7 @@
 <h1>Select Performance:</h1>
 <div class="performanceList">
-  <ul class="performance list-group" *ngFor="let performance of performances">
-    <li class="list-group-item d-flex">
+  <ul class="performance list-group">
+    <li class="list-group-item d-flex" *ngFor="let performance of performances">
       <p class="title flex-grow-1">{{artistNames(performance)}} on {{performance.startDate | date:'medium' }}</p>
       <button class="btn btn-primary" [routerLink]="['/event', 'performance', performance.id, 'seats']">Buy ticket!
       </button>
