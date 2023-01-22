@@ -11,6 +11,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
+import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
@@ -21,8 +22,9 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.BookingService;
 import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TicketValidationService;
+import com.google.zxing.WriterException;
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -37,6 +40,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.CANCELLATION;
+import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.PURCHASE;
+import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.RESERVATION;
 
 /**
  * Implements the Booking Service Interface used by the customer to book tickets.
@@ -111,8 +118,19 @@ public class BookingServiceImpl implements BookingService {
       new NotFoundException("No booking with id " + bookingId + " found for current user")
     );
 
+
     List<Booking> bookings = user.getBookings();
-    bookings.removeIf(b -> b.equals(booking));
+    for (Booking b : bookings) {
+      if (b.equals(booking)) {
+        if (booking.getBookingType() == PURCHASE) {
+          b.cancel();
+        } else {
+          b.revoke();
+        }
+        break;
+      }
+    }
+
     user.setBookings(bookings);
 
     userRepository.save(user);
@@ -122,18 +140,23 @@ public class BookingServiceImpl implements BookingService {
   @Transactional
   public void purchaseReservation(Long bookingId) {
     ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    Booking booking = getBookingFromCurrentUser(bookingId);
+
+    booking.setBookingType(PURCHASE);
+
+    userRepository.save(user);
+  }
+
+  private Booking getBookingFromCurrentUser(Long bookingId) {
+    ApplicationUser user = userRepository.findUserByEmail(getEmail());
     Optional<Booking> matchingBooking = user.getBookings()
       .stream()
       .filter(booking -> Objects.equals(booking.getId(), bookingId))
       .findFirst();
 
-    Booking booking = matchingBooking.orElseThrow(() ->
+    return matchingBooking.orElseThrow(() ->
       new NotFoundException("No booking with id " + bookingId + " found for current user")
     );
-
-    booking.setBookingType(BookingType.PURCHASE);
-
-    userRepository.save(user);
   }
 
   @Override
@@ -205,14 +228,36 @@ public class BookingServiceImpl implements BookingService {
     });
   }
 
-
-  @SneakyThrows
-  public byte[] createPdfForBooking(Booking savedBooking, String domain) {
+  @Override
+  public byte[] createPdfForBooking(Long bookingId, String domain, DocumentType type) throws DocumentException, IOException, WriterException {
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    Booking booking = getBookingFromCurrentUser(bookingId);
 
-    pdfService.createTicketPdf(stream, savedBooking.getTickets(), domain);
+    switch (type) {
+      case RECEIPT -> {
+        if (booking.getBookingType() == RESERVATION) {
+          throw new IllegalStateException("Cannot provide receipt for reservations");
+        }
+        pdfService.createReceiptPdf(stream, booking, domain);
+      }
+      case TICKETS -> {
+        if (booking.getBookingType() != PURCHASE) {
+          throw new IllegalStateException("Cannot generate tickets for reserved or canceled bookings");
+        }
+        pdfService.createTicketPdf(stream, booking, domain);
+      }
+      case CANCELLATION -> {
+        if (booking.getBookingType() != CANCELLATION) {
+          throw new IllegalStateException("Cannot generate cancellation for valid bookings");
+        }
+        pdfService.createCancellationPdf(stream, booking, domain);
+      }
+      default -> throw new IllegalStateException("Unexpected value: " + type);
+    }
+
     return stream.toByteArray();
   }
+
 
   @Override
   public Booking getById(long id) throws NotFoundException {

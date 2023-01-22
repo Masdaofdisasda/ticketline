@@ -42,26 +42,27 @@ public class UserDataGenerator {
   }
 
   @PostConstruct
-  private void generateAdminUser() {
-    if (!userRepository.findAll().isEmpty()) {
-      LOGGER.debug("user already generated");
-      userRepository.deleteAll();
-    } else {
-      LOGGER.debug("generating admin user entry");
-      ApplicationUser admin = ApplicationUser.builder()
-        .email(TEST_ADMIN_EMAIL)
-        .password(this.passwordEncoder.encode(TEST_ADMIN_PSW))
-        .firstName(TEST_ADMIN_FIRST_NAME)
-        .lastName(TEST_ADMIN_LAST_NAME)
-        .accountNonLocked(true)
-        .admin(true)
-        .build();
-      LOGGER.debug("saving user {}", admin);
-      userRepository.save(admin);
-    }
+  private void generateAll() {
+    userRepository.deleteAll();
+    generateAdminUser();
+    generateLockedUser();
+    generateRegularUser();
   }
 
-  @PostConstruct
+  private void generateAdminUser() {
+    LOGGER.debug("generating admin user entry");
+    ApplicationUser admin = ApplicationUser.builder()
+      .email(TEST_ADMIN_EMAIL)
+      .password(this.passwordEncoder.encode(TEST_ADMIN_PSW))
+      .firstName(TEST_ADMIN_FIRST_NAME)
+      .lastName(TEST_ADMIN_LAST_NAME)
+      .accountNonLocked(true)
+      .admin(true)
+      .build();
+    LOGGER.debug("saving user {}", admin);
+    userRepository.save(admin);
+  }
+
   private void generateLockedUser() {
     LOGGER.debug("generating admin user entry");
     ApplicationUser user = ApplicationUser.builder()
@@ -78,7 +79,6 @@ public class UserDataGenerator {
     userRepository.save(user);
   }
 
-  @PostConstruct
   private void generateRegularUser() {
     LOGGER.debug("generating users");
     ApplicationUser user = ApplicationUser.builder()

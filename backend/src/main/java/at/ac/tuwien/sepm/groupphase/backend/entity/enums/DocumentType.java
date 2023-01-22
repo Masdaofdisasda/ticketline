@@ -3,15 +3,15 @@ package at.ac.tuwien.sepm.groupphase.backend.entity.enums;
 import lombok.Getter;
 
 @Getter
-public enum BookingType {
+public enum DocumentType {
 
-  RESERVATION("Reservation"),
-  PURCHASE("Purchase"),
+  TICKETS("Tickets"),
+  RECEIPT("Receipt"),
   CANCELLATION("Cancellation");
 
   private final String type;
 
-  BookingType(String type) {
+  DocumentType(String type) {
     this.type = type;
   }
 }

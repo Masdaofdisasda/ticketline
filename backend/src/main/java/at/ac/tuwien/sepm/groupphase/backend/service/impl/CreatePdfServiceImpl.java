@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
+import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -30,10 +32,12 @@ import java.util.List;
 
 @Service
 public class CreatePdfServiceImpl implements CreatePdfService {
+
   @Override
-  public void createTicketPdf(OutputStream outputStream, List<Ticket> ticketList, String domain)
+  public void createTicketPdf(OutputStream outputStream, Booking booking, String domain)
     throws IOException, DocumentException, WriterException {
     // Create the PDF document
+    List<Ticket> ticketList = booking.getTickets();
     Document document = new Document();
     PdfWriter.getInstance(document, outputStream);
     document.open();
@@ -74,6 +78,104 @@ public class CreatePdfServiceImpl implements CreatePdfService {
 
       document.newPage();
     }
+
+    document.close();
+  }
+
+  @Override
+  public void createReceiptPdf(OutputStream outputStream, Booking booking, String domain) throws DocumentException {
+    // Create the PDF document
+    Document document = new Document();
+    PdfWriter.getInstance(document, outputStream);
+    document.open();
+
+    BaseFont baseFont = FontFactory.getFont(FontFactory.HELVETICA).getBaseFont();
+    Paragraph titleElement = new Paragraph("Ticketline GmbH", new Font(baseFont, 36f));
+    titleElement.setFont(new Font(baseFont, 24f));
+    titleElement.add(new Phrase("\nTicketplatz 23"));
+    titleElement.add(new Phrase("\n1010 Wien"));
+    titleElement.setFont(new Font(baseFont, 11));
+    titleElement.add(new Phrase("\nVAT: AT12345678"));
+    titleElement.setSpacingAfter(40f);
+    document.add(titleElement);
+
+    Paragraph header = new Paragraph("Receipt for booking nr. " + booking.getId() + "                                      "
+      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+    header.setSpacingAfter(12f);
+    document.add(header);
+
+    List<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
+      ? booking.getCanceledTickets().stream().toList()
+      : booking.getTickets();
+    for (final Ticket ticket : tickets) {
+
+      String eventName = ticket.getPerformance().getEvent().getName();
+      if (eventName.length() > 20) {
+        eventName = eventName.substring(0, 20);
+      }
+      Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
+        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+      document.add(contentElement);
+    }
+
+    Paragraph total = new Paragraph("-----------------------------------------------------------------", new Font(baseFont, 24f));
+    total.add(new Phrase("\nTotal (incl. tax): " + booking.calculateTotal() + " EUR"));
+    total.setSpacingBefore(6f);
+    total.setSpacingAfter(12f);
+    document.add(total);
+
+    Paragraph paymentInfo = new Paragraph("Payed with credit card", new Font(baseFont, 11f));
+    document.add(paymentInfo);
+
+    document.close();
+  }
+
+  @Override
+  public void createCancellationPdf(OutputStream outputStream, Booking booking, String domain) throws DocumentException, WriterException, IOException {
+    // Create the PDF document
+    Document document = new Document();
+    PdfWriter.getInstance(document, outputStream);
+    document.open();
+
+    BaseFont baseFont = FontFactory.getFont(FontFactory.HELVETICA).getBaseFont();
+    Paragraph titleElement = new Paragraph("Ticketline GmbH", new Font(baseFont, 36f));
+    titleElement.setFont(new Font(baseFont, 24f));
+    titleElement.add(new Phrase("\nTicketplatz 23"));
+    titleElement.add(new Phrase("\n1010 Wien"));
+    titleElement.setFont(new Font(baseFont, 11));
+    titleElement.add(new Phrase("\nVAT: AT12345678"));
+    titleElement.setSpacingAfter(40f);
+    document.add(titleElement);
+
+    Paragraph header = new Paragraph("Cancellation for booking nr. " + booking.getId() + "                               "
+      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+    header.setSpacingAfter(12f);
+    document.add(header);
+
+    List<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
+      ? booking.getCanceledTickets().stream().toList()
+      : booking.getTickets();
+    for (final Ticket ticket : tickets) {
+
+      String eventName = ticket.getPerformance().getEvent().getName();
+      if (eventName.length() > 20) {
+        eventName = eventName.substring(0, 20);
+      }
+      Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
+        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+      document.add(contentElement);
+    }
+
+    Paragraph total = new Paragraph("-----------------------------------------------------------------", new Font(baseFont, 24f));
+    total.add(new Phrase("\nRefund: " + booking.calculateTotal() + " EUR"));
+    total.setSpacingBefore(6f);
+    total.setSpacingAfter(12f);
+    document.add(total);
+
+    Paragraph paymentInfo = new Paragraph("The total price was refundend to your credit card", new Font(baseFont, 11f));
+    document.add(paymentInfo);
 
     document.close();
   }

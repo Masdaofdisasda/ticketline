@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketFixture {
+
   public static List<Ticket> getBuildTickets(int counter) {
     List<Ticket> tickets = new ArrayList<>();
     for (int i = 1; i <= counter; i++) {

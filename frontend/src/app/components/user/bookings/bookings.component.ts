@@ -43,4 +43,26 @@ export class BookingsComponent implements OnInit {
       });
   }
 
+  downloadTicket(bookingId): void {
+    this.bookingService.downloadAndSave(
+      this.bookingService.downloadTickets(bookingId),
+      'tickets for booking ' + bookingId
+    );
+  }
+
+  downloadReceipt(bookingId): void {
+    this.bookingService.downloadAndSave(
+      this.bookingService.downloadReceipt(bookingId),
+      'receipt for booking ' + bookingId
+    );
+  }
+
+  downloadCancellation(bookingId): void {
+    this.bookingService.downloadAndSave(
+      this.bookingService.downloadCancellation(bookingId),
+      'cancellation for booking ' + bookingId
+    );
+  }
+
+
 }

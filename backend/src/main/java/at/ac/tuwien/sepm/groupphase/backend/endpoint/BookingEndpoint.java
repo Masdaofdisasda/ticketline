@@ -4,8 +4,10 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
+import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
 import at.ac.tuwien.sepm.groupphase.backend.service.BookingService;
-import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
+import com.google.zxing.WriterException;
+import com.itextpdf.text.DocumentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -37,7 +40,6 @@ public class BookingEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final BookingService bookingService;
-  private final CreatePdfService pdfService;
 
   /**
    * Make reservations for multiple tickets and create a new booking for a user.
@@ -54,16 +56,43 @@ public class BookingEndpoint {
     return bookingService.makeBooking(tickets, BookingType.RESERVATION);
   }
 
-  @GetMapping("/{id}/pdf")
+  @GetMapping("/{bookingId}/ticketsPdf")
   @PermitAll
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generatePdf(HttpServletRequest request, @PathVariable long id) {
-    LOGGER.info("POST /api/v1/booking/{}/pdf: generatePdf({})", id, id);
+  public ResponseEntity<byte[]> generateTicketsPdf(HttpServletRequest request, @PathVariable long bookingId)
+    throws DocumentException, IOException, WriterException {
+    LOGGER.info("POST /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
     return ResponseEntity
       .status(HttpStatus.OK)
       .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
-      .body(bookingService.createPdfForBooking(bookingService.getById(id),
-        request.getServerName() + ":" + request.getServerPort()));
+      .body(bookingService.createPdfForBooking(bookingId,
+        request.getServerName() + ":" + request.getServerPort(), DocumentType.TICKETS));
+  }
+
+  @GetMapping("/{bookingId}/receiptPdf")
+  @PermitAll
+  @Transactional(readOnly = true)
+  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId)
+    throws DocumentException, IOException, WriterException {
+    LOGGER.info("POST /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+      .body(bookingService.createPdfForBooking(bookingId,
+        request.getServerName() + ":" + request.getServerPort(), DocumentType.RECEIPT));
+  }
+
+  @GetMapping("/{bookingId}/cancellationPdf")
+  @PermitAll
+  @Transactional(readOnly = true)
+  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId)
+    throws DocumentException, IOException, WriterException {
+    LOGGER.info("POST /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+      .body(bookingService.createPdfForBooking(bookingId,
+        request.getServerName() + ":" + request.getServerPort(), DocumentType.CANCELLATION));
   }
 
   /**

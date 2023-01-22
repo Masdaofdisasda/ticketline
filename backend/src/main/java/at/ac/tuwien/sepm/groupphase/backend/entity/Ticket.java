@@ -11,8 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Builder(toBuilder = true)
@@ -36,6 +39,18 @@ public class Ticket {
 
   @ManyToOne(cascade = CascadeType.ALL)
   private Booking booking;
+
+  @ManyToMany(mappedBy = "canceledTickets")
+  private Set<Booking> canceledBookings = new HashSet<>();
+
+  public void addCanceledBooking(Booking booking) {
+    if (canceledBookings.contains(booking)) {
+      return;
+    }
+    canceledBookings.add(booking);
+    booking.addCanceledTicket(this);
+  }
+
 
   private byte[] validationHash;
 
