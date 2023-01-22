@@ -20,6 +20,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -66,8 +67,8 @@ public class CreatePdfServiceImpl implements CreatePdfService {
 
       // Create the QR code
       QRCodeWriter qrCodeWriter = new QRCodeWriter();
-      String qrContent = String.format("%s/api/v1/tickets/validate?hash=%s",
-        domain, Base64.getEncoder().encodeToString(ticket.getValidationHash()));
+      String qrContent = String.format("%s#/tickets/validate?hash=%s",
+        domain, Base64.getUrlEncoder().encodeToString(ticket.getValidationHash()));
       BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 200, 200);
       BufferedImage qrCodeImage = bitMatrixToBufferedImage(bitMatrix);
       Image qrCodePdfImage = Image.getInstance(qrCodeImage, null);
