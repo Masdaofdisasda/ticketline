@@ -1,13 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {MessageDto} from '../dto/messageDto';
+import {HttpClient} from '@angular/common/http';
+import {Message} from '../dtos/message';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
-import {MessageCreateDto} from '../dto/messageCreateDto';
-import {UploadResponseDto} from '../dto/uploadResponseDto';
-import {PageResponseDto} from '../dto/page-response.dto';
-import {PageDto} from '../dto/page.dto';
-import {NewsOverviewDto} from '../dto/newsOverviewDto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +14,11 @@ export class MessageService {
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
-
-  /*
-   * Load all messages from the backend
+  /**
+   * Loads all messages from the backend
    */
-  getPaginatedMessage(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
-    const params = new HttpParams()
-      .set('pageIndex', pageDto.pageIndex)
-      .set('pageSize', pageDto.pageSize);
-
-    return this.httpClient.get<PageResponseDto<NewsOverviewDto>>(this.messageBaseUri, {params});
+  getMessage(): Observable<Message[]> {
+    return this.httpClient.get<Message[]>(this.messageBaseUri);
   }
 
   /**
@@ -36,9 +26,9 @@ export class MessageService {
    *
    * @param id of message to load
    */
-  getMessageById(id: number): Observable<MessageDto> {
+  getMessageById(id: number): Observable<Message> {
     console.log('Load message details for ' + id);
-    return this.httpClient.get<MessageDto>(this.messageBaseUri + '/' + id);
+    return this.httpClient.get<Message>(this.messageBaseUri + '/' + id);
   }
 
   /**
@@ -46,18 +36,8 @@ export class MessageService {
    *
    * @param message to persist
    */
-  createMessage(message: MessageCreateDto): Observable<MessageDto> {
+  createMessage(message: Message): Observable<Message> {
     console.log('Create message with title ' + message.title);
-    return this.httpClient.post<MessageDto>(this.messageBaseUri, message);
-  }
-
-  /**
-   * Send a picture to save
-   *
-   * @param picture to upload
-   */
-  uploadPicture(picture: FormData): Observable<UploadResponseDto> {
-    console.log('upload picture');
-    return this.httpClient.post<UploadResponseDto>(this.messageBaseUri+'/picture', picture);
+    return this.httpClient.post<Message>(this.messageBaseUri, message);
   }
 }

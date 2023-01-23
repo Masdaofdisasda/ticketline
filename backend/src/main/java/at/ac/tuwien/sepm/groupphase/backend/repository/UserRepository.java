@@ -1,27 +1,32 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+//TODO: replace this class with a correct ApplicationUser JPARepository implementation
 @Repository
-public interface UserRepository extends JpaRepository<ApplicationUser, Long> {
-  public ApplicationUser findUserByEmail(String email);
+public class UserRepository {
 
-  public ApplicationUser findUserById(Long id);
+  private final ApplicationUser user;
+  private final ApplicationUser admin;
 
-  @Query("UPDATE ApplicationUser u SET u.failedAttempt = ?1 WHERE u.email = ?2")
-  @Modifying
-  @Transactional
-  public void updateFailedAttempts(int failAttempts, String email);
+  @Autowired
+  public UserRepository(PasswordEncoder passwordEncoder) {
+    user = new ApplicationUser("user@email.com", passwordEncoder.encode("password"), false);
+    admin = new ApplicationUser("admin@email.com", passwordEncoder.encode("password"), true);
+  }
 
-  @Query("SELECT u from ApplicationUser u WHERE u.accountNonLocked = false")
-  public List<ApplicationUser> getLockedUsers();
+  public ApplicationUser findUserByEmail(String email) {
+    if (email.equals(user.getEmail())) {
+      return user;
+    }
+    if (email.equals(admin.getEmail())) {
+      return admin;
+    }
+    return null; // In this case null is returned to fake Repository behavior
+  }
 
-  public List<ApplicationUser> findAll();
+
 }

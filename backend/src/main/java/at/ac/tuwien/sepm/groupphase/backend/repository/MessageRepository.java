@@ -1,22 +1,19 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
   /**
-   * findAllPagable return messages by descending publishing date.
+   * Find all message entries ordered by published at date (descending).
    *
-   * @param pageable holds page information like index and pagesize
-   * @return page with matching events
+   * @return ordered list of al message entries
    */
-  @Query("SELECT me FROM Message me"
-    + " ORDER BY me.publishedAt desc")
-  Page<Message> findAllPagable(Pageable pageable);
+  List<Message> findAllByOrderByPublishedAtDesc();
+
 }
