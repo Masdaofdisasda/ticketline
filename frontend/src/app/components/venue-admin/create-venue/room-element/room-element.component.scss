@@ -1,0 +1,55 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+}
+
+.sector-list-outer {
+  min-height: 0;
+}
+
+.sector-list {
+  height: auto;
+  overflow-y: auto;
+}
+
+.room-view-wrapper {
+  height: 20rem;
+  overflow: scroll;
+}
+
+.room-view {
+    scale: 1;
+    overflow: scroll;
+    background-color: aliceblue;
+}
+
+.room-column {
+    white-space: nowrap;
+    line-break: strict;
+    display: inline-block;
+    background-color: rgb(229, 174, 174);
+    margin-left: .3rem;
+}
+
+.room-column:hover {
+    background-color: lighten($color: rgb(229, 174, 174), $amount: .3);
+}
+
+.room-row {
+    white-space: nowrap;
+    line-break: strict;
+    width: 100%;
+}
+
+.cell {
+    background-color: bisque;
+    aspect-ratio: 1;
+    min-width: 2rem;
+    min-height: 2rem;
+}
+
+.sector-heading {
+    display: flex;
+    justify-content: space-between;
+}

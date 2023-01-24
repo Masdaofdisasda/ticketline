@@ -1,0 +1,69 @@
+<form [formGroup]="searchFormGroup">
+  <div class="form-group">
+    <!-- artist search form -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Search Artist</h5>
+        <div class="form-group">
+          <input id="artistInput" class="form-control" placeholder="Enter artist name" formControlName="artistName">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- location search form -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Filter Location</h5>
+      <div class="form-group fourXone">
+        <input class="form-control" placeholder="Enter country" formControlName="country">
+        <input class="form-control" placeholder="Enter city" formControlName="city">
+        <input class="form-control" placeholder="Enter street" formControlName="street">
+        <input class="form-control" placeholder="Enter zip code" formControlName="zipCode">
+      </div>
+      <div class="form-group twoXone">
+        <input class="form-control" placeholder="Enter the name of the venue" formControlName="venueName">
+        <input class="form-control" placeholder="Enter the name of the event hall" formControlName="eventHall">
+      </div>
+    </div>
+  </div>
+
+  <!-- event search form -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Filter Events</h5>
+      <div class="form-group fourXone">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="tonight" id="btnradio1" autocomplete="off"
+                 (change)="setDate(true)">
+          <label class="btn btn-outline-primary" for="btnradio1">Today</label>
+
+          <input type="radio" class="btn-check" name="tonight" id="btnradio2" autocomplete="off"
+                 (change)="setDate(false)">
+          <label class="btn btn-outline-primary" for="btnradio2">Weekend</label>
+        </div>
+        <div class="input-group">
+          <app-date-time-picker placeholder="Select Start DateTime" 
+                                formControlName="startTime" [clear]="this.clearDate">
+          </app-date-time-picker>
+        </div>
+        <div class="input-group">
+          <app-date-time-picker placeholder="Select End DateTime"
+                                formControlName="endTime" [clear]="this.clearDate">
+          </app-date-time-picker>
+        </div>
+        <div class="input-group">
+          <select class="form-select" formControlName="category">
+            <option></option>
+            <option *ngFor="let option of categories|async">{{option}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 1%">
+        <input class="form-control" placeholder="Name of event" formControlName="nameOfEvent">
+      </div>
+    </div>
+    <button type="button" class="btn" (click)="resetSearchForm()" style="color: red">Reset Filter
+    </button>
+  </div>
+</form>

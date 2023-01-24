@@ -1,0 +1,69 @@
+<div>
+  <br>
+  <div>
+    <h2>Create Event</h2>
+  </div>
+  <br>
+</div>
+
+<form [formGroup]="createFormGroup">
+  <div class="form-group row">
+    <div class="col-sm">
+      <input id="eventName" class="form-control" placeholder="Enter name of event" formControlName="eventName">
+    </div>
+    <div class="col-sm">
+      <input id="eventCategory" class="form-control" placeholder="Enter category of event"
+             formControlName="eventCategory">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm">
+      <app-date-time-picker placeholder="Select start time of event"
+                            formControlName="startTime">
+      </app-date-time-picker>
+    </div>
+    <div class="col-sm">
+      <app-date-time-picker placeholder="Select end time of event"
+                            formControlName="endTime">
+      </app-date-time-picker>
+    </div>
+  </div>
+  <div>
+    <div class="mb-3">
+      <h1 class="display-6 d-inline mr-2">add performances</h1>
+      <button type="button" class="btn btn-secondary d-inline float-end" (click)="addPerformance()">
+        <i class="bi bi-plus"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="createFormGroup">
+      <ng-container formArrayName="performances">
+        <ngb-accordion *ngFor="let performanceFormGroup of performances.controls; let index = index">
+          <ngb-panel class="p-3">
+            <ng-template ngbPanelHeader>
+              <div class="d-flex justify-content-between">
+                <button ngbPanelToggle class="accordion-button d-flex justify-content-between">
+                  <span class="flex-grow-1">Performance #{{index}}</span>
+                  <button class="btn btn-outline-danger mr-4 float-end" (click)="removePerformance(index)"><i
+                    class="bi bi-trash"></i></button>
+                </button>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <app-event-performance-create
+                [performanceFormGroup]="performanceFormGroup"
+                [index]="index"></app-event-performance-create>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </ng-container>
+    </form>
+  </div>
+  <button type="button"
+          class="btn btn-primary float-end"
+          [disabled]="createFormGroup.invalid || createFormGroup.get('performances').value.size === 0"
+          (click)="createEvent()">
+    Create
+  </button>
+</form>
+
