@@ -1,16 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-import {Location} from '@angular/common';
-import {AuthRequest} from '../../dto/auth-request';
+import {AuthRequest} from '../../dtos/auth-request';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
   loginForm: UntypedFormGroup;
   // After first submission attempt, form validation will start
   submitted = false;
@@ -18,25 +19,12 @@ export class LoginComponent implements OnInit {
   error = false;
   errorMessage = '';
 
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private _location: Location) {
+  constructor(private formBuilder: UntypedFormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
-
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
-  }
-
-  ngOnInit() {}
 
   /**
    * Form validation will start after the method is called, additionally an AuthRequest will be sent
@@ -44,10 +32,7 @@ export class LoginComponent implements OnInit {
   loginUser() {
     this.submitted = true;
     if (this.loginForm.valid) {
-      const authRequest: AuthRequest = new AuthRequest(
-        this.loginForm.controls.email.value,
-        this.loginForm.controls.password.value
-      );
+      const authRequest: AuthRequest = new AuthRequest(this.loginForm.controls.username.value, this.loginForm.controls.password.value);
       this.authenticateUser(authRequest);
     } else {
       console.log('Invalid input');
@@ -59,29 +44,34 @@ export class LoginComponent implements OnInit {
    *
    * @param authRequest authentication data from the user login form
    */
-  private authenticateUser(authRequest: AuthRequest) {
+  authenticateUser(authRequest: AuthRequest) {
     console.log('Try to authenticate user: ' + authRequest.email);
     this.authService.loginUser(authRequest).subscribe({
       next: () => {
         console.log('Successfully logged in user: ' + authRequest.email);
-        this._location.back();
+        this.router.navigate(['/message']);
       },
-      error: (error) => {
+      error: error => {
         console.log('Could not log in due to:');
         console.log(error);
-        console.log(error.status);
         this.error = true;
-        let errorObject;
-        try {
-          errorObject = JSON.parse(error.error);
-        } catch (e) {}
-        if (errorObject && errorObject.error === 'Forbidden') {
-          this.errorMessage =
-            'Could not log in with these credentials. Please check email and password.';
+        if (typeof error.error === 'object') {
+          this.errorMessage = error.error.error;
         } else {
           this.errorMessage = error.error;
         }
-      },
+      }
     });
   }
+
+  /**
+   * Error flag will be deactivated, which clears the error message
+   */
+  vanishError() {
+    this.error = false;
+  }
+
+  ngOnInit() {
+  }
+
 }
