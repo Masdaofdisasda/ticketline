@@ -1,23 +1,28 @@
 <div class="form-group row" [formGroup]="form">
   <div class="col-sm-3">
-    <ng-select [multiple]="true" formControlName="artistsControl" [items]="artists |async" bindLabel="name">
+    <label for="artists">Artists</label>
+    <ng-select id="artists" [multiple]="true" formControlName="artistsControl" [items]="artists |async" bindLabel="name">
     </ng-select>
   </div>
   <div class="col-sm-2">
-    <ng-select formControlName="venueControl" [items]="venues | async" bindLabel="name">
+    <label for="venue">At Venue</label>
+    <ng-select id="venue" formControlName="venueControl" [items]="venues | async" bindLabel="name">
     </ng-select>
   </div>
   <div class="col-sm-2">
-    <ng-select formControlName="roomControl" [items]="form?.value.venueControl?.rooms" bindLabel="name" bindValue="id">
+    <label for="room">In Room</label>
+    <ng-select id="room" formControlName="roomControl" [items]="form?.value.venueControl?.rooms" bindLabel="name" bindValue="id">
     </ng-select>
   </div>
   <div class="col-sm-2">
-    <app-date-time-picker placeholder="start time"
+    <label for="startTime">Starting from</label>
+    <app-date-time-picker id="startTime" placeholder="start time"
                           formControlName="startDateControl">
     </app-date-time-picker>
   </div>
   <div class="col-sm-2">
-    <app-date-time-picker placeholder="end time" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
+    <label for="endTime">Until</label>
+    <app-date-time-picker id="endTime" placeholder="end time" inputDatetimeFormat="dd/MM/yyyy hh:mm a"
                           formControlName="endDateControl">
     </app-date-time-picker>
   </div>

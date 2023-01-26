@@ -1,17 +1,22 @@
-<div class="pt-5">
+<div>
+  <br>
+  <div class="d-flex justify-content-between">
+    <h2>Add User</h2>
+  </div>
+  <br>
+</div>
+
+<div>
   <div class="row">
     <div class="col-md-6 mx-auto">
       <span class="anchor" id="formCreateUser"></span>
-      <p class="text-center mb-5">
-        Create new user
-      </p>
       <div>
         <form class="form" [formGroup]="createUserForm" (ngSubmit)="createUser()">
           <div class="row">
             <div class="form-group col">
-              <label for="inputFirstName">First name *</label>
+              <label for="inputFirstName">First Name*</label>
               <input type="text" name="firstName" formControlName="firstName" class="form-control" id="inputFirstName"
-                aria-describedby="firstNameHelp" placeholder="First name">
+                     aria-describedby="firstNameHelp" placeholder="Enter First Name">
               <div *ngIf="submitted && createUserForm.controls.firstName.errors" class="error">
                 <small class="form-text text-warning" *ngIf="createUserForm.controls.firstName.errors.required">Your
                   first name
@@ -21,9 +26,9 @@
               </div>
             </div>
             <div class="form-group col">
-              <label for="inputLastName">Last name *</label>
+              <label for="inputLastName">Last Name*</label>
               <input type="text" name="lastName" formControlName="lastName" class="form-control" id="inputLastName"
-                aria-describedby="lastNameHelp" placeholder="Last name">
+                     aria-describedby="lastNameHelp" placeholder="Enter Last Name">
               <div *ngIf="submitted && createUserForm.controls.lastName.errors" class="error">
                 <small class="form-text text-warning" *ngIf="createUserForm.controls.lastName.errors.required">Your
                   last name
@@ -36,9 +41,9 @@
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <label for="inputEmail">Email address *</label>
+                <label for="inputEmail">Email Address*</label>
                 <input type="text" name="email" formControlName="email" class="form-control" id="inputEmail"
-                  aria-describedby="emailHelp" placeholder="Email address">
+                       aria-describedby="emailHelp" placeholder="Enter Email Address">
                 <div *ngIf="submitted && createUserForm.controls.email.errors" class="error">
                   <small class="form-text text-warning" *ngIf="createUserForm.controls.email.errors.required">Your
                     email
@@ -50,9 +55,9 @@
             </div>
             <div class="col">
               <div class="form-group">
-                <label for="password">Password *</label>
+                <label for="inputPassword">Password*</label>
                 <input type="password" name="password" formControlName="password" class="form-control"
-                  id="inputPassword" placeholder="Password">
+                       id="inputPassword" placeholder="Enter 8 Characters or more">
                 <div *ngIf="submitted && createUserForm.controls.password.errors" class="error">
                   <small class="form-text text-warning" *ngIf="createUserForm.controls.password.errors.required">Your
                     password
@@ -67,14 +72,22 @@
               </div>
             </div>
           </div>
-          <div class="form-check form-switch mr-4">
-            <input class="form-check-input" role="switch" type="checkbox" formControlName="isAdmin" id="isAdmin">
-            <label class="form-check-label" for="accountNonLocked">admin</label>
+          <div class="d-flex">
+            <div class="form-check form-switch mr-4">
+              <input class="form-check-input" role="switch" type="checkbox" formControlName="isAdmin" id="isAdmin">
+              <label class="form-check-label" for="isAdmin">Grant Admin Rights</label>
+            </div>
+            <span class="flex-grow-1"></span>
+            <div class="text-secondary">
+              * are required fields
+            </div>
           </div>
-          <div class="col d-flex justify-content-center my-5">
-            <button type="button" (click)="createUser()" class="btn btn-primary w-75" id="createButton"
-                    [disabled]="!this.createUserForm.valid">create
-            </button>
+          <div class="col d-flex justify-content-end mt-3">
+            <div>
+              <button type="button" (click)="createUser()" class="btn btn-primary" id="createButton"
+                      [disabled]="!this.createUserForm.valid">Add User
+              </button>
+            </div>
           </div>
         </form>
       </div>

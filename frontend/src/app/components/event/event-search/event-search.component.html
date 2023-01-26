@@ -1,69 +1,91 @@
-<form [formGroup]="searchFormGroup">
-  <div class="form-group">
-    <!-- artist search form -->
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search Artist</h5>
-        <div class="form-group">
-          <input id="artistInput" class="form-control" placeholder="Enter artist name" formControlName="artistName">
+<form [formGroup]="searchFormGroup" xmlns="http://www.w3.org/1999/html">
+
+
+  <div>
+    <div class="form-group d-flex justify-content-start">
+      <div class="w-25 me-3">
+        <label for="artistInput">Artist Name</label>
+        <input id="artistInput" class="form-control" placeholder="Enter Artist Name" formControlName="artistName">
+      </div>
+      <div class="w-25 me-3">
+        <label for="nameOfEvent">Event Name</label>
+        <input id="nameOfEvent" class="form-control" placeholder="Enter Event Name" formControlName="nameOfEvent">
+      </div>
+      <div class="me-3 d-flex align-items-end">
+        <div id="filterGroup" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <button type="button" name="tonight" id="btnradio1" class="btn btn-outline-primary" (click)="setDate(true)">
+            Today
+          </button>
+          <button type="button" name="tonight" id="btnradio2" class="btn btn-outline-primary" (click)="setDate(false)">
+            Weekend
+          </button>
+        </div>
+      </div>
+      <span class="flex-grow-1"></span>
+      <div class="d-flex align-items-end">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#advanced">
+            Advanced Search
+          </button>
+          <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#filter">
+            Filters
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="resetSearchForm()">Reset</button>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- location search form -->
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Filter Location</h5>
-      <div class="form-group fourXone">
-        <input class="form-control" placeholder="Enter country" formControlName="country">
-        <input class="form-control" placeholder="Enter city" formControlName="city">
-        <input class="form-control" placeholder="Enter street" formControlName="street">
-        <input class="form-control" placeholder="Enter zip code" formControlName="zipCode">
+    <div id="advanced" class="collapse">
+      <div class="collapse form-group d-flex justify-content-between">
+        <div class="w-25 me-3">
+          <label for="country">Country</label>
+          <input id="country" class="form-control" placeholder="Enter Country" formControlName="country">
+        </div>
+        <div class="w-25 me-3">
+          <label for="city">City</label>
+          <input id="city" class="form-control" placeholder="Enter City" formControlName="city">
+        </div>
+        <div class="w-25 me-3">
+          <label for="street">Street</label>
+          <input id="street" class="form-control" placeholder="Enter Street" formControlName="street">
+        </div>
+        <div class="w-25">
+          <label for="zipCode">Zip Code</label>
+          <input id="zipCode" class="form-control" placeholder="Enter Zip Code" formControlName="zipCode">
+        </div>
       </div>
-      <div class="form-group twoXone">
-        <input class="form-control" placeholder="Enter the name of the venue" formControlName="venueName">
-        <input class="form-control" placeholder="Enter the name of the event hall" formControlName="eventHall">
+      <div class="form-group d-flex justify-content-between">
+        <div class="w-50 me-3">
+          <label for="venueName">Venue</label>
+          <input id="venueName" class="form-control" placeholder="Enter Venue" formControlName="venueName">
+        </div>
+        <div class="w-50 me-3">
+          <label for="venueName">Event Hall</label>
+          <input class="form-control" placeholder="Enter Event Hall" formControlName="eventHall">
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- event search form -->
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Filter Events</h5>
-      <div class="form-group fourXone">
-        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="tonight" id="btnradio1" autocomplete="off"
-                 (change)="setDate(true)">
-          <label class="btn btn-outline-primary" for="btnradio1">Today</label>
-
-          <input type="radio" class="btn-check" name="tonight" id="btnradio2" autocomplete="off"
-                 (change)="setDate(false)">
-          <label class="btn btn-outline-primary" for="btnradio2">Weekend</label>
-        </div>
-        <div class="input-group">
-          <app-date-time-picker placeholder="Select Start DateTime" 
+    <div id="filter" class="collapse">
+      <div class=" form-group d-flex justify-content-start">
+        <div class="me-3">
+          <label for="startTime">From</label>
+          <app-date-time-picker id="startTime" placeholder="Select Start DateTime"
                                 formControlName="startTime" [clear]="this.clearDate">
           </app-date-time-picker>
         </div>
-        <div class="input-group">
-          <app-date-time-picker placeholder="Select End DateTime"
+        <div class="me-3">
+          <label for="endTime">Until</label>
+          <app-date-time-picker id="endTime" placeholder="Select End DateTime"
                                 formControlName="endTime" [clear]="this.clearDate">
           </app-date-time-picker>
         </div>
-        <div class="input-group">
-          <select class="form-select" formControlName="category">
+        <div class="me-3">
+          <label for="category">Genre/Category</label>
+          <select id="category" class="form-select" formControlName="category">
             <option></option>
             <option *ngFor="let option of categories|async">{{option}}</option>
           </select>
         </div>
       </div>
-      <div class="form-group" style="margin-top: 1%">
-        <input class="form-control" placeholder="Name of event" formControlName="nameOfEvent">
-      </div>
     </div>
-    <button type="button" class="btn" (click)="resetSearchForm()" style="color: red">Reset Filter
-    </button>
   </div>
 </form>
