@@ -41,7 +41,10 @@ export class EventCreateComponent implements OnInit {
   createEvent() {
     const dto = this.getEventDtoFromFormGroup();
     this.eventService.create(dto).subscribe(
-      () => this.router.navigate(['/event'])
+      () => {
+        this.notification.success( 'Event \'' + dto.name + '\' was created');
+        this.router.navigate(['/event']);
+      }
     );
   }
 

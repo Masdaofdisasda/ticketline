@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand mx-4" href="">TICKETLINE</a>
+
+    <!--Navbar-->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -8,26 +10,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/order/cart" routerLinkActive="active">Cart</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/news"
             routerLinkActive="active">News</a>
-        </li>
-        <li class="nav-item dropdown" *ngIf="authService.isLoggedIn() && authService.isAdmin()">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Admin
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" routerLink="/admin/users" routerLinkActive="active">All
-                Users</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/admin/venue" routerLinkActive="active">
-                Venue</a>
-            </li>
-          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/event" routerLinkActive="active">Events</a>
@@ -38,12 +22,42 @@
       </ul>
 
       <div class="navbar-nav">
-        <div class="d-flex">
-          <a *ngIf="!authService.isLoggedIn()" class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+
+        <!--Cart-->
+        <button *ngIf="!authService.isAdmin()" type="button" class="btn btn-secondary px-4 mx-2" routerLink="/order/cart" routerLinkActive="active">
+          <i class="bi bi-cart me-2"></i>Cart
+        </button>
+
+        <!--Admin-->
+        <div *ngIf="authService.isAdmin() && authService.isLoggedIn()" class="btn-group" role="group">
+          <button id="btnGroupDrop3" type="button" class="btn btn-secondary px-4 mx-2 dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bi bi-person-gear me-2"></i>Admin
+          </button>
+          <div class="dropdown-menu" aria-labelledby="btnGroupDrop3">
+            <a class="dropdown-item" routerLink="/admin/users" routerLinkActive="active">
+              <i class="bi bi-people-fill me-2"></i>Users</a>
+            <a class="dropdown-item" routerLink="/admin/venue" routerLinkActive="active">
+              <i class="bi bi-building me-2"></i>Venues</a>
+          </div>
         </div>
-        <a *ngIf="!authService.isLoggedIn()" class="nav-link nav-btn btn btn-primary" routerLink="/registration"
-          routerLinkActive="active">Sign
-          Up</a>
+
+
+        <!--Login-->
+        <div *ngIf="!authService.isLoggedIn()" class="btn-group" role="group">
+          <button id="btnGroupDrop2" type="button" class="btn btn-primary px-4 mx-2 dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          </button>
+          <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+            <a class="dropdown-item" routerLink="/login" routerLinkActive="active">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+            <a class="dropdown-item" routerLink="/registration" routerLinkActive="active">
+              <i class="bi bi-pencil-square me-2"></i>Sign Up</a>
+          </div>
+        </div>
+
+        <!--Account-->
         <div *ngIf="authService.isLoggedIn()" class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-primary px-4 mx-2 dropdown-toggle"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,7 +68,7 @@
               <i class="bi bi-gear me-2"></i>
               Settings
             </a>
-            <a class="dropdown-item" [routerLink]="['user/bookings']">
+            <a *ngIf="!authService.isAdmin()" class="dropdown-item" [routerLink]="['user/bookings']">
               <i class="bi bi-list-ul me-2"></i>
               My Bookings
             </a>

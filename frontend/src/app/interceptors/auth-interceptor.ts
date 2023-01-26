@@ -36,7 +36,6 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(this.authService.getToken() ? authReq : req).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse && event.status === 201) {
-          this.toastr.success('Object created.');
         }
       }),
       catchError((error: any) => {

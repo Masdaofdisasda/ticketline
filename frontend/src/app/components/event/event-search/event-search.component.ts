@@ -63,6 +63,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
     this.listenToFormGroupChange();
   }
 
+
   setDate(tonight: boolean): void {
     const today = new Date();
     if (tonight) {

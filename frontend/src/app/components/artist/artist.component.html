@@ -1,24 +1,28 @@
 <div>
   <br>
-  <div class="fourXone">
+  <div class="d-flex justify-content-between">
     <h2>Artists</h2>
-    <span style="width: 80%"></span>
-    <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">Create Artist</button>
+    <span>
+    <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">
+      <i class="bi bi-plus-circle me-2"></i>Add Artist</button>
+    </span>
   </div>
   <br>
 </div>
 
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">Name</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let artist of artists">
-    <th scope="row">{{ artist.id }}</th>
-    <td>{{ artist.name }}</td>
-  </tr>
-  </tbody>
-</table>
+<div class="d-flex justify-content-center">
+  <table class="table table-light w-50">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let artist of artists">
+      <th scope="row">{{ artist.id }}</th>
+      <td>{{ artist.name }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

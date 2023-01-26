@@ -1,15 +1,17 @@
 <div>
   <br>
-  <div class="fourXone">
+  <div class="d-flex justify-content-between">
     <h2>Events</h2>
-    <span style="width: 80%"></span>
-    <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">Create Event</button>
+    <span>
+    <button type="button" class="btn btn-primary mr-1" routerLink="create" *ngIf="auth.isAdmin()">
+      <i class="bi bi-plus-circle me-2"></i>Add Event</button>
+    </span>
   </div>
   <br>
 </div>
 
 <ngb-accordion #ac1="ngbAccordion" activeIds="ngb-panel-0">
-  <ngb-panel title="Search for Events">
+  <ngb-panel title="Find Events">
     <ng-template ngbPanelContent>
       <app-event-search (searchRequest)="search($event)"></app-event-search>
       <app-event-search-result [pagedEvents]="this.pagedEventDtos | async"
@@ -19,7 +21,7 @@
 </ngb-accordion>
 <br>
 <ngb-accordion #ac2="ngbAccordion">
-  <ngb-panel title="Top of the month">
+  <ngb-panel title="Popular Events">
     <ng-template ngbPanelContent>
       <app-event-search-result [pagedEvents]="this.eventsTopOfTheMonth | async"
                                (pageChangedEvent)="sendPagedTopOfTheMonthEventRequest($event)"></app-event-search-result>

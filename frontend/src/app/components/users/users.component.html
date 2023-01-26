@@ -1,59 +1,70 @@
 <div>
+  <br>
   <div class="d-flex justify-content-between">
-    <h2 class="my-2">Users</h2>
-    <button class="btn btn-secondary my-2" (click)="getUsers()">refresh</button>
+    <h2>Users</h2>
+    <span>
+      <button class="btn btn-secondary me-2" (click)="getUsers()">
+        <i class="bi bi-arrow-clockwise me-2"></i>Refresh</button>
+      <button class="btn btn-primary" (click)="create()">
+        <i class="bi bi-plus-circle me-2"></i>Add User</button>
+    </span>
   </div>
+  <br>
+</div>
 
+<div>
   <div class="input-group mb-3 d-flex align-middle">
-    <span class="input-group-text" id="filter">filter</span>
     <input type="text" class="form-control" id="filterUserInput"
-      placeholder="enter name or email to filter the displayed users" aria-label="filter" aria-describedby="filter"
-      [(ngModel)]="filterTerm" (keyup)="filterUsers()">
+           placeholder="Search Users" aria-label="filter" aria-describedby="filter"
+           [(ngModel)]="filterTerm" (keyup)="filterUsers()">
     <form [formGroup]="lockedForm" class="d-flex align-items-center">
       <div class="form-check mx-2">
         <input class="form-check-input" type="radio" formControlName="locked" id="radioLocked" value="locked">
         <label class="form-check-label" for="radioLocked">
-          locked
+          Locked
         </label>
       </div>
       <div class="form-check mx-2">
         <input class="form-check-input" type="radio" formControlName="locked" id="radioUnlocked" value="unlocked">
         <label class="form-check-label" for="radioUnlocked">
-          unlocked
+          Unlocked
         </label>
       </div>
       <div class="form-check mx-2">
         <input class="form-check-input" type="radio" formControlName="locked" id="radioAll" value="all">
         <label class="form-check-label" for="radioAll">
-          all
+          All
         </label>
       </div>
     </form>
   </div>
   <div class="list-group w-auto" *ngFor="let user of filteredUsers">
-    <div href="#" class="list-group-item d-flex gap-3 py-3" aria-current="true">
+    <div href="#" [class]="user.accountNonLocked ? 'list-group-item d-flex gap-3 py-3' : 'list-group-item d-flex gap-3 py-3 bg-warning bg-opacity-10'" aria-current="true">
       <div class="d-flex w-100 justify-content-between users">
         <div>
-          <h6 class="mb-0">{{user.email}}</h6>
-          <div class="name">
+          <div class="name fw-bold">
             {{user.firstName}} {{user.lastName}}
+            <span *ngIf="!user.accountNonLocked" class="badge bg-warning text-dark"><i class="bi bi-lock me-2"></i>Locked</span>
+            <span *ngIf="user.accountNonLocked" class="badge bg-success"><i class="bi bi-unlock me-2"></i>Unlocked</span>
           </div>
+          <div>{{user.email}}</div>
         </div>
         <div class="d-flex align-items-center">
-          <div class="form-check form-switch mr-4">
-            <input class="form-check-input" role="switch" type="checkbox" id="accountNonLocked"
-              [ngModel]="user.accountNonLocked" (click)="changeLocked(user)" [disabled]="isLoggedInUser(user)">
-            <label class="form-check-label" for="accountNonLocked">unlocked</label>
+          <div class="me-2 align-items-end">
+            <label *ngIf="!user.accountNonLocked" class="btn btn-warning" for="btn-lock{{user.id}}">
+              Unlock Account</label>
+            <label *ngIf="user.accountNonLocked" class="btn btn-outline-primary" for="btn-lock{{user.id}}">
+              Lock Account</label>
+
+            <input type="checkbox" class="btn-check" id="btn-lock{{user.id}}" autocomplete="off" [checked]="user.accountNonLocked"
+                   [disabled]="isLoggedInUser(user)" (click)="changeLocked(user)" data-toggle="toggle" >
+
           </div>
-          <button type="button" class="btn btn-secondary resetPasswordButton" (click)="resetPassword(user)">Reset
-            Password</button>
+          <button type="button" class="btn btn-outline-danger resetPasswordButton" (click)="resetPassword(user)">Reset
+            Password
+          </button>
         </div>
-        <!-- <small class="opacity-50 text-nowrap">now</small> -->
       </div>
     </div>
   </div>
-  <div>
-    <div>
-      <button type="button" class="btn btn-primary mt-4" (click)="create()">Create</button>
-    </div>
-  </div>
+</div>

@@ -26,7 +26,10 @@ export class VenueAdminComponent implements OnInit {
     this.deleteDialog.open('Venue', venue.name)
       .then((confirmed) => {
         if (confirmed) {
-          this.service.deleteVenue(venue.id).subscribe((data) => this.queryVenues());
+          this.service.deleteVenue(venue.id).subscribe(() => {
+            this.notification.success('\'' + venue.name + '\' was removed');
+            this.queryVenues();
+          });
         }
       });
   }
