@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
 import {map, Observable, toArray} from 'rxjs';
@@ -13,11 +13,10 @@ import {ToastrService} from 'ngx-toastr';
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss']
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, AfterViewInit {
 
   @Input()
   checkoutMode = false;
-
 
   @Output()
   hoverStart = new EventEmitter<Ticket>();
@@ -37,6 +36,12 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
+      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
+        ...arr.filter(t => t.performanceId !== this.performanceId)])));
+  }
+
+  ngAfterViewInit(): void {
     this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
       map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
         ...arr.filter(t => t.performanceId !== this.performanceId)])));
@@ -101,11 +106,10 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onHoverStart(ticket: Ticket): void {
-      this.hoverStart.emit(ticket);
+    this.hoverStart.emit(ticket);
   }
 
   onHoverEnd(ticket: Ticket): void {
-    console.log(ticket);
-      this.hoverEnd.emit(ticket);
+    this.hoverEnd.emit(ticket);
   }
 }
