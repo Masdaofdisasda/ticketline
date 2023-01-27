@@ -46,7 +46,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   private get selectionOutlineStrength() {
-    return this.roomPlan.height * this.roomPlan.height * .0005;
+    return this.roomPlan.room.rowSize * this.roomPlan.room.columnSize * 0.01;
   }
 
   ngOnInit(): void {
@@ -60,6 +60,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
         next: data => {
           this.performance = data;
           this.spinner.hide('room-plan-spinner');
+          setTimeout(() => this.highlightInCart(this.shoppingCartService.getItems()), 10);
         },
         error: err => console.error(err)
       });
@@ -69,11 +70,20 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.shoppingCart.tickets$.subscribe((tickets) => {
-      this.resetSelected();
-      tickets.forEach(ticket => {
+      if (this.performance) {
+        this.highlightInCart(tickets);
+      }
+    });
+  }
+
+
+  highlightInCart(tickets: Ticket[]): void {
+    this.resetSelected();
+    tickets.forEach(ticket => {
+      if (ticket.performanceId === this.performanceId) {
         this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, 110),
-          this.selectionOutlineStrength, ticket.column, ticket.row);
-      });
+          ticket.column, ticket.row);
+      }
     });
   }
 
@@ -93,7 +103,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   shoppingCardHoverEnd(ticket: Ticket) {
-    this.roomPlan.setColor(this.getSectorOfSeat(ticket.seat).priceCategory.color, ticket.column, ticket.row);
+    this.roomPlan.setColor(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, ticket.column, ticket.row);
   }
 
   private getSectorOfSeat(seat: Seat): Sector {
@@ -140,6 +150,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
       return;
     }
     this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color, 110) + 'aa',
-      this.selectionOutlineStrength, seat.colNumber, seat.rowNumber);
+      seat.colNumber, seat.rowNumber);
   }
 }
