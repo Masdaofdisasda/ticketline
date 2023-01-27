@@ -13,6 +13,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<ApplicationUser, Long> {
   public ApplicationUser findUserByEmail(String email);
 
+  @Query("SELECT u from ApplicationUser u LEFT JOIN FETCH u.news WHERE u.id = ?1")
   public ApplicationUser findUserById(Long id);
 
   @Query("UPDATE ApplicationUser u SET u.failedAttempt = ?1 WHERE u.email = ?2")

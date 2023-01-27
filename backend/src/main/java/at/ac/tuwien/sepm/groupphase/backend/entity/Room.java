@@ -2,49 +2,58 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.validator.constraints.Range;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Entity
+@Table(name = "ROOM")
 public class Room {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID", nullable = false)
   private Long id;
-  private String name;
-  @Range(min = 0, max = 1024)
+
+  @Column(name = "COLUMN_SIZE")
   private Integer columnSize;
-  @Range(min = 0, max = 1024)
+
+  @Size(max = 255)
+  @Column(name = "NAME")
+  private String name;
+
+  @Column(name = "ROW_SIZE")
   private Integer rowSize;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "room", fetch = FetchType.EAGER)
-  @Fetch(FetchMode.SUBSELECT)
-  @Builder.Default
-  @NotNull
-  private List<Sector> sectors = new ArrayList<>();
-
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "VENUE_ID")
   private Venue venue;
 
   @OneToMany(mappedBy = "room")
-  @Builder.Default
-  private List<Performance> performances = new ArrayList<>();
+  private Set<Performance> performances = new LinkedHashSet<>();
+
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+  private Set<Sector> sectors = new LinkedHashSet<>();
+
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+  private Set<SeatingPlan> seatingPlans = new LinkedHashSet<>();
 }

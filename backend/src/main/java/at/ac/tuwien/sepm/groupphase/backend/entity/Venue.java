@@ -2,53 +2,63 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder(toBuilder = true)
 @Entity
+@Table(name = "VENUE")
 public class Venue {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID", nullable = false)
   private Long id;
 
-  @Size(min = 1, max = 255)
-  private String name;
-
-  @Size(min = 1, max = 255)
-  private String street;
-
-  @Size(min = 1, max = 255)
-  private String houseNumber;
-
-  @Size(min = 1, max = 255)
+  @Size(max = 255)
+  @Column(name = "CITY")
   private String city;
 
-  @Size(min = 1, max = 255)
+  @Size(max = 255)
+  @Column(name = "COUNTRY")
   private String country;
 
-  @Size(min = 1, max = 255)
+  @Size(max = 255)
+  @Column(name = "HOUSE_NUMBER")
+  private String houseNumber;
+
+  @Size(max = 255)
+  @Column(name = "NAME")
+  private String name;
+
+  @Size(max = 255)
+  @Column(name = "STREET")
+  private String street;
+
+  @Size(max = 255)
+  @Column(name = "ZIP_CODE")
   private String zipCode;
 
   @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
-  @Fetch(FetchMode.JOIN)
-  @Builder.Default
-  private List<Room> rooms = new ArrayList<>();
+  private Set<Room> rooms = new LinkedHashSet<>();
 
+  public void addRoom(Room room) {
+    rooms.add(room);
+  }
 }

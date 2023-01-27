@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Room, Venue} from 'src/app/dto/venue';
@@ -13,14 +13,14 @@ import {cloneDeep, isEqual, unset} from 'lodash';
   styleUrls: ['./create-venue.component.scss']
 })
 export class CreateVenueComponent implements OnInit, AfterViewInit {
-  @Input()
-  venue = new Venue();
 
   @ViewChild('createVenueForm')
   createVenueForm: NgForm;
 
   @ViewChild('addRoomForm')
   addRoomForm: NgForm;
+
+  venue = new Venue();
 
   roomToAdd = new Room();
 

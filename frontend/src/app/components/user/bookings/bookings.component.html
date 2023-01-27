@@ -1,3 +1,4 @@
+<div style="height: 3rem"></div>
 <div>
   <br>
   <div>
@@ -13,10 +14,10 @@
       <th scope="col">#</th>
       <th scope="col">Booked on</th>
       <th scope="col">Booking Status</th>
-    <th scope="col">Total</th>
-    <th scope="col">Actions</th>
-    <th scope="col">Documents</th>
-  </tr>
+      <th scope="col">Total</th>
+      <th scope="col">Actions</th>
+      <th scope="col">Documents</th>
+    </tr>
     </thead>
     <tbody>
     <tr *ngFor="let booking of bookings">
@@ -24,86 +25,86 @@
       <td>{{ booking.bookedOn | date:'short'}}</td>
       <td class="align-middle">
         <span *ngIf="booking.type==='RESERVATION'" class="badge badge-pill bg-primary">reserved</span>
-      <span *ngIf="booking.type==='PURCHASE'" class="badge badge-pill bg-success">purchased</span>
-      <span *ngIf="booking.type==='CANCELLATION'" class="badge badge-pill bg-secondary">canceled</span>
-    </td>
-    <td>{{ booking.orderTotal }} €</td>
-    <td>
-      <div class="btn-group btn-group-sm" role="group">
-        <button type="button" [class]="booking.type==='RESERVATION' ? 'btn btn-outline-primary btn-sm' : 'btn btn-outline-secondary btn-sm'" [disabled]="booking.type!=='RESERVATION'"
-                (click)="purchaseReservation(booking.id)"
-        >
-          <i class="bi bi-wallet2 me-2"></i>Purchase
-        </button>
-        <button *ngIf="booking.type!=='RESERVATION'" type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#'+'cancel-btn'+booking.id"
-                [class]="booking.type!=='CANCELLATION' ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-secondary btn-sm'"
-                [disabled]="booking.type==='CANCELLATION'">
-          <i class="bi bi-x-lg me-2"></i>Cancel
-        </button>
-        <button *ngIf="booking.type==='RESERVATION'" type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#'+'revoke-btn'+booking.id"
-                [class]="booking.type!=='CANCELLATION' ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-secondary btn-sm'" [disabled]="booking.type==='CANCELLATION'">
-          <i class="bi bi-x-lg me-2"></i>Revoke
-        </button>
-      </div>
-    </td>
-    <td>
-      <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-outline-secondary btn-sm"
-                [disabled]="booking.type!=='PURCHASE'" (click)="downloadReceipt(booking.id)">
-          <i class="bi bi-receipt me-2"></i>Receipt
-        </button>
-        <button type="button" [routerLink]="['seats']" class="btn btn-outline-secondary btn-sm"
-                [disabled]="booking.type!=='CANCELLATION'" (click)="downloadCancellation(booking.id)">
-          <i class="bi bi-receipt-cutoff me-2" ></i>Cancellation
-        </button>
-        <button type="button" [routerLink]="['seats']" class="btn btn-outline-secondary btn-sm"
-                [disabled]="booking.type!=='PURCHASE'" (click)="downloadTicket(booking.id)">
-          <i class="bi bi-qr-code me-2" ></i>Tickets
-        </button>
-      </div>
-    </td>
+        <span *ngIf="booking.type==='PURCHASE'" class="badge badge-pill bg-success">purchased</span>
+        <span *ngIf="booking.type==='CANCELLATION'" class="badge badge-pill bg-secondary">canceled</span>
+      </td>
+      <td>{{ booking.orderTotal }} €</td>
+      <td>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" [class]="booking.type==='RESERVATION' ? 'btn btn-outline-primary btn-sm' : 'btn btn-outline-secondary btn-sm'" [disabled]="booking.type!=='RESERVATION'"
+                  (click)="purchaseReservation(booking.id)"
+          >
+            <i class="bi bi-wallet2 me-2"></i>Purchase
+          </button>
+          <button *ngIf="booking.type!=='RESERVATION'" type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#'+'cancel-btn'+booking.id"
+                  [class]="booking.type!=='CANCELLATION' ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-secondary btn-sm'"
+                  [disabled]="booking.type==='CANCELLATION'">
+            <i class="bi bi-x-lg me-2"></i>Cancel
+          </button>
+          <button *ngIf="booking.type==='RESERVATION'" type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#'+'revoke-btn'+booking.id"
+                  [class]="booking.type!=='CANCELLATION' ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-secondary btn-sm'" [disabled]="booking.type==='CANCELLATION'">
+            <i class="bi bi-x-lg me-2"></i>Revoke
+          </button>
+        </div>
+      </td>
+      <td>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+                  [disabled]="booking.type!=='PURCHASE'" (click)="downloadReceipt(booking.id)">
+            <i class="bi bi-receipt me-2"></i>Receipt
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+                  [disabled]="booking.type!=='CANCELLATION'" (click)="downloadCancellation(booking.id)">
+            <i class="bi bi-receipt-cutoff me-2"></i>Cancellation
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+                  [disabled]="booking.type!=='PURCHASE'" (click)="downloadTicket(booking.id)">
+            <i class="bi bi-qr-code me-2"></i>Tickets
+          </button>
+        </div>
+      </td>
 
-    <div class="modal fade" [id]="'cancel-btn'+booking.id" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cancel Purchase</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to cancel your purchase? Your tickets will be invalidated and we will refund you your money.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="button" (click)="cancelBooking(booking.id)" data-bs-dismiss="modal" class="btn btn-danger">
-              Yes
-            </button>
+      <div class="modal fade" [id]="'cancel-btn'+booking.id" tabindex="-1" aria-labelledby="exampleModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Cancel Purchase</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to cancel your purchase? Your tickets will be invalidated and we will refund you your money.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              <button type="button" (click)="cancelBooking(booking.id)" data-bs-dismiss="modal" class="btn btn-danger">
+                Yes
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="modal fade" [id]="'revoke-btn'+booking.id" tabindex="-1" aria-labelledby="revokeModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="revokeModalLabel">Revoke Reservation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to revoke your reservation? Others will be able to purchase your tickets.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="button" (click)="cancelBooking(booking.id)" data-bs-dismiss="modal" class="btn btn-danger">
-              Yes
-            </button>
+      <div class="modal fade" [id]="'revoke-btn'+booking.id" tabindex="-1" aria-labelledby="revokeModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="revokeModalLabel">Revoke Reservation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to revoke your reservation? Others will be able to purchase your tickets.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              <button type="button" (click)="cancelBooking(booking.id)" data-bs-dismiss="modal" class="btn btn-danger">
+                Yes
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
     </tr>
     </tbody>

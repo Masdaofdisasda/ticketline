@@ -109,7 +109,7 @@ public class EventEndpoint {
   public EventDtoSimple getById(@PathVariable long id) {
     LOGGER.info("GET /api/v1/events/" + id);
     Event event = eventService.getById(id);
-    return eventMapper.eventSimpleEventDto(this.eventService.getById(id));
+    return eventMapper.eventSimpleEventDto(event);
   }
 
   private <T> PageDtoResponse<T> buildResponseDto(int pageIndex, int pageSize, long hits, int pagesTotal, List<T> data) {

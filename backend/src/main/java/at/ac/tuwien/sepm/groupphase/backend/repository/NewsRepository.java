@@ -5,7 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
@@ -37,9 +40,12 @@ public interface NewsRepository extends JpaRepository<News, Long> {
    * @param pageable holds page information like index and pagesize
    * @return page with unread news
    */
-  @Query("SELECT me FROM News me"
+  @Query("SELECT n FROM News n"
     + " WHERE NOT EXISTS ("
-    + " SELECT b from me.seenBy b where b.id = ?1)"
-    + " ORDER BY me.publishedAt desc")
+    + " SELECT b from n.hasSeen b where b.id = ?1)"
+    + " ORDER BY n.publishedAt desc")
   Page<News> findAllUnreadPagable(Long userId, Pageable pageable);
+
+  @Query("SELECT n FROM News n LEFT JOIN FETCH n.hasSeen WHERE n.id = :id")
+  Optional<News> findNewsById(@Param("id") Long id);
 }

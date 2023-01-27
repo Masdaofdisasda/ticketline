@@ -35,6 +35,13 @@ export class Seat {
   rowName?: string;
   colName?: string;
   state: SeatState;
+
+  color?: string;
+  pricing?: number;
+}
+
+export class SeatWithTicket {
+
 }
 
 export const enum SeatState {

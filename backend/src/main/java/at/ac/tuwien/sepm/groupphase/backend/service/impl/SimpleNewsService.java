@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 
 @Service
 public class SimpleNewsService implements NewsService {
@@ -43,19 +42,17 @@ public class SimpleNewsService implements NewsService {
   @Override
   public News findOne(Long id) {
     LOGGER.debug("Find news entry with id {}", id);
-    Optional<News> message = newsRepository.findById(id);
-    if (message.isPresent()) {
-      return message.get();
-    } else {
-      throw new NotFoundException(String.format("Could not find news entry with id %s", id));
-    }
+    return newsRepository.findNewsById(id).orElseThrow(() ->
+      new NotFoundException(String.format("Could not find news entry with id %s", id)));
+
   }
 
   @Override
   public void markAsSeen(Long userId, News news) {
     ApplicationUser user = userRepository.findUserById(userId);
-    if (!news.getSeenBy().contains(user)) {
-      news.getSeenBy().add(user);
+    if (!news.getHasSeen().contains(user)) {
+      user.addHasSeen(news);
+      news.add(user);
       newsRepository.save(news);
     }
   }

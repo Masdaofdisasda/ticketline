@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BookingService} from '../../../services/booking.service';
 import {BookingItem} from '../../../dto/bookingItem';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-bookings',
@@ -27,11 +28,8 @@ export class BookingsComponent implements OnInit {
 
   cancelBooking(bookingId: number): void {
     this.bookingService.cancelBooking(bookingId)
-      .subscribe({
-        next: () => {
-          this.ngOnInit();
-        }
-      });
+      .pipe(tap(data => console.log(data)))
+      .subscribe(() => this.ngOnInit());
   }
 
   purchaseReservation(bookingId: number): void {

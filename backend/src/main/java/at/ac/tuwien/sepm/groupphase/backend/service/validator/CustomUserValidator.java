@@ -179,7 +179,7 @@ public class CustomUserValidator {
 
     } else if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
       ApplicationUser user = userRepository.findUserById(userId);
-      if (Boolean.TRUE.equals(user.getAdmin())) {
+      if (user.isAdmin()) {
         throw new ValidationException("Cannot delete admin users.", List.of("Cannot delete admin users."));
       }
     }

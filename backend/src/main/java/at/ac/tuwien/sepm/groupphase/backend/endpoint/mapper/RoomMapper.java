@@ -7,11 +7,12 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(uses = {SectorMapper.class})
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {SectorMapper.class})
 public abstract class RoomMapper {
 
   @Autowired

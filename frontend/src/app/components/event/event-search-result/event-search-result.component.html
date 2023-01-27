@@ -16,13 +16,14 @@
     <td>{{ event.artistName }}</td>
     <td>{{ event.name }}</td>
     <td>{{ event.category }}</td>
-    <td>{{ event.startDate | date:'short' }}</td>
-    <td>{{ event.endDate | date:'short' }}</td>
+    <td>{{ event.startDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+    <td>{{ event.endDate | date:'dd/MM/yyyy hh:mm a' }}</td>
     <td>{{ event.venueName }}</td>
     <td>{{ event.eventHallName }}</td>
     <td>
       <button type="button" class="btn btn-primary" (click)="getTicketsClicked(event)">
-        <i class="bi bi-ticket-perforated-fill me-2" ></i>Get tickets</button>
+        <i class="bi bi-ticket-perforated-fill me-2"></i>Get tickets
+      </button>
     </td>
   </tr>
   </tbody>
@@ -38,8 +39,8 @@
 
   <select class="form-select" style="width: auto" [(ngModel)]="this.pagedEventsDefault.pageSize"
           (ngModelChange)="refreshEvents()">
-    <option [ngValue]="5">5 Items</option>
-    <option [ngValue]="10">10 Items</option>
-    <option [ngValue]="20">20 Items</option>
+    <option [ngValue]="25">25 Items</option>
+    <option [ngValue]="50">50 Items</option>
+    <option [ngValue]="100">100 Items</option>
   </select>
 </div>

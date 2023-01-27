@@ -46,7 +46,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   private get selectionOutlineStrength() {
-    return this.roomPlan.height * .1;
+    return this.roomPlan.height * this.roomPlan.height * .0005;
   }
 
   ngOnInit(): void {
@@ -70,8 +70,10 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.shoppingCart.tickets$.subscribe((tickets) => {
       this.resetSelected();
-      tickets.forEach(ticket =>
-        this.roomPlan.setOutline(this.selectionOutlineColor, this.selectionOutlineStrength, ticket.column, ticket.row));
+      tickets.forEach(ticket => {
+        this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, 110),
+          this.selectionOutlineStrength, ticket.column, ticket.row);
+      });
     });
   }
 
@@ -103,7 +105,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     return null;
   }
 
-  private addSeatToCart(seat: Seat) {
+  private async addSeatToCart(seat: Seat) {
     const sector = this.getSectorOfSeat(seat);
 
     this.shoppingCartService.addToCart({
@@ -133,11 +135,11 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private selectSeat(seat: Seat) {
+  private async selectSeat(seat: Seat) {
     if (!(seat.state === SeatState.free || seat.state === SeatState.unset)) {
       return;
     }
-    this.roomPlan.setOutline(this.colors.offsetHue(this.getSectorOfSeat(seat).priceCategory.color, 110) + 'aa',
+    this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color, 110) + 'aa',
       this.selectionOutlineStrength, seat.colNumber, seat.rowNumber);
   }
 }

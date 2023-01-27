@@ -27,7 +27,7 @@
 <div class="mt-4 container">
   <div class="row m-xl-4 m-lg-3">
 
-    <div class="p-2" *ngFor="let news of loadNews()">
+    <div class="p-2" *ngFor="let news of pagedProperties.data">
 
       <div class="card">
 
@@ -47,17 +47,18 @@
       </div>
     </div>
     <div class="d-flex justify-content-between p-2">
-      <div class="btn-group">
-        <button class="form-control btn btn-sm btn-outline-secondary" (click)="previousPage()"><<</button>
-        <button class="btn btn-outline-primary disabled">{{this.pagedProperties.pageIndex+1}}</button>
-        <button class="form-control btn btn-sm btn-outline-secondary" (click)="nextPage()">>></button>
-      </div>
+      <ngb-pagination
+              [collectionSize]="this.pagedProperties.hits"
+              [(page)]="this.pagedProperties.pageIndex"
+              [pageSize]="this.pagedProperties.pageSize"
+              (pageChange)="refreshNews()">
+      </ngb-pagination>
 
       <select class="form-select" style="width: auto" [(ngModel)]="this.pagedProperties.pageSize"
               (ngModelChange)="refreshNews()">
-        <option [ngValue]="2">2 items per page</option>
-        <option [ngValue]="5">5 items per page</option>
-        <option [ngValue]="10">10 items per page</option>
+        <option [ngValue]="25">25 items per page</option>
+        <option [ngValue]="50">50 items per page</option>
+        <option [ngValue]="100">100 items per page</option>
       </select>
     </div>
   </div>

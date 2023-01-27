@@ -8,6 +8,7 @@ import {PriceCategory, Room, Seat, Sector} from '../../../dto/venue';
 import {RoomService} from '../../../services/room.service';
 import {MultiselectEvent} from '../../room-plan/multiselect-event';
 import {RoomPlanComponent} from '../../room-plan/room-plan.component';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-event-performance-create',
@@ -15,7 +16,6 @@ import {RoomPlanComponent} from '../../room-plan/room-plan.component';
   styleUrls: ['./event-performance-create.component.scss'],
 })
 export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
-
   @ViewChild(RoomPlanComponent)
   roomPlan: RoomPlanComponent;
   // @Input() eventCreateFormGroup: FormGroup = new FormGroup<any>({});
@@ -25,25 +25,26 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
   @Input()
   index: number;
 
-
   artists = this.artistService.findAll();
 
   venues = this.venueService.getAll();
 
   priceCategories: Observable<Array<PriceCategory>>;
-
+  rooms: Observable<Room[]>;
   selectedRoom$: Observable<Room>;
   selectedRoom: Room;
   seatSelection = [] as Array<number>;
 
   readonly blockedSeatColor = '#aaa';
 
-  constructor(private fb: FormBuilder,
-              private artistService: ArtistService,
-              private venueService: VenueService,
-              private roomService: RoomService,
-              private priceCategoryService: PriceCategoryService) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private artistService: ArtistService,
+    private venueService: VenueService,
+    private roomService: RoomService,
+    private priceCategoryService: PriceCategoryService,
+    private spinner: NgxSpinnerService
+  ) {}
 
   get controls() {
     return this.form.controls;
@@ -55,10 +56,17 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     const roomSelected = (roomId) => {
+      if (!roomId) {
+        return;
+      }
       this.priceCategories = this.priceCategoryService.getByRoomId(roomId);
       this.priceCategories.subscribe((pcs) =>
-        pcs.forEach(pc =>
-          (this.form.get('pricingsGroup') as FormGroup).addControl(pc.id.toString(), new FormControl(null, Validators.required)))
+        pcs.forEach((pc) =>
+          (this.form.get('pricingsGroup') as FormGroup).addControl(
+            pc.id.toString(),
+            new FormControl(null, Validators.required)
+          )
+        )
       );
       this.selectedRoom$ = this.roomService.getById(roomId);
       this.selectedRoom$.subscribe((room) => {
@@ -69,6 +77,15 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
     if (this.form.controls.roomControl.value) {
       roomSelected(this.form.controls.roomControl.value);
     }
+
+    this.form.controls.venueControl.valueChanges.subscribe((venue) => {
+      console.log('venueChange');
+      this.selectedRoom = null;
+      this.selectedRoom$ = null;
+      this.spinner.show('price-categories-spinner');
+      this.performanceFormGroup.get('roomControl').setValue(null);
+      this.rooms = this.roomService.getByVenueId(venue.id);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -80,7 +97,7 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
   multiSelectEnd(seats: Array<Seat>, _form: AbstractControl) {
     const form = _form as FormGroup;
     this.seatSelection = [];
-    seats.forEach(seat => this.toggleSeat(seat, form));
+    seats.forEach((seat) => this.toggleSeat(seat, form));
   }
 
   toggleSeat(seat: Seat, form: FormGroup) {
@@ -93,39 +110,71 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
   }
 
   getSectorOfSeat(seat: Seat): Sector {
-    return this.selectedRoom.sectors.filter(sector => sector.seats.map(seat_ => seat_.id).includes(seat.id))[0];
+    return this.selectedRoom.sectors.filter((sector) =>
+      sector.seats.map((seat_) => seat_.id).includes(seat.id)
+    )[0];
   }
 
   resetColor(seat: Seat, _form: AbstractControl) {
     const form = _form as FormGroup;
     if (this.seatSelection.includes(seat.id)) {
-      this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
+      this.roomPlan.setColor(
+        this.getSectorOfSeat(seat).priceCategory.color + 'aa',
+        seat.colNumber,
+        seat.rowNumber
+      );
     } else if (form.value.includes(seat.id)) {
-      this.roomPlan.setColor(this.blockedSeatColor, seat.colNumber, seat.rowNumber);
+      this.roomPlan.setColor(
+        this.blockedSeatColor,
+        seat.colNumber,
+        seat.rowNumber
+      );
     } else {
-      this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color, seat.colNumber, seat.rowNumber);
+      this.roomPlan.setColor(
+        this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color,
+        seat.colNumber,
+        seat.rowNumber
+      );
     }
   }
 
   hover(seat: Seat) {
-    this.roomPlan.setColor(this.getSectorOfSeat(seat).priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
+    this.roomPlan.setColor(
+      this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color + 'aa',
+      seat.colNumber,
+      seat.rowNumber
+    );
   }
 
   multiSelectChange(event: MultiselectEvent, form: AbstractControl) {
-    event.removed.forEach(seat => this.resetColor(seat, form));
-    event.added.forEach(seat => this.hover(seat));
-    this.seatSelection = event.all.map(seat => seat.id);
+    event.removed.forEach((seat) => this.resetColor(seat, form));
+    event.added.forEach((seat) => this.hover(seat));
+    this.seatSelection = event.all.map((seat) => seat.id);
   }
 
   updateRoomPlan() {
-    this.selectedRoom?.sectors.forEach(sector => {
-      sector.seats.forEach(seat => {
+    this.selectedRoom?.sectors.forEach((sector) => {
+      sector.seats.forEach((seat) => {
         if (this.seatSelection.includes(seat.id)) {
-          this.roomPlan.setColor(sector.priceCategory.color + 'aa', seat.colNumber, seat.rowNumber);
-        } else if (this.form.get('blockedSeatsControl').value.includes(seat.id)) {
-          this.roomPlan.setColor(this.blockedSeatColor, seat.colNumber, seat.rowNumber);
+          this.roomPlan.setColor(
+            sector.priceCategory.color + 'aa',
+            seat.colNumber,
+            seat.rowNumber
+          );
+        } else if (
+          this.form.get('blockedSeatsControl').value.includes(seat.id)
+        ) {
+          this.roomPlan.setColor(
+            this.blockedSeatColor,
+            seat.colNumber,
+            seat.rowNumber
+          );
         } else {
-          this.roomPlan.setColor(sector.priceCategory.color, seat.colNumber, seat.rowNumber);
+          this.roomPlan.setColor(
+            sector.priceCategory.color,
+            seat.colNumber,
+            seat.rowNumber
+          );
         }
       });
     });
