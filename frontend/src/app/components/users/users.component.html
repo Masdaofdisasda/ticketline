@@ -38,6 +38,21 @@
       </div>
     </form>
   </div>
+
+  <div *ngIf="users.length === 0">
+    <div class="container loading-skeleton" *ngFor="let item of [].constructor(10); let i = index">
+      <form>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Example select</label>
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <div class="list-group w-auto" *ngFor="let user of filteredUsers">
     <div href="#" [class]="user.accountNonLocked ? 'list-group-item d-flex gap-3 py-3' : 'list-group-item d-flex gap-3 py-3 bg-warning bg-opacity-10'" aria-current="true">
       <div class="d-flex w-100 justify-content-between users">

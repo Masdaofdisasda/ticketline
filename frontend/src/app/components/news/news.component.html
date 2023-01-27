@@ -7,60 +7,65 @@
 
 <div>
   <br>
-  <div class="fourXone">
+  <div class="d-flex justify-content-between">
     <h2 *ngIf="!this.archive">Latest News</h2>
     <h2 *ngIf="this.archive">News Archive</h2>
-    <span style="width: 80%"></span>
-    <button type="button" class="btn btn-primary btn-sm mr-4" *ngIf="authService.isAdmin()"
-            (click)="navigateCreatePage()">Create News Entry
+    <span>
+    <button type="button" class="btn btn-primary btn me-2" *ngIf="authService.isAdmin()"
+            (click)="navigateCreatePage()"><i class="bi bi-plus-circle me-2"></i>Create News Entry
     </button>
-    <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="!this.archive"
-            (click)="navigateArchivePage()">View News Archive
+    <button type="button" class="btn btn-secondary btn" *ngIf="!this.archive"
+            (click)="navigateArchivePage()"><i class="bi bi-newspaper me-2"></i>View News Archive
     </button>
-    <button type="button" class="btn btn-secondary btn-sm mr-4" *ngIf="this.archive"
-            (click)="navigateLatestPage()">View Latest News
+    <button type="button" class="btn btn-secondary btn" *ngIf="this.archive"
+            (click)="navigateLatestPage()"><i class="bi bi-newspaper me-2"></i>View Latest News
     </button>
+    </span>
   </div>
   <br>
 </div>
 
-<div class="mt-4 container">
-  <div class="row m-xl-4 m-lg-3">
-
-    <div class="p-2" *ngFor="let news of pagedProperties.data">
-
+<div *ngIf="pagedProperties.data.length === 0" class="container loading-skeleton">
+  <div class="row">
+    <div class="col-3 p-2" *ngFor="let item of [].constructor(20); let i = index">
       <div class="card">
-
         <div class="card-body">
-          <div class="row">
-            <div class="col-2">
-              <h4 class="card-title">{{news.title}}</h4>
-              <h5 class="card-subtitle mb-2 text-muted">{{news.publishedAt | date}}</h5>
-            </div>
-
-            <div class="col-10">
-              <p class="card-text">{{news.summary}}</p>
-              <a href="/#/news/details/{{news.id}}">Read More...</a>
-            </div>
-          </div>
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
       </div>
-    </div>
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-              [collectionSize]="this.pagedProperties.hits"
-              [(page)]="this.pagedProperties.pageIndex"
-              [pageSize]="this.pagedProperties.pageSize"
-              (pageChange)="refreshNews()">
-      </ngb-pagination>
-
-      <select class="form-select" style="width: auto" [(ngModel)]="this.pagedProperties.pageSize"
-              (ngModelChange)="refreshNews()">
-        <option [ngValue]="25">25 items per page</option>
-        <option [ngValue]="50">50 items per page</option>
-        <option [ngValue]="100">100 items per page</option>
-      </select>
     </div>
   </div>
 </div>
 
+<div class="row card-group">
+  <div class="col-3 p-2" style="display: table"  *ngFor="let news of pagedProperties.data">
+    <div class="card" style="display: table-cell" >
+      <div class="card-body">
+        <h5 class="card-title">{{news.title}}</h5>
+        <p class="card-text">{{news.summary}}</p>
+        <a href="/#/news/details/{{news.id}}">Read More</a>
+        <p class="card-text mt-2"><small class="text-muted">{{news.publishedAt | date}}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination
+    [collectionSize]="this.pagedProperties.hits"
+    [(page)]="this.pagedProperties.pageIndex"
+    [pageSize]="this.pagedProperties.pageSize"
+    (pageChange)="refreshNews()">
+  </ngb-pagination>
+
+  <select class="form-select" style="width: auto" [(ngModel)]="this.pagedProperties.pageSize"
+          (ngModelChange)="refreshNews()">
+    <option [ngValue]="25">25 Entries</option>
+    <option [ngValue]="50">50 Entries</option>
+    <option [ngValue]="100">100 Entries</option>
+  </select>
+</div>

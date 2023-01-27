@@ -4,6 +4,7 @@ import {PageDto} from '../../../dto/page.dto';
 import {ExtendedEventDto} from '../../../dto/extended-event.dto';
 import {Router} from '@angular/router';
 import {EventDto} from '../../../dto/event.dto';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-event-search-result',
@@ -17,7 +18,7 @@ export class EventSearchResultComponent implements OnChanges {
 
   pagedEventsDefault = PageResponseDto.getPageResponseDto();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public auth: AuthService) {
   }
 
   refreshEvents() {

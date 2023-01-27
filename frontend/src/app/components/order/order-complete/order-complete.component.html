@@ -1,34 +1,42 @@
-<h1 class="display-1 py-4">Thank you for your order!</h1>
-
-<div class="row">
-  <div class="col-3">
+<div>
+  <br>
+  <div class="d-flex justify-content-between">
+    <h2>Thank You for Your Order!</h2>
+    <span>
+    </span>
   </div>
+  <br>
+</div>
 
-  <div class="col-6">
-    <div *ngIf="booking" class="bg-white rounded-2 py-3 px-3">
-      <div *ngIf="booking.type === 'PURCHASE' " class="fw-bold px-2 text-center">We have processed your purchase:</div>
-      <div *ngIf="booking.type === 'RESERVATION' " class="fw-bold px-2 text-center">We have reserved your tickets:</div>
-
-      <div class="container-fluid py-3">
-        <div class="py-3">
-          <div class="fw-normal">Order number:</div>
+<div *ngIf="booking" class="d-flex justify-content-center">
+  <div class="card p-3" style="min-width: 40rem;">
+    <div class="card-body">
+      <h5 *ngIf="booking.type === 'PURCHASE'" class="card-title pb-3">We have processed Your Purchase</h5>
+      <h5 *ngIf="booking.type === 'RESERVATION'" class="card-title">We have reserved Your Tickets</h5>
+      <div class="card-text">
+        <div *ngIf="booking.type === 'RESERVATION'" class="py-2">
+          <div class="alert alert-info">Your tickets are reserved and have to be collected 30 minutes before the start of the event.</div>
+        </div>
+        <div class="py-2">
+          <div class="fw-normal">Order Number:</div>
           <div class="fw-lighter">{{booking.bookingId}}</div>
         </div>
-        <div class="py-3">
-          <div class="fw-normal">Order total:</div>
+        <div class="py-2">
+          <div class="fw-normal">Order Total:</div>
           <div class="fw-lighter">{{booking.orderTotal}} EUR</div>
         </div>
-        <div class="py-3">
-          <div class="fw-normal">Tickets and order confirmation are sent to:</div>
+        <div class="py-2">
+          <div class="fw-normal">Tickets are sent to:</div>
           <div class="fw-lighter">{{booking.boughtByEmail}}</div>
         </div>
       </div>
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-primary" (click)="download(booking.bookingId)">Download tickets</button>
+      <div class="d-flex justify-content-center pt-4">
+        <button *ngIf="booking.type === 'PURCHASE'" type="button" class="btn btn-primary btn-lg me-2" (click)="download(booking.bookingId)">
+          <i class="bi bi-ticket-perforated-fill me-2"></i>Download Tickets</button>
+        <button type="button" class="btn btn-outline-secondary btn-lg" [routerLink]="['//user/bookings']">
+          <i class="bi bi-list-ul me-2"></i>
+          My Bookings</button>
       </div>
     </div>
-  </div>
-
-  <div class="col-3">
   </div>
 </div>

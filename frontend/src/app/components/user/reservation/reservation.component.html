@@ -1,0 +1,71 @@
+<div class="bg-white rounded-2 py-3 px-3 d-flex flex-column min-height-0 h-100">
+  <div class="fw-bold px-2">Select Tickets from your Reservation to purchase</div>
+
+  <div *ngIf="cart.length===0" class="alert alert-info my-2" role="alert">
+    Please select at least one ticket.
+  </div>
+
+  <div *ngIf="booking"
+       class="container-fluid py-3 flex-shrink-1 min-height-0 d-flex flex-column">
+    <ul class="overflow-auto list-group list-group-flush flex-grow-1">
+      <li *ngFor="let ticket of booking.tickets" class="list-group-item">
+        <div [class]="isSelected(ticket) ? 'card' : 'card bg-secondary bg-opacity-25'">
+          <div class="card-header">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" [checked]="isSelected(ticket)"
+                     [id]="'customCheck'+ticket.ticketId"
+                     (change)="selectItem(ticket)">
+              <label class="custom-control-label"
+                     [for]="'customCheck'+ticket.ticketId">{{isSelected(ticket) ? 'Ticket selected'
+                : 'Ticket removed'}}</label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-text">{{getEvent(ticket)}} {{ticket.performance.startDate | date: 'short'}}</div>
+            <div class="card-text">Location: {{ticket.performance.room.name}}</div>
+            <div class="card-text">Seat: {{ticket.seat.colName}}:{{ticket.seat.rowName}}</div>
+            <div class="d-flex justify-content-end">
+              <div class="text-end pt-1 fw-lighter">
+                {{formatTicketPrice(ticket)}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="fw-normal text-end pt-4 pe-4">
+      {{getTotalAmount()}}
+    </div>
+
+  </div>
+
+  <span *ngIf="booking" class="d-flex justify-content-evenly">
+    <button type="button"  data-bs-toggle="modal" [attr.data-bs-target]="'#'+'revoke-btn'" class="btn btn-outline-danger"
+    >Revoke Reservation</button>
+    <button type="button" (click)="purchaseTickets()" class="btn btn-primary" [disabled]="cart.length===0"
+    >Purchase selected Tickets</button>
+  </span>
+
+
+  <div class="modal fade" [id]="'revoke-btn'" tabindex="-1" aria-labelledby="revokeModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="revokeModalLabel">Revoke Reservation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to revoke your reservation? Others will be able to purchase your tickets.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" (click)="cancelBooking(booking.bookingId)" data-bs-dismiss="modal" class="btn btn-danger">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

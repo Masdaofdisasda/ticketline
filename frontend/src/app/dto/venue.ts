@@ -40,10 +40,6 @@ export class Seat {
   pricing?: number;
 }
 
-export class SeatWithTicket {
-
-}
-
 export const enum SeatState {
   unset = 'UNSET',
   free = 'FREE',

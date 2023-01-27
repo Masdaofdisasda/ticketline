@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
@@ -52,9 +54,10 @@ public interface BookingService {
   /**
    * Sets booking made by the user to the status purchased.
    *
-   * @param bookingId to purchase
+   * @param bookingId to handle
+   * @param tickets   to purchase
    */
-  void purchaseReservation(Long bookingId) throws ValidationException;
+  void purchaseReservation(Long bookingId, List<TicketFullDto> tickets) throws ValidationException;
 
   /**
    * Creates a PDF of given type for a booking.
@@ -73,4 +76,12 @@ public interface BookingService {
    * @return The booking with the given id
    */
   Booking getById(long id);
+
+  /**
+   * Fetches ful booking for purchase reservations.
+   *
+   * @param bookingId of the booking
+   * @return List of bookings
+   */
+  BookingFullDto fetchBookingFull(Long bookingId);
 }

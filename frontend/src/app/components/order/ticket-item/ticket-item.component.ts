@@ -23,13 +23,8 @@ export class TicketItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  formatTicketInfo(): string {
-    return '1x Sector: ' + this.ticket.sector
-    + ', Seat: ' + this.ticket.seatNumber;
-  }
-
   formatTicketPrice(): string {
-    return String(this.ticket.price) + ' EUR';
+    return String(this.ticket.price.toFixed(2)) + ' €';
   }
 
   removeItem() {
