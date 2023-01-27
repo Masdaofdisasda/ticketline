@@ -1,30 +1,21 @@
-<div>
-  <br>
-  <div class="fourXone">
-    <div>
-      <h2>{{this.news.title}}</h2>
-      <h5>{{this.news.publishedAt | date}}</h5>
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="{{this.imageUrl}}" class="card-img" alt="...">
     </div>
-
-    <span style="width: 80%"></span>
-    <button type="button" class="btn btn-secondary btn-sm mr-4"
-            (click)="navigateLatestPage()">View Latest News
-    </button>
-  </div>
-  <br>
-  <div class="h-25 row align-items-center">
-    <div class="col-3">
-      <img id="newsImage" class="h-100 img-fluid" src="{{this.imageUrl}}">
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{this.news.title}}</h5>
+        <p class="card-text">{{this.news.summary}}</p>
+        <p class="card-text">{{this.news.text}}</p>
+        <p class="card-text"><small class="text-muted">{{this.news.publishedAt | date}}</small></p>
+      </div>
     </div>
-
-    <div class="col-9">
-      <p id="summary">{{this.news.summary}}</p>
-    </div>
-  </div>
-  <br>
-  <div class="row">
-    <p id="text">{{this.news.text}}</p>
   </div>
 </div>
+<button type="button" class="btn btn-outline-secondary"
+        (click)="navigateLatestPage()"><i class="bi bi-arrow-left-circle me-2"></i>View Latest News
+</button>
+
 
 

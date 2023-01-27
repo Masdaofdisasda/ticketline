@@ -23,8 +23,8 @@
   </span>
 
   <span *ngIf="(tickets$ | async).length !== 0 && checkoutMode && authService.isLoggedIn()" class="d-flex justify-content-center">
-    <button type="button" (click)="reserveTickets()" class="btn btn-light me-4">Reserve tickets</button>
-    <button type="button" (click)="purchaseTickets()" class="btn btn-primary">Purchase tickets</button>
+    <button type="button" (click)="reserveTickets()" class="btn btn-light me-4">Reserve Tickets</button>
+    <button type="button" (click)="purchaseTickets()" class="btn btn-primary">Purchase Tickets</button>
   </span>
 
 </div>

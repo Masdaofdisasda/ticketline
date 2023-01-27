@@ -53,6 +53,7 @@ import { SelectPerformanceComponent } from './components/event/select-performanc
 import { NewsCreateComponent } from './components/news/news-create/news-create.component';
 import {NewsDetailsComponent} from './components/news/news-details/news-details.component';
 import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
+import { ReservationComponent } from './components/user/reservation/reservation.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { TicketValidationComponent } from './components/ticket-validation/ticket
     PasswordForgotComponent,
     CreateUserComponent,
     TicketValidationComponent,
+    ReservationComponent,
   ],
   imports: [
     BrowserModule,

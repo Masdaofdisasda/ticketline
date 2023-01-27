@@ -20,6 +20,18 @@
     <th scope="col">Actions</th>
   </tr>
   </thead>
+
+
+  <tbody *ngIf="venues.length === 0">
+  <tr class="container loading-skeleton" *ngFor="let item of [].constructor(10); let i = index">
+    <td class="form-group" *ngFor="let item of [].constructor(5); let i = index">
+      <select class="form-control" id="exampleFormControlSelect1">
+        <option>1</option>
+      </select>
+    </td>
+  </tr>
+  </tbody>
+
   <tbody *ngFor="let venue of venues">
   <tr>
     <th scope="row">{{venue.id}}</th>

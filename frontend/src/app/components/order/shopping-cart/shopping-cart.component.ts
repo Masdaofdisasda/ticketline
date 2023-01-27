@@ -44,20 +44,20 @@ export class ShoppingCartComponent implements OnInit {
 
   getHeader(): string {
     if (this.checkoutMode) {
-      return 'Your order:';
+      return 'Your Order:';
     }
 
     if (this.isEmpty()) {
-      return 'Please select seats';
+      return 'Please select Seats';
     } else {
-      return 'Your tickets:';
+      return 'Your Tickets:';
     }
   }
 
   getTotalAmount(): string {
     const total = this.shoppingCartService.calculateTotal();
-    const amount = total === 0 ? '0.00' : String(total);
-    return 'Total: ' + amount + ' EUR';
+    const amount = total === 0 ? '0.00' : String(total.toFixed(2));
+    return 'Total: ' + amount + ' €';
   }
 
   clearCart(): void {
@@ -68,8 +68,8 @@ export class ShoppingCartComponent implements OnInit {
     this.bookingService.reserveTickets(this.shoppingCartService.getItems())
       .subscribe({
         next: data => {
-          this.toastr.success('Your reservation was successfully completed, you can find it under your bookings', 'Reservation successful');
-          const orderId = data;
+          const orderId = data.bookingId;
+          this.toastr.success('Reservation successful');
           this.clearCart();
           this.router.navigate(['order', orderId]);
         }
@@ -81,6 +81,7 @@ export class ShoppingCartComponent implements OnInit {
       .subscribe({
         next: data => {
           const orderId = data.bookingId;
+          this.toastr.success('Purchase successful');
           this.clearCart();
           this.download(data.bookingId);
           this.router.navigate(['order', orderId]);
@@ -96,10 +97,11 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onHoverStart(ticket: Ticket): void {
-    this.hoverStart.emit(ticket);
+      this.hoverStart.emit(ticket);
   }
 
   onHoverEnd(ticket: Ticket): void {
-    this.hoverEnd.emit(ticket);
+    console.log(ticket);
+      this.hoverEnd.emit(ticket);
   }
 }

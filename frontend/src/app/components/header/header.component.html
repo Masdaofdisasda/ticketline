@@ -26,6 +26,7 @@
         <!--Cart-->
         <button *ngIf="!authService.isAdmin()" type="button" class="btn btn-secondary px-4 mx-2" routerLink="/order/cart" routerLinkActive="active">
           <i class="bi bi-cart me-2"></i>Cart
+          <span *ngIf="(tickets$ | async).length !== 0" class="ms-2 badge badge-pill badge-info">{{(tickets$ | async).length}}</span>
         </button>
 
         <!--Admin-->

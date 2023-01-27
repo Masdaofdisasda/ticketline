@@ -17,18 +17,19 @@ export class ShoppingCartService {
     const tickets = this.getItems();
     tickets.push(ticket);
     this.ticketsSubject.next(tickets);
-    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
+    localStorage.setItem('cart', JSON.stringify(this.getItems()));
   }
 
   removeItem(ticket: Ticket) {
     const tickets = this.getItems();
-    this.ticketsSubject.next(tickets.filter(ele => ele !== ticket));
-    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
+    const newTickets = tickets.filter(ele => ele !== ticket);
+    this.ticketsSubject.next(newTickets);
+    localStorage.setItem('cart', JSON.stringify(newTickets));
   }
 
   getItems(): Ticket[] {
-    if (!this.ticketsSubject.getValue()) {
-      const retrievedObject = sessionStorage.getItem('cart');
+    if (this.ticketsSubject.getValue().length===0) {
+      const retrievedObject = localStorage.getItem('cart');
       if (retrievedObject) {
         this.ticketsSubject.next(JSON.parse(retrievedObject));
       }
@@ -39,7 +40,7 @@ export class ShoppingCartService {
 
   clearCart() {
     this.ticketsSubject.next([]);
-    sessionStorage.setItem('cart', JSON.stringify(this.getItems()));
+    localStorage.removeItem('cart');
   }
 
   isEmpty(): boolean {

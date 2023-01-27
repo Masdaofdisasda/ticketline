@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,6 +128,21 @@ public class BookingEndpoint {
   }
 
   /**
+   * fetches booking information for a single booking. Used to select tickets of a booking
+   *
+   * @param bookingId of the finished booking
+   * @return details about the booking
+   */
+  @GetMapping("/tickets/{bookingId}")
+  @Secured("ROLE_USER")
+  @Operation(security = @SecurityRequirement(name = "apiKey"))
+  @Transactional
+  public BookingFullDto fetchFullBooking(@PathVariable Long bookingId) {
+    LOGGER.info("GET /api/v1/booking/tickets/{}: fetchFullBooking({})", bookingId, bookingId);
+    return bookingService.fetchBookingFull(bookingId);
+  }
+
+  /**
    * fetches all bookings of the current user.
    *
    * @return list of bookings
@@ -158,12 +174,12 @@ public class BookingEndpoint {
    *
    * @param bookingId of the booking to update
    */
-  @PutMapping("/{bookingId}")
+  @PostMapping(value = "/{bookingId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public void purchaseReservation(@PathVariable Long bookingId) throws ValidationException {
-    LOGGER.info("PUT /api/v1/booking/{}: purchaseReservation({})", bookingId, bookingId);
-    bookingService.purchaseReservation(bookingId);
+  public void purchaseReservation(@PathVariable Long bookingId, @RequestBody List<TicketFullDto> tickets) throws ValidationException {
+    LOGGER.info("PUT /api/v1/booking/{}: purchaseReservation({},{})", bookingId, bookingId, tickets);
+    bookingService.purchaseReservation(bookingId, tickets);
   }
 
 }
