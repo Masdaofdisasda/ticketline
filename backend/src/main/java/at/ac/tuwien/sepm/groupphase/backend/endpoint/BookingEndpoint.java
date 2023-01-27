@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.BookingService;
 import com.google.zxing.WriterException;
 import com.itextpdf.text.DocumentException;
@@ -160,7 +161,7 @@ public class BookingEndpoint {
   @PutMapping("/{bookingId}")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public void purchaseReservation(@PathVariable Long bookingId) {
+  public void purchaseReservation(@PathVariable Long bookingId) throws ValidationException {
     LOGGER.info("PUT /api/v1/booking/{}: purchaseReservation({})", bookingId, bookingId);
     bookingService.purchaseReservation(bookingId);
   }

@@ -88,12 +88,8 @@ public class CustomUserDetailService implements UserService {
   @Override
   public ApplicationUser findApplicationUserByEmail(String email) {
     LOGGER.debug("Find application user by email");
-    ApplicationUser applicationUser = userRepository.findUserByEmail(email);
-    if (applicationUser != null) {
-      return applicationUser;
-    }
-    throw new NotFoundException(
-      String.format("Could not find the user with the email address %s", email));
+    return userRepository.findUserByEmail(email)
+      .orElseThrow(() -> new NotFoundException(String.format("Could not find the user with the email address %s", email)));
   }
 
   public ApplicationUser findApplicationUserById(Long id) {
@@ -209,7 +205,9 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public SimpleUserDto getUser() {
-    ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    ApplicationUser user = userRepository.findUserByEmail(email)
+      .orElseThrow(() -> new NotFoundException(String.format("Could not find the user with the email address %s", email)));
     return SimpleUserDto.builder()
       .id(user.getId())
       .email(user.getEmail())
@@ -239,7 +237,6 @@ public class CustomUserDetailService implements UserService {
 
   @Override
   public void deleteUser(Long userId) throws ValidationException {
-
     customUserValidator.validateForDelete(userId);
     userRepository.deleteById(userId);
   }
@@ -275,7 +272,8 @@ public class CustomUserDetailService implements UserService {
     LOGGER.debug("Create a password reset token for given user");
     PasswordResetToken myToken =
       new PasswordResetToken(token, user);
-    passwordResetTokenRepository.save(myToken);
+    user.setPasswordToken(myToken);
+    userRepository.save(user);
   }
 
   @Override

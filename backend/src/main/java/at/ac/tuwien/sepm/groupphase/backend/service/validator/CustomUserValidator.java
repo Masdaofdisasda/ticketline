@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,8 +109,8 @@ public class CustomUserValidator {
 
     List<String> validationErrors = new ArrayList<>();
 
-    ApplicationUser applicationUser = userRepository.findUserByEmail(user.getEmail());
-    if (applicationUser != null) {
+    Optional<ApplicationUser> applicationUser = userRepository.findUserByEmail(user.getEmail());
+    if (applicationUser.isPresent()) {
       validationErrors.add("A user with the given email address already exists.");
     }
 
@@ -132,8 +134,8 @@ public class CustomUserValidator {
 
     List<String> validationErrors = new ArrayList<>();
 
-    ApplicationUser applicationUser = userRepository.findUserByEmail(user.getEmail());
-    if (applicationUser != null) {
+    Optional<ApplicationUser> applicationUser = userRepository.findUserByEmail(user.getEmail());
+    if (applicationUser.isPresent()) {
       validationErrors.add("A user with the given email address already exists.");
     }
 
@@ -153,7 +155,9 @@ public class CustomUserValidator {
 
     List<String> validationErrors = new ArrayList<>();
 
-    ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    ApplicationUser user = userRepository.findUserByEmail(email)
+      .orElseThrow(() -> new NotFoundException("User with email %s not found".formatted(email)));
     if (!Objects.equals(user.getId(), userDto.getId())) {
       validationErrors.add("User can only change his own data.");
     }
@@ -172,7 +176,10 @@ public class CustomUserValidator {
     var roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
     if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
-      ApplicationUser user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+      final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+      ApplicationUser user = userRepository.findUserByEmail(email)
+        .orElseThrow(() -> new NotFoundException("User with email %s not found".formatted(email)));
       if (!Objects.equals(user.getId(), userId)) {
         throw new ValidationException("Cannot delete other users.", List.of("Cannot delete other users."));
       }

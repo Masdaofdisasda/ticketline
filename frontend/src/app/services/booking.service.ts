@@ -57,7 +57,7 @@ export class BookingService {
   downloadAndSave(download: Observable<Blob>, filename: string): void {
     download.subscribe({
       next: value => {
-        this.saveData(value, 'application/pdf', 'Ticketline - ' + filename + '.pdf');
+        this.saveData(value, 'application/pdf', 'Ticketline_' + filename + '.pdf');
       }
     });
   }

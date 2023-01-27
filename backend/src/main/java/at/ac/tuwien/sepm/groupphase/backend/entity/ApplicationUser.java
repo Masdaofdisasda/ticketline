@@ -14,10 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,7 +28,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "APPLICATION_USER")
 public class ApplicationUser {
@@ -70,20 +69,15 @@ public class ApplicationUser {
   @Column(name = "PASSWORD", nullable = false, length = 100)
   private String password;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "PASSWORD_TOKEN_ID")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private PasswordResetToken passwordToken;
-
-  @OneToMany(mappedBy = "user")
-  private Set<PasswordResetToken> passwordResetTokens = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "user")
   private Set<Booking> bookings = new LinkedHashSet<>();
 
   @Builder.Default
-  @ManyToMany(mappedBy = "hasSeen", cascade = CascadeType.PERSIST)
+  @ManyToMany()
   private Set<News> news = new LinkedHashSet<>();
-
 
   public void addBooking(Booking booking) {
     if (bookings.contains(booking)) {

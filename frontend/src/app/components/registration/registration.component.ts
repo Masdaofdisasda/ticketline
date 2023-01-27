@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { RegistrationRequest } from '../../dto/registration-request';
-import { AuthRequest } from '../../dto/auth-request';
-import { RegistrationService } from 'src/app/services/registration.service';
+import {Component, OnInit} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {RegistrationRequest} from '../../dto/registration-request';
+import {AuthRequest} from '../../dto/auth-request';
+import {RegistrationService} from 'src/app/services/registration.service';
 
 @Component({
   selector: 'app-registration',
@@ -108,7 +104,7 @@ export class RegistrationComponent implements OnInit {
     this.authService.loginUser(authRequest).subscribe({
       next: () => {
         console.log('Successfully logged in user: ' + authRequest.email);
-        this.router.navigate(['/event']);
+        this.router.navigate(['/news']);
       },
       error: (error) => {
         console.log('Could not log in due to:');
