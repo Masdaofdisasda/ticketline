@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDtoSimple;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
 import java.lang.invoke.MethodHandles;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/v1/room")
@@ -51,4 +53,12 @@ public class RoomEndpoint {
     LOGGER.info("getById({})", id);
     return this.mapper.roomToRoomDto(this.service.getById(id));
   }
+
+  @PermitAll
+  @GetMapping("venue/{id}")
+  public Stream<RoomDtoSimple> getRoomsByVenueId(@PathVariable long id) {
+    LOGGER.info("getRoomsByVenueId({})", id);
+    return this.service.getByVenueId(id).stream().map(this.mapper::roomToRoomDtoSimple);
+  }
+
 }

@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {BookingService} from '../../../services/booking.service';
 import {Ticket} from '../../../dto/ticket';
 import {AuthService} from '../../../services/auth.service';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -25,10 +26,11 @@ export class ShoppingCartComponent implements OnInit {
   tickets$: Observable<Ticket[]>;
 
   constructor(
-    private shoppingCartService: ShoppingCartService,
-    private bookingService: BookingService,
-    private router: Router,
-    public authService: AuthService,
+      private shoppingCartService: ShoppingCartService,
+      private bookingService: BookingService,
+      private router: Router,
+      public authService: AuthService,
+      private toastr: ToastrService
   ) {
   }
 
@@ -66,6 +68,7 @@ export class ShoppingCartComponent implements OnInit {
     this.bookingService.reserveTickets(this.shoppingCartService.getItems())
       .subscribe({
         next: data => {
+          this.toastr.success('Your reservation was successfully completed, you can find it under your bookings', 'Reservation successful');
           const orderId = data;
           this.clearCart();
           this.router.navigate(['order', orderId]);

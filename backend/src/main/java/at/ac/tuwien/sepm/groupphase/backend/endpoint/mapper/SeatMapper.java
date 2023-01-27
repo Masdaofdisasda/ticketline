@@ -10,13 +10,15 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface SeatMapper {
 
   SeatMapper INSTANCE = Mappers.getMapper(SeatMapper.class);
@@ -44,8 +46,8 @@ public interface SeatMapper {
 
     SeatDto.State state = SeatDto.State.BLOCKED;
 
-    if (seat.getTicketList().size() > 0) {
-      for (Ticket ticket : seat.getTicketList()) {
+    if (!seat.getTickets().isEmpty()) {
+      for (Ticket ticket : seat.getTickets()) {
         if (!Objects.equals(ticket.getPerformance().getId(), performanceId)) {
           continue;
         }
@@ -60,17 +62,14 @@ public interface SeatMapper {
           state = SeatDto.State.UNSET;
         }
       }
-    } else {
-      state = SeatDto.State.BLOCKED;
     }
-
     seatGen.setState(state);
 
     return seatGen;
   }
 
   @IterableMapping(qualifiedByName = "seatToSeatDtoForPerformance")
-  default List<SeatDto> seatsToSeatDtosForPerformance(List<Seat> seats, Long performanceId) {
+  default List<SeatDto> seatsToSeatDtosForPerformance(Set<Seat> seats, Long performanceId) {
     if (seats == null && performanceId == null) {
       return null;
     }

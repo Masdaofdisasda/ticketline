@@ -29,7 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,7 +67,7 @@ public class CustomUserDetailService implements UserService {
       ApplicationUser applicationUser = findApplicationUserByEmail(email);
 
       List<GrantedAuthority> grantedAuthorities;
-      if (Boolean.TRUE.equals(applicationUser.getAdmin())) {
+      if (applicationUser.isAdmin()) {
         grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
       } else {
         grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
@@ -165,6 +165,7 @@ public class CustomUserDetailService implements UserService {
         .lastName(userRegistrationDto.getLastName())
         .admin(false)
         .accountNonLocked(true)
+        .failedAttempt(0)
         .build();
     userRepository.save(applicationUser);
   }
@@ -180,6 +181,7 @@ public class CustomUserDetailService implements UserService {
         .lastName(userCreationDto.getLastName())
         .admin(userCreationDto.getIsAdmin())
         .accountNonLocked(true)
+        .failedAttempt(0)
         .build();
     userRepository.save(applicationUser);
   }
@@ -245,7 +247,7 @@ public class CustomUserDetailService implements UserService {
   public void lock(ApplicationUser user) {
     LOGGER.debug("Lock a user");
     user.setAccountNonLocked(false);
-    user.setLockTime(new Date());
+    user.setLockTime(LocalDateTime.now());
 
     userRepository.save(user);
   }
@@ -261,10 +263,7 @@ public class CustomUserDetailService implements UserService {
   }
 
   public boolean unlockWhenTimeExpired(ApplicationUser user) {
-    long lockTimeInMillis = user.getLockTime().getTime();
-    long currentTimeInMillis = System.currentTimeMillis();
-
-    if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+    if (user.getLockTime().plusHours(24).isBefore(LocalDateTime.now())) {
       this.unlock(user);
       return true;
     }

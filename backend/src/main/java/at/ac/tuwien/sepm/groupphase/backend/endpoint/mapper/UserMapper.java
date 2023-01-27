@@ -7,11 +7,12 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
   UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);

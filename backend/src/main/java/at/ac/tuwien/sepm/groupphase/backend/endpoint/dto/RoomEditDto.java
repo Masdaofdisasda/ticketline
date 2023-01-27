@@ -16,6 +16,5 @@ public class RoomEditDto {
   private String name;
   private Integer rowSize;
   private Integer columnSize;
-
   private List<SectorEditDto> sectors;
 }

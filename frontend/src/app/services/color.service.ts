@@ -217,7 +217,11 @@ export class ColorService {
   }
 
   rgbValuesToString(r: number, g: number, b: number) {
-    return `${(Math.round(r)).toString(16)}${(Math.round(g)).toString(16)}${(Math.round(b)).toString(16)}`;
+    const convert = (num) => {
+      const str = (Math.round(num)).toString(16);
+      return (str.length === 1 ? '0' : '') + str;
+    };
+    return `${convert(r)}${convert(g)}${convert(b)}`;
   }
 
   offsetHue(color: string, angle: number) {

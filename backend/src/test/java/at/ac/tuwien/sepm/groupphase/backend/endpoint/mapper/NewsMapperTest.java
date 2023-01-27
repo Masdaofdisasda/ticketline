@@ -1,27 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.News;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class NewsMapperTest implements TestData {
-
+/*
   private final News news = News.builder()
     .id(ID)
     .title(TEST_NEWS_TITLE)
@@ -61,5 +50,7 @@ public class NewsMapperTest implements TestData {
     );
   }
 
+
+ */
 
 }

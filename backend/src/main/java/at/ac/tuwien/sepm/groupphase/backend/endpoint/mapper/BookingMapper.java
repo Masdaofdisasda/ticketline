@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class BookingMapper {
@@ -29,9 +30,9 @@ public class BookingMapper {
       .build();
   }
 
-  public List<BookingItemDto> map(List<Booking> bookings) {
+  public List<BookingItemDto> map(Set<Booking> bookings) {
     return bookings.stream().map(
-      this::map
+        this::map
     ).toList();
   }
 

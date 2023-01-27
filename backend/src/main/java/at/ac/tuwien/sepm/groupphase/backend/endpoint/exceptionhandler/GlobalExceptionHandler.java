@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 
+import at.ac.tuwien.sepm.groupphase.backend.exception.ConflictException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.CustomLockedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.TicketCancellationException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import org.h2.jdbc.JdbcSQLDataException;
 import org.slf4j.Logger;
@@ -65,13 +67,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LOGGER.warn(ex.getMessage());
 
     return handleExceptionInternal(
-      ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
   @ExceptionHandler(value = {SeatNotAvailableException.class})
   public ResponseEntity<Object> handleSeatNotAvailableException(SeatNotAvailableException ex, WebRequest request) {
     LOGGER.warn(ex.getMessage());
 
+    return handleExceptionInternal(
+        ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(value = {ConflictException.class})
+  public ResponseEntity<Object> handleConflictException(ConflictException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
+
+    return handleExceptionInternal(
+        ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+  }
+
+  @ExceptionHandler(value = {IllegalArgumentException.class})
+  public ResponseEntity<Object> handleIllegalArgumentException(SeatNotAvailableException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
+
+    return handleExceptionInternal(
+        ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(TicketCancellationException.class)
+  public ResponseEntity<Object> handleTicketCancellationException(TicketCancellationException ex, WebRequest request) {
+    LOGGER.warn(ex.getMessage());
     return handleExceptionInternal(
       ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -82,10 +107,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    */
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-    MethodArgumentNotValidException ex,
-    HttpHeaders headers,
-    HttpStatus status,
+      MethodArgumentNotValidException ex,
+      HttpHeaders headers,
+      HttpStatus status,
     WebRequest request) {
+    ex.printStackTrace();
     Map<String, Object> body = new LinkedHashMap<>();
     // Get all errors
     List<String> errors =

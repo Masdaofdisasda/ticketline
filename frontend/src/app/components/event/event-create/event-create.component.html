@@ -1,98 +1,104 @@
 <div>
-  <br>
-  <div class="d-flex justify-content-start align-items-center">
-    <h2>Add Event</h2>
-    <div class="mx-2">
-      <button class="btn btn-outline-info btn-sm" data-toggle="collapse" data-target="#howto, #step1, #step2, #step3, #step4">?</button>
+    <br>
+    <div class="d-flex justify-content-start align-items-center">
+        <h2>Add Event</h2>
+        <div class="mx-2">
+            <button class="btn btn-outline-info btn-sm" data-toggle="collapse"
+                    data-target="#howto, #step1, #step2, #step3, #step4">?
+            </button>
+        </div>
     </div>
-  </div>
-  <br>
+    <br>
 </div>
 
 <div id="howto" class="collapse">
-  <div class="alert alert-info" role="contentinfo">
-    <p>How do I add an event?</p>
-    <p>1. Enter information about the venue.</p>
-    <p>2. Add a Performance.</p>
-    <p>3. Open the Performance and select who is where and when performing. The date needs be between the event start and end date.
-      Then set the price for the seats and block seats if needed.
-    </p>
-    <p>4. Add as many performances as needed and click the button in the bottom right to create your event.</p>
-  </div>
+    <div class="alert alert-info" role="contentinfo">
+        <p>How do I add an event?</p>
+        <p>1. Enter information about the venue.</p>
+        <p>2. Add a Performance.</p>
+        <p>3. Open the Performance and select who is where and when performing. The date needs be between the event
+            start and end date.
+            Then set the price for the seats and block seats if needed.
+        </p>
+        <p>4. Add as many performances as needed and click the button in the bottom right to create your event.</p>
+    </div>
 </div>
 
 <form [formGroup]="createFormGroup">
-  <div class="mt-3 p-3 card">
-  <div class="form-group">
-    <h5 id="step1" class="badge bg-info me-2 collapse">1</h5>
-    <div class="d-flex justify-content-between">
-      <div class="w-25 me-3">
-        <label for="eventName">Event Name</label>
-        <input id="eventName" class="form-control" placeholder="Enter Event Name" formControlName="eventName">
-      </div>
-      <div class="w-25 me-3">
-        <label for="eventCategory">Event Category</label>
-        <input id="eventCategory" class="form-control" placeholder="Enter Event Category"
-               formControlName="eventCategory">
-      </div>
-      <div class="w-25 me-3">
-        <label for="startTime">Starts at</label>
-        <app-date-time-picker id="startTime" placeholder="Select start time of event"
-                              formControlName="startTime">
-        </app-date-time-picker>
-      </div>
-      <div class="w-25 me-3">
-        <label for="endTime">Ends at</label>
-        <app-date-time-picker id="endTime" placeholder="Select end time of event"
-                              formControlName="endTime">
-        </app-date-time-picker>
-      </div>
+    <div class="mt-3 p-3 card">
+        <div class="form-group">
+            <h5 id="step1" class="badge bg-info me-2 collapse">1</h5>
+            <div class="d-flex justify-content-between">
+                <div class="w-25 me-3">
+                    <label for="eventName">Event Name</label>
+                    <input id="eventName" class="form-control" placeholder="Enter Event Name"
+                           formControlName="eventName">
+                </div>
+                <div class="w-25 me-3">
+                    <label for="eventCategory">Event Category</label>
+                    <input id="eventCategory" class="form-control" placeholder="Enter Event Category"
+                           formControlName="eventCategory">
+                </div>
+                <div class="w-25 me-3">
+                    <label for="startTime">Starts at</label>
+                    <app-date-time-picker id="startTime" placeholder="Select start time of event"
+                                          formControlName="startTime">
+                    </app-date-time-picker>
+                </div>
+                <div class="w-25 me-3">
+                    <label for="endTime">Ends at</label>
+                    <app-date-time-picker id="endTime" placeholder="Select end time of event"
+                                          formControlName="endTime">
+                    </app-date-time-picker>
+                </div>
+            </div>
+        </div>
+
     </div>
-  </div>
+    <div class="mt-3 p-3 card">
 
-  </div>
-  <div class="mt-3 p-3 card">
-
-    <div class="d-flex justify-content-between mb-3 mt-4">
-    <h5>Performances</h5>
-    <span>
+        <div class="d-flex justify-content-between mb-3 mt-4">
+            <h5>Performances</h5>
+            <span>
       <button type="button" class="btn btn-primary d-inline float-end" (click)="addPerformance()">
         <i class="bi bi-plus"></i>
                   <h5 id="step2" class="badge bg-info me-2 collapse">2</h5>Add Performance</button>
     </span>
-  </div>
+        </div>
 
-    <form [formGroup]="createFormGroup">
-      <h5 id="step3" class="badge bg-info me-2 collapse">3</h5>
-      <ng-container formArrayName="performances">
-        <ngb-accordion *ngFor="let performanceFormGroup of performances.controls; let index = index">
-          <ngb-panel class="p-3">
-            <ng-template ngbPanelHeader>
-              <div class="d-flex justify-content-between">
-                <button ngbPanelToggle class="accordion-button d-flex justify-content-between">
-                  <span class="flex-grow-1">
-    Performance #{{index}}</span>
-                  <button class="btn btn-outline-danger mr-4 float-end" (click)="removePerformance(index)"><i
-                    class="bi bi-trash me-2"></i>Remove</button>
-                </button>
-              </div>
-            </ng-template>
-            <ng-template ngbPanelContent>
-              <app-event-performance-create
-                [performanceFormGroup]="performanceFormGroup"
-                [index]="index"></app-event-performance-create>
-            </ng-template>
-          </ngb-panel>
-        </ngb-accordion>
-      </ng-container>
-    </form>
-  </div>
-  <button type="button"
-          class="btn btn-primary float-end"
-          [disabled]="createFormGroup.invalid || createFormGroup.get('performances').value.size === 0"
-          (click)="createEvent()">
-    <h5 id="step4" class="badge bg-info me-2 collapse">4</h5>
-    Create Event
-  </button>
+        <form [formGroup]="createFormGroup">
+            <h5 id="step3" class="badge bg-info me-2 collapse">3</h5>
+            <ng-container formArrayName="performances">
+                <ngb-accordion [closeOthers]="true">
+                    <ngb-panel class="p-3"
+                               *ngFor="let performanceFormGroup of performances.controls; let index = index">
+                        <ng-template ngbPanelHeader>
+                            <div class="d-flex justify-content-between">
+                                <button ngbPanelToggle class="accordion-button d-flex justify-content-between">
+                                    <span class="flex-grow-1"> Performance #{{index}}</span>
+                                    <button class="btn btn-outline-danger mr-4 float-end"
+                                            (click)="removePerformance(index)"><i
+                                            class="bi bi-trash me-2"></i>Remove
+                                    </button>
+                                </button>
+                            </div>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            <app-event-performance-create
+                                    [performanceFormGroup]="performanceFormGroup"
+                                    [index]="index"></app-event-performance-create>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </ng-container>
+        </form>
+    </div>
+    <button type="button"
+            class="btn btn-primary float-end"
+            [disabled]="createFormGroup.invalid || createFormGroup.get('performances').value.length === 0"
+            (click)="createEvent()">
+        <h5 id="step4" class="badge bg-info me-2 collapse">4</h5>
+        Create Event
+    </button>
 </form>
 

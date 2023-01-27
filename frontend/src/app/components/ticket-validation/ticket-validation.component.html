@@ -1,4 +1,18 @@
-<h1 *ngIf="status === 'VALID'" class="bi-check2-circle text-center validIcon"> </h1>
-<h1 *ngIf="status === 'VALID'" class=" text-center"> The Ticket is Valid!</h1>
-<h1 *ngIf="status !== 'VALID'" class="bi-x-circle  text-center invalidIcon"> </h1>
-<h1 *ngIf="status !== 'VALID'" class="text-center"> The Ticket is Invalid!
+<div style="height: 3rem"></div>
+<div *ngIf="validationTicket$ | async as obs; else loading">
+  <div *ngIf="obs.status === 'VALID'">
+    <h1 class="bi-check2-circle text-center validIcon"></h1>
+    <h1 class=" text-center"> The Ticket is Valid!</h1>
+  </div>
+  <div *ngIf="obs.status !== 'VALID'">
+    <h1 class="bi-x-circle  text-center invalidIcon"></h1>
+    <h1 class="text-center"> The Ticket is Invalid!</h1>
+  </div>
+</div>
+
+<ng-template #loading>
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p
+    style="color: black"> Loading... </p></ngx-spinner>
+</ng-template>
+
+

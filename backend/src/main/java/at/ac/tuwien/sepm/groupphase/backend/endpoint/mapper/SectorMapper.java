@@ -7,13 +7,15 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Mapper(uses = {SeatMapper.class, PriceCategoryMapper.class})
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {SeatMapper.class, PriceCategoryMapper.class})
 public abstract class SectorMapper {
 
   @Autowired
@@ -32,7 +34,7 @@ public abstract class SectorMapper {
       return sectorGen;
     }
 
-    for (Pricing p : sector.getPriceCategory().getPricingList()) {
+    for (Pricing p : sector.getPriceCategory().getPricings()) {
       if (p.getPerformance() != null && Objects.equals(p.getPerformance().getId(), performanceId)) {
         sectorGen.getPriceCategory().setPricing(p.getPricing());
       }
@@ -43,7 +45,7 @@ public abstract class SectorMapper {
   }
 
   @IterableMapping(qualifiedByName = "sectorToSectorDtoForPerformance")
-  public List<SectorDto> sectorsToSectorDtosForPerformance(List<Sector> sectors, Long performanceId) {
+  public List<SectorDto> sectorsToSectorDtosForPerformance(Set<Sector> sectors, Long performanceId) {
     if (sectors == null && performanceId == null) {
       return null;
     }

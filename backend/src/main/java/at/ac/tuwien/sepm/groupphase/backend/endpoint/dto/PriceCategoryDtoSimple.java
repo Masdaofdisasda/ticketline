@@ -1,4 +1,3 @@
-
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import lombok.AllArgsConstructor;
@@ -6,12 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDtoSimple {
-
-  Long id;
-  String name;
+public class PriceCategoryDtoSimple {
+  @NotNull
+  private Long id;
+  @NotNull
+  private String name;
+  @NotNull
+  private String color;
 }

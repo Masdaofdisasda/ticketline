@@ -43,13 +43,11 @@ public class PriceCategoryServiceImpl implements PriceCategoryService {
 
   @Override
   public List<PriceCategory> getByPerformanceId(long id) {
-    return repository.getPriceCategoriesByPerformance(performanceRepository.findById(id)
-      .orElseThrow(() -> new NotFoundException("Performance with id " + " id could not be found")));
+    return repository.getPriceCategoriesByPerformance(id);
   }
 
   @Override
   public List<PriceCategory> getByRoomId(long id) {
-    return repository.findAll().stream().filter(pc ->
-      pc.getSectorList().stream().anyMatch(sector -> sector.getRoom().getId().equals(id))).toList();
+    return this.repository.getPriceCategoriesByRoom(id);
   }
 }

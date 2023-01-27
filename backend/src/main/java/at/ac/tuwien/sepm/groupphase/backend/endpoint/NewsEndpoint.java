@@ -44,10 +44,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/news")
 public class NewsEndpoint {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final NewsService newsService;
-
   private final UserService userService;
   private final NewsMapper newsMapper;
 
@@ -87,7 +85,7 @@ public class NewsEndpoint {
   public DetailedNewsDto find(@PathVariable Long id) {
     LOGGER.info("GET /api/v1/news/{}", id);
     News news = newsService.findOne(id);
-    DetailedNewsDto detailedNewsDto = newsMapper.newsToDetailedNewsDto(newsService.findOne(id));
+    DetailedNewsDto detailedNewsDto = newsMapper.newsToDetailedNewsDto(news);
     newsService.markAsSeen(userService.getUser().getId(), news);
     return detailedNewsDto;
   }

@@ -13,7 +13,7 @@ export class ShoppingCartService {
   constructor() {
   }
 
-  addToCart(ticket: Ticket) {
+  async addToCart(ticket: Ticket) {
     const tickets = this.getItems();
     tickets.push(ticket);
     this.ticketsSubject.next(tickets);

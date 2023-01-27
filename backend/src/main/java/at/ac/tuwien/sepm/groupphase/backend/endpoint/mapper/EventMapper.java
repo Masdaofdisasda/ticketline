@@ -13,13 +13,15 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Mapper(uses = {PerformanceMapper.class})
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {PerformanceMapper.class})
 public interface EventMapper {
 
   EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
@@ -50,36 +52,36 @@ public interface EventMapper {
   Event eventDtoToEvent(EventCreateDto eventDto);
 
   @IterableMapping(qualifiedByName = "eventSimpleEventDto")
-  List<EventDtoSimple> eventToSimpleEventDto(List<Event> events);
+  List<EventDtoSimple> eventToSimpleEventDto(Set<Event> events);
 
   @Named("getArtistName")
-  default String getArtistName(List<Performance> performances) {
+  default String getArtistName(Set<Performance> performances) {
     List<String> artistNames = performances.stream()
-      .map(Performance::getArtists)
-      .flatMap(Collection::stream)
-      .distinct()
-      .filter(Objects::nonNull)
-      .map(Artist::getName).toList();
+        .map(Performance::getArtists)
+        .flatMap(Collection::stream)
+        .distinct()
+        .filter(Objects::nonNull)
+        .map(Artist::getName).toList();
 
     return String.join(",", artistNames);
   }
 
   @Named("getEventHallName")
-  default String getEventHallName(List<Performance> performances) {
+  default String getEventHallName(Set<Performance> performances) {
     List<String> eventHallNames = performances.stream().map(Performance::getRoom)
-      .filter(Objects::nonNull)
-      .distinct().map(Room::getName).toList();
+        .filter(Objects::nonNull)
+        .distinct().map(Room::getName).toList();
 
     return String.join(",", eventHallNames);
   }
 
   @Named("getVenueName")
-  default String getVenueName(List<Performance> performances) {
+  default String getVenueName(Set<Performance> performances) {
     List<String> venueNames = performances.stream()
-      .map(Performance::getRoom)
-      .map(Room::getVenue)
-      .filter(Objects::nonNull)
-      .distinct().map(Venue::getName).toList();
+        .map(Performance::getRoom)
+        .map(Room::getVenue)
+        .filter(Objects::nonNull)
+        .distinct().map(Venue::getName).toList();
 
     return String.join(",", venueNames);
   }

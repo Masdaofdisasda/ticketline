@@ -17,11 +17,11 @@ public interface TicketValidationService {
    *
    * @param validationHash The hash that is used to validate
    * @return {@link TicketValidationResult#DECRYPTION_FAILED}: is returned when an error in the decryption arises (e.g. when qr code data was read wrong)
-   *         {@link TicketValidationResult#TICKET_NOT_FOUND}: is returned when the hash was decrypted but the associated ticket does not exist in persistence
-   *         {@link TicketValidationResult#TICKET_ALREADY_USED}: is returned when the ticket was found, but the data says it was already redeemed
-   *         {@link TicketValidationResult#VALID}: is returned when everything went right and can be used
+   *      {@link TicketValidationResult#TICKET_NOT_FOUND}: is returned when the hash was decrypted but the associated ticket does not exist in persistence
+   *      {@link TicketValidationResult#TICKET_ALREADY_USED}: is returned when the ticket was found, but the data says it was already redeemed
+   *      {@link TicketValidationResult#VALID}: is returned when everything went right and can be used
    */
-  TicketValidationResult validateTicket(byte[] validationHash);
+  TicketValidationResult validateTicket(byte[] validationHash) throws InterruptedException;
 
   enum TicketValidationResult {
     BOOKING_CANCELED(""),

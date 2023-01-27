@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 
+import java.util.List;
+
 public interface RoomService {
   /**
    * Delete a {@link Room} from the persistent storage.
@@ -28,4 +30,12 @@ public interface RoomService {
    * @return The room with the given id
    */
   Room getById(long id) throws NotFoundException;
+
+  /**
+   * Get all rooms contained.
+   *
+   * @param id The id venue
+   * @return All rooms contained in given
+   */
+  List<Room> getByVenueId(long id);
 }

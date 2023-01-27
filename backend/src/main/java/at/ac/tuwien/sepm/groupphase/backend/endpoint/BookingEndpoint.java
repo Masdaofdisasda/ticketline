@@ -28,15 +28,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/v1/booking")
-@RequiredArgsConstructor
 public class BookingEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -60,40 +60,40 @@ public class BookingEndpoint {
   @GetMapping("/{bookingId}/ticketsPdf")
   @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateTicketsPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
-    throws DocumentException, IOException, WriterException {
+  public ResponseEntity<byte[]> generateTicketsPdf(@PathVariable long bookingId, @RequestHeader("referer") String senderUri)
+      throws DocumentException, IOException, WriterException {
     LOGGER.info("GET /api/v1/booking/{}/ticketsPdf: generateTicketsPdf({})", bookingId, bookingId);
     return ResponseEntity
-      .status(HttpStatus.OK)
-      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
-      .body(bookingService.createPdfForBooking(bookingId,
-        senderUri, DocumentType.TICKETS));
+        .status(HttpStatus.OK)
+        .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+        .body(bookingService.createPdfForBooking(bookingId,
+            senderUri, DocumentType.TICKETS));
   }
 
   @GetMapping("/{bookingId}/receiptPdf")
   @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateReceiptPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
-    throws DocumentException, IOException, WriterException {
+  public ResponseEntity<byte[]> generateReceiptPdf(@PathVariable long bookingId, @RequestHeader("referer") String senderUri)
+      throws DocumentException, IOException, WriterException {
     LOGGER.info("GET /api/v1/booking/{}/receiptPdf: generateReceiptPdf({})", bookingId, bookingId);
     return ResponseEntity
-      .status(HttpStatus.OK)
-      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
-      .body(bookingService.createPdfForBooking(bookingId,
-        senderUri, DocumentType.RECEIPT));
+        .status(HttpStatus.OK)
+        .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+        .body(bookingService.createPdfForBooking(bookingId,
+            senderUri, DocumentType.RECEIPT));
   }
 
   @GetMapping("/{bookingId}/cancellationPdf")
   @Secured("ROLE_USER")
   @Transactional(readOnly = true)
-  public ResponseEntity<byte[]> generateCancellationPdf(HttpServletRequest request, @PathVariable long bookingId, @RequestHeader("referer") String senderUri)
-    throws DocumentException, IOException, WriterException {
+  public ResponseEntity<byte[]> generateCancellationPdf(@PathVariable long bookingId, @RequestHeader("referer") String senderUri)
+      throws DocumentException, IOException, WriterException {
     LOGGER.info("GET /api/v1/booking/{}/cancellationPdf: generateCancellationPdf({})", bookingId, bookingId);
     return ResponseEntity
-      .status(HttpStatus.OK)
-      .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
-      .body(bookingService.createPdfForBooking(bookingId,
-        senderUri, DocumentType.CANCELLATION));
+        .status(HttpStatus.OK)
+        .header("Content-Type", MediaType.APPLICATION_PDF_VALUE)
+        .body(bookingService.createPdfForBooking(bookingId,
+            senderUri, DocumentType.CANCELLATION));
   }
 
   /**
@@ -119,6 +119,7 @@ public class BookingEndpoint {
   @GetMapping("/{bookingId}")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
+  @Transactional
   public BookingDetailDto fetchBooking(@PathVariable Long bookingId) {
     LOGGER.info("GET /api/v1/booking/{}: fetchBooking({})", bookingId, bookingId);
     return bookingService.fetchBookingDetails(bookingId);
@@ -132,9 +133,10 @@ public class BookingEndpoint {
   @GetMapping
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public List<BookingItemDto> fetchBookings() {
+  @Transactional
+  public Stream<BookingItemDto> fetchBookings() {
     LOGGER.info("GET /api/v1/booking/: fetchBookings()");
-    return bookingService.fetchBookings();
+    return bookingService.fetchBookings().stream().sorted(Comparator.comparing(BookingItemDto::getBookedOn).reversed());
   }
 
   /**

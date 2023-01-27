@@ -6,77 +6,84 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "APPLICATION_USER")
 public class ApplicationUser {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID", nullable = false)
   private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String email;
-
-  @Column(nullable = false, length = 100)
-  private String password;
-
-  @Column(nullable = false)
-  private String firstName;
-
-  @Column(nullable = false)
-  private String lastName;
-
-  @Column(name = "account_non_locked")
+  @Column(name = "ACCOUNT_NON_LOCKED")
   private boolean accountNonLocked;
 
-  @Column(name = "failed_attempt")
-  private int failedAttempt;
+  @Column(name = "ADMIN")
+  private boolean admin;
 
-  @Column(name = "lock_time")
-  private Date lockTime;
+  @Size(max = 255)
+  @NotNull
+  @Column(name = "EMAIL", nullable = false)
+  private String email;
 
-  @ManyToMany
-  private Set<News> hasSeen;
+  @Column(name = "FAILED_ATTEMPT")
+  private Integer failedAttempt;
 
-  private Boolean admin;
+  @Size(max = 255)
+  @NotNull
+  @Column(name = "FIRST_NAME", nullable = false)
+  private String firstName;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Fetch(FetchMode.JOIN)
+  @Size(max = 255)
+  @NotNull
+  @Column(name = "LAST_NAME", nullable = false)
+  private String lastName;
+
+  @Column(name = "LOCK_TIME")
+  private LocalDateTime lockTime;
+
+  @Size(max = 100)
+  @NotNull
+  @Column(name = "PASSWORD", nullable = false, length = 100)
+  private String password;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "PASSWORD_TOKEN_ID")
+  private PasswordResetToken passwordToken;
+
+  @OneToMany(mappedBy = "user")
+  private Set<PasswordResetToken> passwordResetTokens = new LinkedHashSet<>();
+
+  @OneToMany(mappedBy = "user")
+  private Set<Booking> bookings = new LinkedHashSet<>();
+
   @Builder.Default
-  private List<Booking> bookings = new ArrayList<>();
+  @ManyToMany(mappedBy = "hasSeen", cascade = CascadeType.PERSIST)
+  private Set<News> news = new LinkedHashSet<>();
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "password_token_id", referencedColumnName = "id")
-  private PasswordResetToken passwordResetToken;
-
-  public ApplicationUser(String email, String password, String firstName, String lastName, Boolean admin) {
-    this.email = email;
-    this.password = password;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.admin = admin;
-  }
 
   public void addBooking(Booking booking) {
     if (bookings.contains(booking)) {
@@ -92,5 +99,9 @@ public class ApplicationUser {
     }
     bookings.remove(booking);
     booking.setUser(null);
+  }
+
+  public void addHasSeen(News news) {
+    this.news.add(news);
   }
 }

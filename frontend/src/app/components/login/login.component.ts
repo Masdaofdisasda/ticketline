@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {Location} from '@angular/common';
 import {AuthRequest} from '../../dto/auth-request';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,8 @@ export class LoginComponent implements OnInit {
     this.error = false;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   /**
    * Form validation will start after the method is called, additionally an AuthRequest will be sent
@@ -63,8 +65,7 @@ export class LoginComponent implements OnInit {
     console.log('Try to authenticate user: ' + authRequest.email);
     this.authService.loginUser(authRequest).subscribe({
       next: () => {
-        console.log('Successfully logged in user: ' + authRequest.email);
-        this._location.back();
+        this.router.navigate(['/event']);
       },
       error: (error) => {
         console.log('Could not log in due to:');
@@ -74,7 +75,8 @@ export class LoginComponent implements OnInit {
         let errorObject;
         try {
           errorObject = JSON.parse(error.error);
-        } catch (e) {}
+        } catch (e) {
+        }
         if (errorObject && errorObject.error === 'Forbidden') {
           this.errorMessage =
             'Could not log in with these credentials. Please check email and password.';

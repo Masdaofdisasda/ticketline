@@ -88,6 +88,6 @@ class EventRepositoryTest {
   }
 
   void findTopOfMonth() {
-    // TODO: 11.12.22 add testcase here
+    
   }
 }

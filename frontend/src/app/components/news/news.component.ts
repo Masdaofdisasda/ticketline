@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NewsService} from '../../services/news.service';
-import {NewsDto} from '../../dto/newsDto';
-import {NgbModal, NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
+import {NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
@@ -22,7 +21,7 @@ export class NewsComponent implements OnInit {
   submitted = false;
   archive: boolean;
 
-  pagedProperties = PageResponseDto.getPageResponseDto();
+  pagedProperties: PageResponseDto<NewsOverviewDto> = PageResponseDto.getPageResponseDto();
 
   private news: NewsOverviewDto[];
 
@@ -53,24 +52,6 @@ export class NewsComponent implements OnInit {
     this.refreshNews();
   }
 
-  nextPage(){
-    if (this.pagedProperties.pageIndex < this.pagedProperties.pagesTotal-1){
-      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex++, ...this.pagedProperties};
-      this.refreshNews();
-    }
-  }
-
-  previousPage(){
-    if (this.pagedProperties.pageIndex > 0){
-      this.pagedProperties = {pageIndex: this.pagedProperties.pageIndex--, ...this.pagedProperties};
-      this.refreshNews();
-    }
-  }
-
-  loadNews(): NewsOverviewDto[] {
-    return this.news;
-  }
-
   refreshNews() {
     if (this.archive){
       this.loadOldNews(this.pagedProperties);
@@ -90,18 +71,9 @@ export class NewsComponent implements OnInit {
    * Loads the specified page of messages from the backend
    */
   private loadUnreadNews(pageDto: PageDto) {
-    this.newsService.getPaginatedNews(pageDto).subscribe({
-      next: (news: PageResponseDto<NewsOverviewDto>) => {
-        this.pagedProperties = news;
-        this.news = news.data;
-        if (this.pagedProperties.pagesTotal < this.pagedProperties.pageIndex){
-          this.pagedProperties.pageIndex = this.pagedProperties.pagesTotal - 1;
-          this.refreshNews();
-        }
-      },
-      error: error => {
-        this.defaultServiceErrorHandling(error);
-      }
+    this.newsService.getPaginatedNews(pageDto).subscribe(data => {
+      data.pageIndex = data.pageIndex + 1;
+      this.pagedProperties = data;
     });
   }
 
@@ -109,30 +81,9 @@ export class NewsComponent implements OnInit {
    * Loads the specified page of messages from the backend
    */
   private loadOldNews(pageDto: PageDto) {
-    this.newsService.getPaginatedNewsArchive(pageDto).subscribe({
-      next: (news: PageResponseDto<NewsOverviewDto>) => {
-        this.pagedProperties = news;
-        this.news = news.data;
-        if (this.pagedProperties.pagesTotal < this.pagedProperties.pageIndex){
-          this.pagedProperties.pageIndex = this.pagedProperties.pagesTotal - 1;
-          this.refreshNews();
-        }
-      },
-      error: error => {
-        this.defaultServiceErrorHandling(error);
-      }
+    this.newsService.getPaginatedNewsArchive(pageDto).subscribe(data => {
+      data.pageIndex = data.pageIndex + 1;
+      this.pagedProperties = data;
     });
   }
-
-
-  private defaultServiceErrorHandling(error: any) {
-    console.log(error);
-    this.error = true;
-    if (typeof error.error === 'object') {
-      this.errorMessage = error.error.error;
-    } else {
-      this.errorMessage = error.error;
-    }
-  }
-
 }

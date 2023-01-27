@@ -142,16 +142,19 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
 
   multiSelectChange(event: MultiselectEvent) {
     if (this.selectedSector.value.id === this.unselectedID) {
+      event.removed.forEach(seat =>
+        this.roomPlan.setColor(this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color, seat.colNumber, seat.rowNumber));
+      event.all.forEach(seat =>
+        this.roomPlan.setColor(this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color + '7b', seat.colNumber, seat.rowNumber));
       return;
     }
     event.removed.forEach(seat => this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber));
-    this.update();
     this.currentlySelected = event.all;
     event.all.forEach(seat => this.roomPlan.setColor(this.selectedSector.value.priceCategory.color + '7b', seat.colNumber, seat.rowNumber));
   }
 
   multiSelectEnd(seats: Array<Seat>) {
-    this.currentlySelected.forEach(seat => this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber));
+    // this.currentlySelected.forEach(seat => this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber));
     this.update();
     if (seats.length < 2) {
       return;
@@ -185,8 +188,6 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     this.selectedSector.value.seats?.forEach((seat) => {
       this.roomPlan.setColor(this.selectedSector.value.priceCategory.color, seat.colNumber, seat.rowNumber);
     });
-
-    window.localStorage.setItem('roomAdd_' + this.room.name, JSON.stringify(this.room));
   }
 
   hoverEnd(seat: Seat) {

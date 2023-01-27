@@ -20,7 +20,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -28,7 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -36,9 +35,9 @@ public class CreatePdfServiceImpl implements CreatePdfService {
 
   @Override
   public void createTicketPdf(OutputStream outputStream, Booking booking, String domain)
-    throws IOException, DocumentException, WriterException {
+      throws IOException, DocumentException, WriterException {
     // Create the PDF document
-    List<Ticket> ticketList = booking.getTickets();
+    Set<Ticket> ticketList = booking.getTickets();
     Document document = new Document();
     PdfWriter.getInstance(document, outputStream);
     document.open();
@@ -58,8 +57,8 @@ public class CreatePdfServiceImpl implements CreatePdfService {
       contentElement.add(new Phrase(ticket.getPerformance().getArtists().stream().map(Artist::getName).reduce("", (a, b) -> a + ", " + b), bold));
       contentElement.add(" on ");
       contentElement.add(new Phrase(String.format("%s - %s",
-        ticket.getPerformance().getStartDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s")),
-        ticket.getPerformance().getEndDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s"))), bold));
+          ticket.getPerformance().getStartDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s")),
+          ticket.getPerformance().getEndDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s"))), bold));
       contentElement.add(".\nYour seat is ");
       contentElement.add(new Phrase(ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber(), bold));
       contentElement.setSpacingAfter(20f);
@@ -68,7 +67,7 @@ public class CreatePdfServiceImpl implements CreatePdfService {
       // Create the QR code
       QRCodeWriter qrCodeWriter = new QRCodeWriter();
       String qrContent = String.format("%s#/tickets/validate?hash=%s",
-        domain, Base64.getUrlEncoder().encodeToString(ticket.getValidationHash()));
+          domain, Base64.getUrlEncoder().encodeToString(ticket.getValidationHash()));
       BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 200, 200);
       BufferedImage qrCodeImage = bitMatrixToBufferedImage(bitMatrix);
       Image qrCodePdfImage = Image.getInstance(qrCodeImage, null);
@@ -101,22 +100,21 @@ public class CreatePdfServiceImpl implements CreatePdfService {
     document.add(titleElement);
 
     Paragraph header = new Paragraph("Receipt for booking nr. " + booking.getId() + "                                      "
-      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+        + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
     header.setSpacingAfter(12f);
     document.add(header);
 
-    List<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
-      ? booking.getCanceledTickets().stream().toList()
-      : booking.getTickets();
-    for (final Ticket ticket : tickets) {
-
+    Set<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
+        ? booking.getCanceledTickets()
+        : booking.getTickets();
+    for (Ticket ticket : tickets) {
       String eventName = ticket.getPerformance().getEvent().getName();
       if (eventName.length() > 20) {
         eventName = eventName.substring(0, 20);
       }
       Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
-        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
-        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+          + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+          + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
       document.add(contentElement);
     }
 
@@ -133,7 +131,7 @@ public class CreatePdfServiceImpl implements CreatePdfService {
   }
 
   @Override
-  public void createCancellationPdf(OutputStream outputStream, Booking booking, String domain) throws DocumentException, WriterException, IOException {
+  public void createCancellationPdf(OutputStream outputStream, Booking booking, String domain) throws DocumentException {
     // Create the PDF document
     Document document = new Document();
     PdfWriter.getInstance(document, outputStream);
@@ -150,13 +148,13 @@ public class CreatePdfServiceImpl implements CreatePdfService {
     document.add(titleElement);
 
     Paragraph header = new Paragraph("Cancellation for booking nr. " + booking.getId() + "                               "
-      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+        + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
     header.setSpacingAfter(12f);
     document.add(header);
 
-    List<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
-      ? booking.getCanceledTickets().stream().toList()
-      : booking.getTickets();
+    Set<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
+        ? booking.getCanceledTickets()
+        : booking.getTickets();
     for (final Ticket ticket : tickets) {
 
       String eventName = ticket.getPerformance().getEvent().getName();
@@ -164,13 +162,13 @@ public class CreatePdfServiceImpl implements CreatePdfService {
         eventName = eventName.substring(0, 20);
       }
       Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
-        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
-        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+          + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+          + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
       document.add(contentElement);
     }
 
     Paragraph total = new Paragraph("-----------------------------------------------------------------", new Font(baseFont, 24f));
-    total.add(new Phrase("\nRefund: " + booking.calculateTotal() + " EUR"));
+    total.add(new Phrase("\nRefund: " + booking.calculateCancelTotal() + " EUR"));
     total.setSpacingBefore(6f);
     total.setSpacingAfter(12f);
     document.add(total);
