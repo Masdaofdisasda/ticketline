@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import com.google.zxing.WriterException;
 import com.itextpdf.text.DocumentException;
 
@@ -53,7 +54,7 @@ public interface BookingService {
    *
    * @param bookingId to purchase
    */
-  void purchaseReservation(Long bookingId);
+  void purchaseReservation(Long bookingId) throws ValidationException;
 
   /**
    * Creates a PDF of given type for a booking.

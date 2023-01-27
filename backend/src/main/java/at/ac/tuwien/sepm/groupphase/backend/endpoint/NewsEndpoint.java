@@ -4,10 +4,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UploadResponseDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.records.PageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.News;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ConflictException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.NewsService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
@@ -39,6 +41,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -62,7 +67,13 @@ public class NewsEndpoint {
   @Operation(summary = "Get list of news")
   public PageDtoResponse<NewsOverviewDto> findAllPaginated(PageDto pageDto) {
     LOGGER.info("GET /api/v1/news");
-    Page<News> page = newsService.findAllPaginated(pageDto);
+    SimpleUserDto simpleUserDto = userService.getUser();
+    Page<News> page;
+    if (userService.findApplicationUserById(simpleUserDto.getId()).isAdmin()) {
+      page = newsService.findAllPaginated(pageDto);
+    } else {
+      page = newsService.findAllReleasedNewsPaginated(pageDto);
+    }
     return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
       newsMapper.newsToNewsOverviewDto(page.getContent()));
   }
@@ -73,8 +84,14 @@ public class NewsEndpoint {
   @Operation(summary = "Get list of news the current user hasnt seen yet")
   public PageDtoResponse<NewsOverviewDto> findAllUnreadPaginated(PageDto pageDto) {
     LOGGER.info("GET /api/v1/news/unread");
-    Long userId = userService.getUser().getId();
-    Page<News> page = newsService.findAllUnreadPaginated(userId, pageDto);
+    SimpleUserDto simpleUserDto = userService.getUser();
+    Page<News> page;
+    Long userId = simpleUserDto.getId();
+    if (userService.findApplicationUserById(simpleUserDto.getId()).isAdmin()) {
+      page = newsService.findAllUnreadPaginated(userId, pageDto);
+    } else {
+      page = newsService.findAllReleasedUnreadPaginated(userId, pageDto);
+    }
     return buildResponseDto(pageDto.pageIndex(), pageDto.pageSize(), page.getTotalElements(), page.getTotalPages(),
       newsMapper.newsToNewsOverviewDto(page.getContent()));
   }
@@ -106,13 +123,14 @@ public class NewsEndpoint {
   @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
   public UploadResponseDto uploadPicture(@RequestParam MultipartFile imageFile) throws ValidationException {
     LOGGER.info("POST /api/v1/news/picture body: {}", imageFile);
-    String generatedFilename = generateFilename(imageFile.getOriginalFilename());
-    ClassLoader classLoader = getClass().getClassLoader();
+    String generatedFilename;
     if (imageFile.getContentType() != null && imageFile.getContentType().startsWith("image/")) {
       try {
-        imageFile.transferTo(new File(classLoader.getResource(".").getFile() + "/" + generatedFilename));
-      } catch (IOException | NullPointerException e) {
-        throw new RuntimeException(e);
+        generatedFilename = generateFilename(imageFile.getOriginalFilename(), 0);
+        ClassLoader classLoader = getClass().getClassLoader();
+        imageFile.transferTo(new File(new URL(classLoader.getResource("."), generatedFilename).toURI()));
+      } catch (IOException | NullPointerException | URISyntaxException e) {
+        throw new ConflictException("The uploaded file is no corrupted");
       }
     } else {
       throw new ValidationException("While submitting an image Errors have occured", List.of("The uploaded file does not contain an image"));
@@ -127,7 +145,7 @@ public class NewsEndpoint {
   @PermitAll
   @ResponseBody
   @GetMapping(value = "/picture")
-  @Operation(summary = "Upload a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
+  @Operation(summary = "Download a Picture to be used with news", security = @SecurityRequirement(name = "apiKey"))
   public ResponseEntity<InputStreamResource> downloadPicture(@RequestParam String path) throws IOException {
     LOGGER.info("GET /api/v1/news/picture body: {}", path);
     ClassLoader classLoader = getClass().getClassLoader();
@@ -135,13 +153,13 @@ public class NewsEndpoint {
     return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(in));
   }
 
-  private String generateFilename(String originalFilename) {
+  private String generateFilename(String originalFilename, int tries) throws MalformedURLException, URISyntaxException {
     ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(classLoader.getResource(".").getFile() + "/" + originalFilename);
+    File file = new File(new URL(classLoader.getResource("."), originalFilename).toURI());
     if (file.exists() && !file.isDirectory()) {
-      return generateFilename((int) (Math.random() * 10) + originalFilename);
+      return generateFilename(originalFilename, tries + 1);
     } else {
-      return originalFilename;
+      return originalFilename.replace(" ", "") + (tries > 0 ? tries : "");
     }
   }
 

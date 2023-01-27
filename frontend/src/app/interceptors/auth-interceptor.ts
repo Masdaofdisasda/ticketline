@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse,} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {AuthService} from '../services/auth.service';
 import {catchError, Observable, throwError} from 'rxjs';
 import {Globals} from '../global/globals';
@@ -46,11 +46,11 @@ export class AuthInterceptor implements HttpInterceptor {
         } else {
           console.log('This is server side error');
           errorMsg = `Error Code: ${error.status} \n Message: ${error.error}`;
-          console.log(error.error);
-          if (error.error === 'Invalid authorization header or token') {
-            //remove token
+          if (error.status === 403) {
+            // remove token
             localStorage.removeItem('authToken');
             console.log(localStorage.getItem('authToken'));
+            errorMsg = `Error Code: ${error.status} \n Message: Invalid credentials`;
           }
         }
         console.log(errorMsg);

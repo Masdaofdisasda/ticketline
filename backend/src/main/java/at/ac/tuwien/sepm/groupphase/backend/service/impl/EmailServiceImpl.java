@@ -21,7 +21,7 @@ public class EmailServiceImpl implements EmailService {
     String message = "You have requested a password reset link. Here is your link: \r\n"
       + url + "\r\nThe link will expire after 24 hours. \r\n"
       + "In case you didn't request this link you can simply ignore this message. Your password will not be changed.\r\n\r\n"
-      + "Kind regards,\r\n The Ticketline team";
+      + "Kind regards,\r\nThe Ticketline team";
     return constructEmail("Ticketline - Reset Password", message, user);
   }
 

@@ -47,10 +47,13 @@
     <div class="col-sm"></div>
 
   </div>
-  <button type="button"
-          class="btn btn-primary float-end"
-          [disabled]="createFormGroup.invalid"
-          (click)="onSubmit()">
-    Create News
-  </button>
+  <div class="d-flex">
+    <span class="flex-grow-1"></span>
+    <button type="button"
+            class="btn btn-primary "
+            [disabled]="createFormGroup.invalid"
+            (click)="onSubmit()">
+      Create News
+    </button>
+  </div>
 </form>

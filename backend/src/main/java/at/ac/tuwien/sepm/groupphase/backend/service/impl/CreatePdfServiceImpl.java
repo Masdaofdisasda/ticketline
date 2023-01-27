@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.service.CreatePdfService;
@@ -28,6 +29,7 @@ import java.io.OutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -35,7 +37,7 @@ public class CreatePdfServiceImpl implements CreatePdfService {
 
   @Override
   public void createTicketPdf(OutputStream outputStream, Booking booking, String domain)
-      throws IOException, DocumentException, WriterException {
+    throws IOException, DocumentException, WriterException {
     // Create the PDF document
     Set<Ticket> ticketList = booking.getTickets();
     Document document = new Document();
@@ -54,20 +56,26 @@ public class CreatePdfServiceImpl implements CreatePdfService {
       contentElement.setFont(new Font(baseFont, 16));
       contentElement.add(new Phrase(ticket.getPerformance().getEvent().getName(), bold));
       contentElement.add(".\nThis Ticket is valid for the performance by ");
-      contentElement.add(new Phrase(ticket.getPerformance().getArtists().stream().map(Artist::getName).reduce("", (a, b) -> a + ", " + b), bold));
+      contentElement.add(new Phrase(ticket.getPerformance().getArtists().stream().map(Artist::getName).collect(Collectors.joining(", ")), bold));
       contentElement.add(" on ");
       contentElement.add(new Phrase(String.format("%s - %s",
-          ticket.getPerformance().getStartDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s")),
-          ticket.getPerformance().getEndDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s"))), bold));
+        ticket.getPerformance().getStartDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s")),
+        ticket.getPerformance().getEndDate().format(DateTimeFormatter.ofPattern("E dd. MMM yyyy H:m:s"))), bold));
       contentElement.add(".\nYour seat is ");
       contentElement.add(new Phrase(ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber(), bold));
+      contentElement.add(" in ");
+      contentElement.add(new Phrase(ticket.getPerformance().getRoom().getName()));
+      contentElement.add(".");
+      Paragraph locationElement =
+        new Paragraph("Location of Performance: " + ticket.getPerformance().getRoom().getVenue().getAddress(), new Font(baseFont, 16f));
+      contentElement.add(locationElement);
       contentElement.setSpacingAfter(20f);
       document.add(contentElement);
 
       // Create the QR code
       QRCodeWriter qrCodeWriter = new QRCodeWriter();
       String qrContent = String.format("%s#/tickets/validate?hash=%s",
-          domain, Base64.getUrlEncoder().encodeToString(ticket.getValidationHash()));
+        domain, Base64.getUrlEncoder().encodeToString(ticket.getValidationHash()));
       BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 200, 200);
       BufferedImage qrCodeImage = bitMatrixToBufferedImage(bitMatrix);
       Image qrCodePdfImage = Image.getInstance(qrCodeImage, null);
@@ -92,30 +100,35 @@ public class CreatePdfServiceImpl implements CreatePdfService {
     BaseFont baseFont = FontFactory.getFont(FontFactory.HELVETICA).getBaseFont();
     Paragraph titleElement = new Paragraph("Ticketline GmbH", new Font(baseFont, 36f));
     titleElement.setFont(new Font(baseFont, 24f));
-    titleElement.add(new Phrase("\nTicketplatz 23"));
-    titleElement.add(new Phrase("\n1010 Wien"));
+    titleElement.add(new Phrase("\n\nTicketplatz 23"));
+    titleElement.add(new Phrase("\n\n1010 Wien"));
     titleElement.setFont(new Font(baseFont, 11));
-    titleElement.add(new Phrase("\nVAT: AT12345678"));
+    titleElement.add(new Phrase("\n\nVAT: AT12345678"));
     titleElement.setSpacingAfter(40f);
+
     document.add(titleElement);
 
     Paragraph header = new Paragraph("Receipt for booking nr. " + booking.getId() + "                                      "
-        + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
     header.setSpacingAfter(12f);
+
     document.add(header);
 
     Set<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
-        ? booking.getCanceledTickets()
-        : booking.getTickets();
+      ? booking.getCanceledTickets()
+      : booking.getTickets();
     for (Ticket ticket : tickets) {
-      String eventName = ticket.getPerformance().getEvent().getName();
+      Performance performance = ticket.getPerformance();
+      String eventName = performance.getEvent().getName();
       if (eventName.length() > 20) {
         eventName = eventName.substring(0, 20);
       }
       Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
-          + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
-          + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+      Paragraph locationElement = new Paragraph("Location of Performance: " + performance.getRoom().getVenue().getAddress(), new Font(baseFont, 16f));
       document.add(contentElement);
+      document.add(locationElement);
     }
 
     Paragraph total = new Paragraph("-----------------------------------------------------------------", new Font(baseFont, 24f));
@@ -140,21 +153,21 @@ public class CreatePdfServiceImpl implements CreatePdfService {
     BaseFont baseFont = FontFactory.getFont(FontFactory.HELVETICA).getBaseFont();
     Paragraph titleElement = new Paragraph("Ticketline GmbH", new Font(baseFont, 36f));
     titleElement.setFont(new Font(baseFont, 24f));
-    titleElement.add(new Phrase("\nTicketplatz 23"));
-    titleElement.add(new Phrase("\n1010 Wien"));
+    titleElement.add(new Phrase("\n\nTicketplatz 23"));
+    titleElement.add(new Phrase("\n\n1010 Wien"));
     titleElement.setFont(new Font(baseFont, 11));
-    titleElement.add(new Phrase("\nVAT: AT12345678"));
+    titleElement.add(new Phrase("\n\nVAT: AT12345678"));
     titleElement.setSpacingAfter(40f);
     document.add(titleElement);
 
     Paragraph header = new Paragraph("Cancellation for booking nr. " + booking.getId() + "                               "
-        + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
+      + booking.getCreatedDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy H:m:s")), new Font(baseFont, 16f));
     header.setSpacingAfter(12f);
     document.add(header);
 
     Set<Ticket> tickets = booking.getBookingType() == BookingType.CANCELLATION
-        ? booking.getCanceledTickets()
-        : booking.getTickets();
+      ? booking.getCanceledTickets()
+      : booking.getTickets();
     for (final Ticket ticket : tickets) {
 
       String eventName = ticket.getPerformance().getEvent().getName();
@@ -162,8 +175,8 @@ public class CreatePdfServiceImpl implements CreatePdfService {
         eventName = eventName.substring(0, 20);
       }
       Paragraph contentElement = new Paragraph("Ticket for: '" + eventName + "', "
-          + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
-          + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
+        + "Seat: " + ticket.getSeat().getColNumber() + ":" + ticket.getSeat().getRowNumber() + "                      "
+        + ticket.getPrice() + " EUR", new Font(baseFont, 16f));
       document.add(contentElement);
     }
 
