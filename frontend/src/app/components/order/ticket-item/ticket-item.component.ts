@@ -12,6 +12,9 @@ export class TicketItemComponent implements OnInit {
   @Input()
   ticket: Ticket;
 
+  @Input()
+  muted: boolean;
+
   @Output()
   delete = new EventEmitter<void>();
 
