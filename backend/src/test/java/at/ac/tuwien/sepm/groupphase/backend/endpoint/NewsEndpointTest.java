@@ -1,18 +1,47 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedNewsDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsOverviewDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PageDtoResponse;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserRegistrationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
+import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class NewsEndpointTest implements TestData {
-/*
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -44,16 +73,20 @@ public class NewsEndpointTest implements TestData {
     .publishedAt(TEST_NEWS_PUBLISHED_AT)
     .build();
 
-  @BeforeEach
-  public void beforeEach() {
-    newsRepository.deleteAll();
-  }
-
   @Test
   public void givenNothing_whenFindAll_thenEmptyList() throws Exception {
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
+
+    userRepository.deleteAll();
+    UserRegistrationDto userRegistrationDto = UserRegistrationDto.builder()
+      .email(ADMIN_USER)
+      .firstName("a")
+      .lastName("m")
+      .password("password").build();
+    userService.register(userRegistrationDto);
+
     MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)).params(requestParams))
       .andDo(print())
@@ -75,6 +108,13 @@ public class NewsEndpointTest implements TestData {
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
     newsRepository.save(news);
+    userRepository.deleteAll();
+    UserRegistrationDto userRegistrationDto = UserRegistrationDto.builder()
+      .email(ADMIN_USER)
+      .firstName("a")
+      .lastName("m")
+      .password("password").build();
+    userService.register(userRegistrationDto);
 
     MvcResult mvcResult = this.mockMvc.perform(get(NEWS_BASE_URI)
         .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
@@ -115,7 +155,11 @@ public class NewsEndpointTest implements TestData {
     DetailedNewsDto detailedNewsDto = objectMapper.readValue(response.getContentAsString(),
       DetailedNewsDto.class);
 
-    assertEquals(news, newsMapper.detailedNewsDtoToNews(detailedNewsDto));
+    assertEquals(news.getText(), detailedNewsDto.getText());
+    assertEquals(news.getTitle(), detailedNewsDto.getTitle());
+    assertEquals(news.getSummary(), detailedNewsDto.getSummary());
+    assertEquals(news.getFileName(), detailedNewsDto.getFileName());
+    assertEquals(news.getId(), detailedNewsDto.getId());
   }
 
   @Test
@@ -191,5 +235,4 @@ public class NewsEndpointTest implements TestData {
     );
   }
 
- */
 }

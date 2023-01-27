@@ -117,7 +117,7 @@ public class DefaultEventService implements EventService {
       performanceDto.getPriceCategoryPricingMap().forEach((key, value) -> {
         longPricingMap.put(key, Pricing.builder()
           .performance(perf)
-          .pricecategory(priceCategoryRepository.findById(key)
+          .priceCategory(priceCategoryRepository.findById(key)
             .orElseThrow(() -> new NotFoundException("PriceCategory with id " + key + " could not be found in PriceCategoryPricingMap")))
           .pricing(value)
           .build());

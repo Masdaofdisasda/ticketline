@@ -39,5 +39,5 @@ public class Pricing {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PRICECATEGORY_ID")
-  private PriceCategory pricecategory;
+  private PriceCategory priceCategory;
 }
