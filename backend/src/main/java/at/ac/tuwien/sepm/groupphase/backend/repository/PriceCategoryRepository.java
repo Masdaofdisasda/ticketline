@@ -10,7 +10,7 @@ import java.util.List;
 public interface PriceCategoryRepository extends JpaRepository<PriceCategory, Long> {
 
   @Query("FROM PriceCategory pc "
-      + " JOIN FETCH Pricing pr ON pc.id = pr.pricecategory.id"
+      + " JOIN FETCH Pricing pr ON pc.id = pr.priceCategory.id"
       + " WHERE pr.performance.id = :performanceId")
   List<PriceCategory> getPriceCategoriesByPerformance(@Param("performanceId") long performanceId);
 

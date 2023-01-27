@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,8 +48,10 @@ public class VenueEndpoint {
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
   @Secured("ROLE_ADMIN")
+  @Transactional
   public VenueDto addVenue(@RequestBody VenueAddDto toAdd) throws ValidationException {
     LOGGER.info("addVenue({})", toAdd);
+
     return this.mapper.venueToVenueDto(
       service.addVenue(
         this.mapper.venueAddDtoToVenue(toAdd)
@@ -89,6 +92,7 @@ public class VenueEndpoint {
    */
   @GetMapping()
   @PermitAll
+  @Transactional
   public Stream<VenueDto> getAllVenues() {
     LOGGER.info("getAllVenues()");
     return service.getAllVenues().stream()

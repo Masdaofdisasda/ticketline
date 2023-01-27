@@ -55,5 +55,6 @@ public class Seat {
   private Sector sector;
 
   @OneToMany(mappedBy = "seat")
+  @Builder.Default
   private Set<Ticket> tickets = new LinkedHashSet<>();
 }

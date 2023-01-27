@@ -1,12 +1,63 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.ArtistFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.EventFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.PriceCategoryFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.RoomFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.SectorFixture;
+import at.ac.tuwien.sepm.groupphase.backend.datagen.fixtures.VenueFixture;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ArtistDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceDtoSimple;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceRoomDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ArtistMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TicketMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ArtistRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PricingRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.RoomRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.TicketRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
+import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -14,7 +65,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class PerformanceEndpointTest {
-  /*
+
   private static final LocalDateTime start = LocalDateTime.of(2022, 1, 1, 10, 10, 10),
     end = LocalDateTime.of(2022, 1, 3, 10, 10, 10);
   @Autowired
@@ -80,13 +131,9 @@ public class PerformanceEndpointTest {
       .event(eventRepository.save(EventFixture.buildEvent1()))
       .startDate(start)
       .endDate(end)
-      .artists(artistRepository.saveAll(List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2())))
+      .artists(new HashSet<>(artistRepository.saveAll(List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2()))))
       .room(roomRepository.save(RoomFixture.buildRoom1()))
       .event(EventFixture.buildEvent1())
-      .tickets(List.of(
-        TicketFixture.buildTicket1(),
-        TicketFixture.buildTicket2()
-      ))
       .build();
 
     long id = performanceRepository.save(performance).getId();
@@ -105,12 +152,17 @@ public class PerformanceEndpointTest {
     assertEquals(id, performanceDto.getId());
     assertEquals(start, performanceDto.getStartDate());
     assertEquals(end, performanceDto.getEndDate());
-    assertEquals(artistMapper.artistsToArtistDtos(List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2())), performanceDto.getArtists());
+    assertThat(artistMapper.artistsToArtistDtos(
+      List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2()))
+      .stream().sorted(Comparator.comparing(ArtistDto::getId)).toList())
+      .isEqualTo(performanceDto.getArtists().stream().sorted(Comparator.comparing(ArtistDto::getId)).toList());
   }
 
   @Test
+  @Transactional
   public void getPerformanceRoom_shouldReturn() throws Exception {
-    priceCategoryRepository.saveAll(Arrays.asList(priceCategoryFixture.getAll()));
+    var priceCategories = Arrays.asList(priceCategoryFixture.getAll());
+    priceCategoryRepository.saveAll(priceCategories);
     SectorFixture.repository = priceCategoryRepository;
 
     venueRepository.save(VenueFixture.buildVenue1());
@@ -122,30 +174,34 @@ public class PerformanceEndpointTest {
       .event(eventRepository.save(EventFixture.buildEvent1()))
       .startDate(start)
       .endDate(end)
-      .artists(artistRepository.saveAll(List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2())))
+      .artists(new HashSet<>(artistRepository.saveAll(List.of(ArtistFixture.buildArtist1(), ArtistFixture.buildArtist2()))))
       .room(room)
       .event(EventFixture.buildEvent1())
-      .tickets(tickets)
       .build();
 
+    performanceRepository.save(performance);
 
     List<Pricing> pricings = new ArrayList<>();
     priceCategoryRepository.findAll().forEach(pc -> {
-      Pricing pricing = pc.getPricingList().get(0);
+      Pricing pricing = pc.getPricings().stream().findFirst().orElseThrow();
       pricing.setPerformance(performance);
       pricings.add(pricing);
     });
 
     pricingRepository.saveAll(pricings);
 
-    for (int i = 0; i < 2; i++) {
-      Ticket ticket = Ticket.builder()
-        .price(pricings.stream().filter(pricing -> pricing.getPerformance().getId()
-          .equals(performance.getId())).findFirst().orElseThrow().getPricing())
-        .performance(performance)
-        .build();
-      tickets.add(ticket);
-    }
+    room.getSectors().forEach(sector -> {
+      sector.getSeats().forEach(seat -> {
+        Ticket ticket = Ticket.builder()
+          .price(pricings.stream().filter(pricing -> pricing.getPerformance().getId()
+            .equals(performance.getId())).findFirst().orElseThrow().getPricing())
+          .performance(performance)
+          .seat(seat)
+          .build();
+        tickets.add(ticket);
+      });
+    });
+
     ticketRepository.saveAll(tickets);
 
     long id = performanceRepository.save(performance).getId();
@@ -165,14 +221,5 @@ public class PerformanceEndpointTest {
     assertNotNull(performanceDto.getRoom());
     assertEquals(room.getId(), performanceDto.getRoom().getId());
     assertEquals(room.getName(), performanceDto.getRoom().getName());
-
-    assertNotNull(performanceDto.getTickets());
-    assertEquals(tickets.size(), performanceDto.getTickets().size());
-    assertEquals(tickets.get(0).getPrice(), performanceDto.getTickets().get(0).getPrice());
-    assertEquals(tickets.get(1).getPrice(), performanceDto.getTickets().get(1).getPrice());
   }
-
-
-   */
-
 }

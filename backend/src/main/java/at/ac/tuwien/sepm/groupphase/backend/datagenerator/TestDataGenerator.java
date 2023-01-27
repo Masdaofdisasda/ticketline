@@ -35,8 +35,6 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -93,9 +91,11 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
   public void onApplicationEvent(final ApplicationReadyEvent applicationReadyEvent) {
 
     System.out.println("----------------------------------------------------Drop of old data----------------------------------------------------");
+    /*
     ResourceDatabasePopulator resourceDatabasePopulator =
-      new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
+    new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
     resourceDatabasePopulator.execute(dataSource);
+     */
 
     System.out.println("------------------------------------------------Starting data generation------------------------------------------------");
     List<ApplicationUser> users = new ArrayList<>();
@@ -291,7 +291,7 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
         Pricing pricing = pricingRepository.save(Pricing.builder()
           .pricing(BigDecimal.valueOf(faker.number().numberBetween(15 * (j + 1), 30 * (j + 1))))
           .performance(performance)
-          .pricecategory(priceCategories.get(j))
+          .priceCategory(priceCategories.get(j))
           .build());
 
         priceCategories.get(j).setPricings(Set.of(pricing));
