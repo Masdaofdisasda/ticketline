@@ -9,7 +9,8 @@
     <ul class="overflow-auto list-group list-group-flush flex-grow-1">
       <li *ngFor="let ticket of tickets$ | async" class="list-group-item" (mouseenter)="onHoverStart(ticket)"
           (mouseleave)="onHoverEnd(ticket)">
-        <app-ticket-item [ticket]="ticket" (delete)="onHoverEnd(ticket)"></app-ticket-item>
+        <app-ticket-item [muted]="performanceId !== ticket.performanceId" [ticket]="ticket"
+                         (delete)="onHoverEnd(ticket)"></app-ticket-item>
       </li>
     </ul>
     <div class="fw-normal text-end pt-4 pe-4">

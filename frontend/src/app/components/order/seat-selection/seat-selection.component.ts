@@ -28,7 +28,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   performance: PerformanceDto;
 
   private performanceId: number;
-  private readonly selectionOutlineColor = 'b8a';
   private readonly highlightColor = 'ffffff87';
 
   constructor(
@@ -43,10 +42,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   get shoppingCartHeight() {
     return visualViewport.height - document.querySelector('app-shopping-cart').getBoundingClientRect().y - 20;
-  }
-
-  private get selectionOutlineStrength() {
-    return this.roomPlan.room.rowSize * this.roomPlan.room.columnSize * 0.01;
   }
 
   ngOnInit(): void {
@@ -69,6 +64,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.shoppingCart.performanceId = this.performanceId;
     this.shoppingCart.tickets$.subscribe((tickets) => {
       if (this.performance) {
         this.highlightInCart(tickets);
@@ -99,11 +95,15 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   shoppingCartHoverStart(ticket: Ticket) {
-    this.roomPlan.setColor(this.highlightColor, ticket.column, ticket.row);
+    if (ticket.performanceId === this.performanceId) {
+      this.roomPlan.setColor(this.highlightColor, ticket.column, ticket.row);
+    }
   }
 
   shoppingCardHoverEnd(ticket: Ticket) {
-    this.roomPlan.setColor(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, ticket.column, ticket.row);
+    if (ticket.performanceId === this.performanceId) {
+      this.roomPlan.setColor(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, ticket.column, ticket.row);
+    }
   }
 
   private getSectorOfSeat(seat: Seat): Sector {
@@ -137,7 +137,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     }
 
     const filtered = this.shoppingCartService.getItems().filter((ticket: Ticket) =>
-      ticket.row === seat.rowNumber && ticket.column === seat.colNumber)[0];
+        ticket.row === seat.rowNumber && ticket.column === seat.colNumber && this.performanceId === ticket.performanceId)[0];
     if (!filtered) {
       this.addSeatToCart(seat);
     } else {

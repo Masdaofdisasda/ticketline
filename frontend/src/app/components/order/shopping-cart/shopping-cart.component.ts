@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {map, Observable, toArray} from 'rxjs';
 import {BookingService} from '../../../services/booking.service';
 import {Ticket} from '../../../dto/ticket';
 import {AuthService} from '../../../services/auth.service';
@@ -18,24 +18,28 @@ export class ShoppingCartComponent implements OnInit {
   @Input()
   checkoutMode = false;
 
+
   @Output()
   hoverStart = new EventEmitter<Ticket>();
   @Output()
   hoverEnd = new EventEmitter<Ticket>();
 
   tickets$: Observable<Ticket[]>;
+  performanceId: number;
 
   constructor(
-      private shoppingCartService: ShoppingCartService,
-      private bookingService: BookingService,
-      private router: Router,
-      public authService: AuthService,
-      private toastr: ToastrService
+    private shoppingCartService: ShoppingCartService,
+    private bookingService: BookingService,
+    private router: Router,
+    public authService: AuthService,
+    private toastr: ToastrService
   ) {
   }
 
   ngOnInit(): void {
-    this.tickets$ = this.shoppingCartService.tickets$;
+    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
+      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
+        ...arr.filter(t => t.performanceId !== this.performanceId)])));
   }
 
   isEmpty(): boolean {
