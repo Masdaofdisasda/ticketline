@@ -15,6 +15,6 @@ export class PageDto {
   }
 
   static initialPage(): PageDto {
-    return new PageDto(0, 10, 0, 0);
+    return new PageDto(0, 25, 0, 0);
   }
 }

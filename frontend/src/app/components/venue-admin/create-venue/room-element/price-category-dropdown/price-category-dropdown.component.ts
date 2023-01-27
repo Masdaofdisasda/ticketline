@@ -45,7 +45,7 @@ export class PriceCategoryDropdownComponent implements OnInit {
     if (form.valid && color.valid) {
       this.priceCategoryService.addPriceCategory(this.priceCategoryAdd).subscribe({
         next: (added) => this.priceCategories.push(added),
-        error: (err) => console.error(err) // TODO
+        error: (err) => console.error(err)
       });
       this.currentMode = 'default';
       this.priceCategoryAdd = new PriceCategory();

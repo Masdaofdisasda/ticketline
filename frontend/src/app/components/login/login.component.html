@@ -8,11 +8,11 @@
 
 <div class="pt-5">
   <div class="row">
-    <div class="col-md-6 mx-auto">
+    <div class="col-md-3 mx-auto">
       <span class="anchor" id="formLogin"></span>
 
       <p class="text-center mb-5">
-        Log in to see our events and purchase tickets.
+        Log in to reserve or purchase tickets.
       </p>
       <div>
         <form class="form" [formGroup]="loginForm" (ngSubmit)="loginUser()">
@@ -30,7 +30,7 @@
           </div>
 
           <div class="form-group">
-            <label for="password">Password</label>
+            <label for="inputPassword">Password</label>
             <input type="password" name="password" formControlName="password" class="form-control" id="inputPassword"
               placeholder="Password" (keydown.enter)="loginUser()">
             <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
@@ -44,17 +44,18 @@
             </div>
           </div>
 
-          <div class="d-flex justify-content-center mt-5 mb-4">
-            <button type="button" (click)="loginUser()" class="btn btn-primary w-75" id="loginButton">Login</button>
+          <div class="d-flex justify-content-center my-4" >
+            <button type="button" (click)="loginUser()" class="btn btn-primary btn-lg" id="loginButton">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Login</button>
           </div>
           <div class="d-flex justify-content-center">
-            <a href="#/recover">forgot password?</a>
+            <button type="button" [routerLink]="['/registration']" class="btn btn-secondary">
+              Don't have an Account?</button>
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+            <a href="#/recover" class="text-secondary">forgot password?</a>
           </div>
 
-          <div class="d-flex justify-content-center my-5">
-            <button type="button" [routerLink]="['/registration']" class="btn btn-secondary">Create new
-              account</button>
-          </div>
         </form>
       </div>
 

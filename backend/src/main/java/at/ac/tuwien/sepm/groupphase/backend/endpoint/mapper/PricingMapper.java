@@ -7,15 +7,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PricingMapper {
 
   @Named("pricingToPricingDto")
   @Mapping(target = "performanceId", source = "performance.id")
-  @Mapping(target = "categoryId", source = "priceCategory.id")
+  @Mapping(target = "categoryId", source = "pricecategory.id")
   PricingDto pricingToPricingDto(Pricing pricing);
 
   @IterableMapping(qualifiedByName = "pricingToPricingDto")

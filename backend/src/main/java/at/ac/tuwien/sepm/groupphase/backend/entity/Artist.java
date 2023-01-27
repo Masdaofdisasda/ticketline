@@ -2,33 +2,43 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Entity
+@Table(name = "ARTIST")
 public class Artist {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID", nullable = false)
   private Long id;
 
+  @Size(max = 255)
+  @Column(name = "NAME")
   private String name;
 
-  @Builder.Default
-  @ManyToMany(mappedBy = "artists")
-  @ToString.Exclude
-  List<Performance> performances = new ArrayList<>();
+  @ManyToMany
+  @JoinTable(name = "PERFORMANCE_ARTISTS",
+      joinColumns = @JoinColumn(name = "ARTIST_ID"),
+      inverseJoinColumns = @JoinColumn(name = "PERFORMANCE_ID"))
+  private Set<Performance> performances = new LinkedHashSet<>();
 }

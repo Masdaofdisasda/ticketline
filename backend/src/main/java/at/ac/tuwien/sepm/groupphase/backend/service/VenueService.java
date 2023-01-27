@@ -19,9 +19,8 @@ public interface VenueService {
    * Remove a record of a {@link Venue} from the persistent storage.
    *
    * @param id The ID of the {@link Venue} that should be deleted
-   * @return the deleted {@link Venue}
    */
-  Venue deleteVenue(long id);
+  void deleteVenue(long id);
 
   /**
    * Add a room to the list of {@link at.ac.tuwien.sepm.groupphase.backend.entity.Room Rooms} of a {@link Venue}.

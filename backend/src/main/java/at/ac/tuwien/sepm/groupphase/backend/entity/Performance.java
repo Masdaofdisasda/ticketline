@@ -2,14 +2,13 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.Setter;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,48 +16,41 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Entity
+@Table(name = "PERFORMANCE")
 public class Performance {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID", nullable = false)
   private Long id;
 
-  private LocalDateTime startDate;
-
+  @Column(name = "END_DATE")
   private LocalDateTime endDate;
 
-  @OneToMany(mappedBy = "performance")
-  @Builder.Default
-  private List<Ticket> tickets = new ArrayList<>();
+  @Column(name = "START_DATE")
+  private LocalDateTime startDate;
 
-  @OneToMany(mappedBy = "performance", cascade = CascadeType.ALL)
-  private List<Pricing> pricing;
-
-  @ManyToMany(mappedBy = "performances")
-  private List<PriceCategory> priceCategories;
-
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "EVENT_ID")
   private Event event;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ROOM_ID")
   private Room room;
 
   @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
-  @JoinTable(
-    name = "performace_artists",
-    joinColumns = @JoinColumn(name = "perfromance_id"),
-    inverseJoinColumns = @JoinColumn(name = "artist_id"))
-  @ToString.Exclude
-  private List<Artist> artists;
+  @JoinTable(name = "PERFORMANCE_ARTISTS",
+      joinColumns = @JoinColumn(name = "PERFORMANCE_ID"),
+      inverseJoinColumns = @JoinColumn(name = "ARTIST_ID"))
+  private Set<Artist> artists = new LinkedHashSet<>();
 }

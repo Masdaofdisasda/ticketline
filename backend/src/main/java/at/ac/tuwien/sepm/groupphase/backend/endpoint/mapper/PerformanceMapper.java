@@ -7,10 +7,11 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PerformanceRoomDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-@Mapper(uses = {TicketMapper.class, ArtistMapper.class, RoomMapper.class})
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {TicketMapper.class, ArtistMapper.class, RoomMapper.class})
 @Transactional(readOnly = true)
 public abstract class PerformanceMapper {
   @Autowired

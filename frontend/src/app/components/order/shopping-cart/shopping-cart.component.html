@@ -6,7 +6,7 @@
 
   <div *ngIf="(tickets$ | async).length !== 0"
        class="container-fluid py-3 flex-shrink-1 min-height-0 d-flex flex-column">
-    <ul class="overflow-scroll list-group list-group-flush flex-grow-1">
+    <ul class="overflow-auto list-group list-group-flush flex-grow-1">
       <li *ngFor="let ticket of tickets$ | async" class="list-group-item" (mouseenter)="onHoverStart(ticket)"
           (mouseleave)="onHoverEnd(ticket)">
         <app-ticket-item [ticket]="ticket" (delete)="onHoverEnd(ticket)"></app-ticket-item>

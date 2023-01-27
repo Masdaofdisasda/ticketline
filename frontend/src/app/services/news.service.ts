@@ -27,7 +27,7 @@ export class NewsService {
    */
   getPaginatedNews(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
     const params = new HttpParams()
-      .set('pageIndex', pageDto.pageIndex)
+        .set('pageIndex', pageDto.pageIndex === 0 ? 0 : pageDto.pageIndex - 1)
       .set('pageSize', pageDto.pageSize);
 
     return this.httpClient.get<PageResponseDto<NewsOverviewDto>>(this.newsBaseUri+'/unread', {params});
@@ -41,7 +41,7 @@ export class NewsService {
    */
   getPaginatedNewsArchive(pageDto: PageDto): Observable<PageResponseDto<NewsOverviewDto>> {
     const params = new HttpParams()
-      .set('pageIndex', pageDto.pageIndex)
+        .set('pageIndex', pageDto.pageIndex === 0 ? 0 : pageDto.pageIndex - 1)
       .set('pageSize', pageDto.pageSize);
 
     return this.httpClient.get<PageResponseDto<NewsOverviewDto>>(this.newsBaseUri, {params});

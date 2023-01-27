@@ -1,21 +1,18 @@
 package at.ac.tuwien.sepm.groupphase.backend.security;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,7 +34,7 @@ public class PasswordResetToken {
   @Column(nullable = false, unique = true)
   private String token;
 
-  @OneToOne
+  @ManyToOne
   private ApplicationUser user;
 
   @Column(nullable = false)

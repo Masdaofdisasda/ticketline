@@ -8,10 +8,11 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.News;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface NewsMapper {
 
   @Named("simpleMessage")

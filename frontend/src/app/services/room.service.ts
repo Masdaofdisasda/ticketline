@@ -16,4 +16,10 @@ export class RoomService {
   public getById(id: number): Observable<Room> {
     return this.httpClient.get<Room>(`${this.roomBaseUri}/${id}`);
   }
+
+  getByVenueId(id: number): Observable<Room[]> {
+    console.log('sending request');
+    return this.httpClient.get<Room[]>(`${this.roomBaseUri}/venue/${id}`);
+  }
+
 }

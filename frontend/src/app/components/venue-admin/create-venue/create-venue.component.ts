@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Room, Venue} from 'src/app/dto/venue';
@@ -13,14 +13,14 @@ import {cloneDeep, isEqual, unset} from 'lodash';
   styleUrls: ['./create-venue.component.scss']
 })
 export class CreateVenueComponent implements OnInit, AfterViewInit {
-  @Input()
-  venue = new Venue();
 
   @ViewChild('createVenueForm')
   createVenueForm: NgForm;
 
   @ViewChild('addRoomForm')
   addRoomForm: NgForm;
+
+  venue = new Venue();
 
   roomToAdd = new Room();
 
@@ -37,7 +37,7 @@ export class CreateVenueComponent implements OnInit, AfterViewInit {
   }
 
   get confirmText() {
-    return this.isEditMode ? 'Edit' : 'Create';
+    return this.isEditMode ? 'Update Venue' : 'Add Venue';
   }
 
   ngOnInit(): void {
@@ -96,11 +96,17 @@ export class CreateVenueComponent implements OnInit, AfterViewInit {
 
       if (this.isEditMode) {
         this.venueService.editVenue(this.venue).subscribe({
-          next: navigation
+          next: () => {
+            this.notification.success('Venue was updated');
+            navigation();
+          }
         });
       } else {
         this.venueService.createVenue(this.venue).subscribe({
-          next: navigation
+          next: () => {
+            this.notification.success('Venue was added');
+            navigation();
+          }
         });
       }
     }
@@ -118,12 +124,9 @@ export class CreateVenueComponent implements OnInit, AfterViewInit {
   }
 
   onCancelClick() {
-    this.confirm.open('Venue', this.venue.name).then(result => {
-      if (result) {
-        this.resetStoredVenue();
-        this.router.navigateByUrl('/admin/venue');
-      }
-    });
+    this.notification.success('Changes discarded');
+    this.resetStoredVenue();
+    this.router.navigateByUrl('/admin/venue');
   }
 
   reset() {

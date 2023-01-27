@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private authService: AuthService,
+    public authService: AuthService,
     private registrationService: RegistrationService,
     private userService: UserService,
     private router: Router,

@@ -1,4 +1,25 @@
-<h1 class="mt-3">{{this.isEditMode ? "Edit " + venue.name : "Create a new venue:"}}</h1>
+<div>
+  <br>
+  <div class="d-flex justify-content-start align-items-center">
+    <h2>{{this.isEditMode ? "Edit '" + venue.name + "'" : "Add a new Venue"}}</h2>
+    <div class="mx-2">
+      <button class="btn btn-outline-info btn-sm" data-toggle="collapse" data-target="#howto, #step1, #step2, #step3, #step4">?</button>
+    </div>
+  </div>
+  <br>
+</div>
+
+
+<div id="howto" class="collapse">
+  <div class="alert alert-info" role="contentinfo">
+    <p>How do I add a venue?</p>
+    <p>1. Give the venue a name and enter the address (eg. Stadhalle).</p>
+    <p>2. Add a room with defined size and name (eg. Saal D).</p>
+    <p>3. Open the room editor, add a sector and a price and color in the selected sectors. Seats that do not belong to a sector will
+    not be available to purchase.</p>
+    <p>4. Add as many rooms as you need. When you are done click on the button at the bottom right.</p>
+  </div>
+</div>
 
 <div *ngIf="saved" class="alert alert-info alert-dismissible fade show text-center" role="info">
   <strong>It seems like you have unsaved changes from the last time using this form</strong><br>Do you want to reset the
@@ -19,89 +40,117 @@
   </div>
 </div>
 
-<h2 class="mt-2">General Information:</h2>
-<form #createVenueForm="ngForm" class="form-group" (change)="saveStoredVenue()">
-  <div class="row">
-    <div class="col-12 col-sm-6 col-lg-4 col-lg-4 labeled-input">
-      <label for="name">Name:</label>
-      <input class="form-control" name="name" id="name" type="text" placeholder="" [(ngModel)]="venue.name" required
-             #nameInput="ngModel"/>
-      <p *ngIf="nameInput.touched && !nameInput.valid" class="text-danger">Name is required</p>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-4 labeled-input">
-      <label for="city">City:</label>
-      <input class="form-control" name="city" id="city" type="text" placeholder="" [(ngModel)]="venue.city" required
-             #cityInput="ngModel"/>
-      <p *ngIf="cityInput.touched && !cityInput.valid" class="text-danger">City is required</p>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-4 address">
-      <div class="d-flex">
-        <div class="street d-inline-block">
-          <label for="street">Street:</label>
-          <input class="form-control" name="street" id="street" type="text" placeholder="" [(ngModel)]="venue.street"
-                 required #streetInput="ngModel"/>
+<div class="mt-3 p-3 card">
+  <div class="d-flex justify-content-start">
+    <h5 id="step1" class="badge bg-info me-2 collapse">1</h5>
+    <h5>Address:</h5>
+  </div>
+  <form #createVenueForm="ngForm" class="form-group" (change)="saveStoredVenue()">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-lg-4 col-lg-4 labeled-input">
+        <label for="name">Venue Name*</label>
+        <input class="form-control" name="name" id="name" type="text" placeholder="Enter Venue Name"
+               [(ngModel)]="venue.name" required
+               #nameInput="ngModel"/>
+        <p *ngIf="nameInput.touched && !nameInput.valid" class="text-danger">Name is required</p>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+        <label for="city">City*</label>
+        <input class="form-control" name="city" id="city" type="text" placeholder="Enter City" [(ngModel)]="venue.city"
+               required
+               #cityInput="ngModel"/>
+        <p *ngIf="cityInput.touched && !cityInput.valid" class="text-danger">City is required</p>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 address">
+        <div class="d-flex">
+          <div class="street d-inline-block">
+            <label for="street">Street*</label>
+            <input class="form-control" name="street" id="street" type="text" placeholder="Enter Street"
+                   [(ngModel)]="venue.street"
+                   required #streetInput="ngModel"/>
+          </div>
+          <div class="houseNumber d-inline-block">
+            <label for="houseNumber">Street Nr*</label>
+            <input class="form-control" name="houseNumber" id="houseNumber" type="text"
+                   placeholder="Enter Street Number"
+                   [(ngModel)]="venue.houseNumber" required #houseNumberInput="ngModel"/>
+          </div>
         </div>
-        <div class="houseNumber d-inline-block">
-          <label for="houseNumber">Number:</label>
-          <input class="form-control" name="houseNumber" id="houseNumber" type="text" placeholder=""
-                 [(ngModel)]="venue.houseNumber" required #houseNumberInput="ngModel"/>
+        <p *ngIf="(streetInput.touched && !streetInput.valid) || (houseNumberInput.touched && houseNumberInput.invalid)"
+           class="text-danger">Street and house number are required</p>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+        <label for="zipCode">Zip Code*</label>
+        <input class="form-control" name="zipCode" id="zipCode" type="text" placeholder="Enter Zip Code"
+               [(ngModel)]="venue.zipCode"
+               required
+               #zipCodeInput="ngModel"/>
+        <p *ngIf="zipCodeInput.touched && !zipCodeInput.valid" class="text-danger">ZIP-Code is required</p>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 labeled-input">
+        <label for="country">Country*</label>
+        <input class="form-control" name="country" id="country" type="text" placeholder="Enter Country"
+               [(ngModel)]="venue.country"
+               #countryInput="ngModel"/>
+        <p *ngIf="countryInput.touched && !countryInput.valid" class="text-danger">Country is required</p>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-end align-items-end">
+        <div class="text-secondary">
+          * are required fields
         </div>
       </div>
-      <p *ngIf="(streetInput.touched && !streetInput.valid) || (houseNumberInput.touched && houseNumberInput.invalid)"
-         class="text-danger">Street and house number are required</p>
     </div>
-    <div class="col-12 col-sm-6 col-lg-4 labeled-input">
-      <label for="zipCode">ZIP code:</label>
-      <input class="form-control" name="zipCode" id="zipCode" type="text" placeholder="" [(ngModel)]="venue.zipCode"
-             required
-             #zipCodeInput="ngModel"/>
-      <p *ngIf="zipCodeInput.touched && !zipCodeInput.valid" class="text-danger">ZIP-Code is required</p>
-    </div>
-        <div class="col-12 col-sm-6 col-lg-4 labeled-input">
-            <label for="country">Country:</label>
-          <input class="form-control" name="country" id="country" type="text" placeholder="" [(ngModel)]="venue.country"
-                 #countryInput="ngModel"/>
-            <p *ngIf="countryInput.touched && !countryInput.valid" class="text-danger">Country is required</p>
-        </div>
-    </div>
-</form>
-<h2>{{confirmText + ' rooms'}}:</h2>
-<button name="button" class="btn btn-outline-primary dropdown-toggle mt-2 mb-2 text-right" type="button" id="addRoomDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="bi bi-plus"></i>Add room…
+  </form>
+</div>
+<div class="mt-3 p-3 card">
+  <div>
+  <h5>{{'Rooms'}}:</h5>
+    <button name="button" class="btn btn-primary dropdown-toggle mt-2 mb-2 text-right" type="button"
+            id="addRoomDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <h5 id="step2" class="badge bg-info me-2 collapse">2</h5>
+      <i class="bi bi-plus"></i>Add Room
     </button>
 
-<div class="dropdown-menu" aria-labelledby="addRoomDropdown">
-  <form #addRoomForm="ngForm" class="form-group">
-    <h5>Input size:</h5>
-    <label for="roomName">Name:</label>
-    <input class="form-control" type="text" name="roomName" id="roomName" [(ngModel)]="roomToAdd.name" #createRoomNameInput="ngModel" required>
-    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Name is required</p>
-    <label for="rows">Rows:</label>
-    <input class="form-control" type="number" name="rows" id="rows" [(ngModel)]="roomToAdd.rowSize"
-           #createRoomRowsInput="ngModel" required>
-    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of rows are required!</p>
-    <label for="columns">Columns:</label>
-    <input class="form-control" type="number" name="columns" id="columns" [(ngModel)]="roomToAdd.columnSize"
-           #createRoomColumnsInput="ngModel"
-           required>
-    <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of columns are required!</p>
-    <button class="btn btn-secondary float-start" type="">Cancel</button>
-    <button class="btn btn-primary float-end" type="submit" (click)="addRoom($event)">Create</button>
-  </form>
+  <div class="dropdown-menu" aria-labelledby="addRoomDropdown">
+    <form #addRoomForm="ngForm" class="form-group">
+      <h5>Input size:</h5>
+      <label for="roomName">Name:</label>
+      <input class="form-control" type="text" name="roomName" id="roomName" [(ngModel)]="roomToAdd.name"
+             #createRoomNameInput="ngModel" required>
+      <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Name is required</p>
+      <label for="rows">Rows:</label>
+      <input class="form-control" type="number" name="rows" id="rows" [(ngModel)]="roomToAdd.rowSize"
+             #createRoomRowsInput="ngModel" required>
+      <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of rows are required!</p>
+      <label for="columns">Columns:</label>
+      <input class="form-control" type="number" name="columns" id="columns" [(ngModel)]="roomToAdd.columnSize"
+             #createRoomColumnsInput="ngModel"
+             required>
+      <p *ngIf="createRoomNameInput.touched && createRoomNameInput.invalid">Number of columns are required!</p>
+      <div class="d-flex justify-content-between mt-2">
+        <button class="btn btn-secondary" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit" (click)="addRoom($event)">Create</button>
+      </div>
+    </form>
 
-  <ul>
-    <li *ngFor="let saved of savedItems"></li>
-  </ul>
+    <ul>
+      <li *ngFor="let saved of savedItems"></li>
+    </ul>
+  </div>
+  </div>
 </div>
 
 <ngb-accordion [closeOthers]="true">
   <ngb-panel *ngFor="let room of venue.rooms; index as index">
     <ng-template ngbPanelHeader>
       <div class="d-flex justify-content-between">
+        <div class="ms-2 mt-2">
+          <h5 id="step3" class="badge bg-info me-2 collapse">3</h5>
+        </div>
         <button ngbPanelToggle class="accordion-button d-flex">
-          <span class="flex-grow-1">{{room.name}}</span>
+          <span class="flex-grow-1">{{room.name}} ({{room.rowSize}} rows x {{room.columnSize}} columns)</span>
           <button class="btn btn-outline-danger mr-4" (click)="deleteRoom($event, room, index)"><i
-            class="bi bi-trash"></i></button>
+            class="bi bi-trash me-2"></i>Remove</button>
         </button>
       </div>
     </ng-template>
@@ -111,11 +160,33 @@
   </ngb-panel>
 </ngb-accordion>
 
-<div class="d-flex">
-  <div class="flex-grow-1">
-    <button class="btn confirm btn-secondary mt-2" (click)="onCancelClick()">Cancel</button>
+<div class="d-flex justify-content-between mt-3">
+    <button type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#cancel-btn'" class="btn confirm btn-outline-danger">Discard</button>
+
+  <div class="modal fade" [id]="'cancel-btn'" tabindex="-1" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Discard Changes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to discard your changes?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" (click)="onCancelClick()" data-bs-dismiss="modal" class="btn btn-danger">
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <button class="btn confirm btn-primary mt-2" (click)="onCreateVenueClick()"
-          [disabled]="!createVenueForm.valid || !this.venue.rooms || this.venue.rooms?.length === 0">{{confirmText}}</button>
+  <button class="btn confirm btn-outline-primary" (click)="onCreateVenueClick()"
+          [disabled]="!createVenueForm.valid || !this.venue.rooms || this.venue.rooms?.length === 0">
+    <h5 id="step4" class="badge bg-info me-2 collapse">4</h5>
+    <i *ngIf="!isEditMode" class="bi bi-plus-circle me-2"></i>
+    <i *ngIf="isEditMode" class="bi bi-arrow-up-circle me-2"></i>{{confirmText}}</button>
 </div>

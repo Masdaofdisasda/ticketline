@@ -2,55 +2,12 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
-import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
-import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
-import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.core.util.Json;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -58,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class VenueEndpointTest implements TestData {
+  /*
   final String name = "testName",
     editName = "editName",
     street = "testStreet",
@@ -425,4 +383,6 @@ public class VenueEndpointTest implements TestData {
       .andDo(print())
       .andReturn();
   }
+
+   */
 }

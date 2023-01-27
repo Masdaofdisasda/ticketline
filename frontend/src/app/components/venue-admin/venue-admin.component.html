@@ -1,22 +1,40 @@
 <div>
   <br>
-  <div class="fourXone">
+  <div class="d-flex justify-content-between">
     <h2>Manage Venues</h2>
-    <span style="width: 80%"></span>
-    <button type="button" class="btn btn-primary mr-1" routerLink="/admin/venue/create">Create Venue</button>
+    <span>
+    <button class="btn btn-primary" routerLink="/admin/venue/create">
+    <i class="bi bi-plus-circle me-2"></i>Add Venue</button>
+    </span>
   </div>
   <br>
 </div>
 
+<table class="table table-hover table-light p3">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Name</th>
+    <th scope="col">City</th>
+    <th scope="col">Country</th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  <tbody *ngFor="let venue of venues">
+  <tr>
+    <th scope="row">{{venue.id}}</th>
+    <td>{{venue.name}}</td>
+    <td>{{venue.city}}</td>
+    <td>{{venue.country}}</td>
+    <td>
+      <div class="btn-group">
+        <button class="btn btn-outline-primary" [routerLink]="['/admin/venue/edit', venue.id]"><i
+          class="bi bi-pencil me-2"></i>Edit</button>
+        <button class="btn btn-outline-danger" (click)="deleteVenueClicked(venue)"><i
+          class="bi bi-trash me-2"></i>Remove</button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
-<div class="venue-list">
-  <div class="venue-item d-flex mt-2" *ngFor="let venue of venues">
-    <p class="flex-grow-1">{{venue.name}}</p>
-    <div class="btn-group">
-      <button class="btn btn-outline-warning" [routerLink]="['/admin/venue/edit', venue.id]"><i
-        class="bi bi-pencil"></i></button>
-      <button class="btn btn-outline-danger" (click)="deleteVenueClicked(venue)"><i
-        class="bi bi-trash"></i></button>
-    </div>
-  </div>
-</div>

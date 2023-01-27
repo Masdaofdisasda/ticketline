@@ -2,23 +2,7 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
 body {
-  background-color: whitesmoke;
-}
-
-.fourXone {
-  display: flex;
-  grid-template-columns: 25% 25% 25% 25%;
-  place-items: center;
-  gap: 10px 20px;
-}
-
-.twoXone {
-  display: flex;
-  grid-template-columns: 50% 50%;
-  place-items: center;
-  gap: 10px 20px;
-  margin-top: 1%;
-  margin-left: .3rem;
+  background-color: #F2F2F2;
 }
 
 .hidden {

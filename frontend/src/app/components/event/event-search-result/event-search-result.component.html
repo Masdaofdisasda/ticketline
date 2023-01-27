@@ -1,13 +1,14 @@
-<table class="table table-striped">
+<table class="table table-hover">
   <thead>
   <tr>
-    <th scope="col">Artist Name</th>
-    <th scope="col">Event Name</th>
+    <th scope="col">Artists</th>
+    <th scope="col">Event</th>
     <th scope="col">Category</th>
-    <th scope="col">Start date</th>
-    <th scope="col">End date</th>
-    <th scope="col">Venue Name</th>
-    <th scope="col">Event-Hall Name</th>
+    <th scope="col">Starts at</th>
+    <th scope="col">Ends at</th>
+    <th scope="col">Venue</th>
+    <th scope="col">Venue Hall</th>
+    <th scope="col">Tickets</th>
   </tr>
   </thead>
   <tbody>
@@ -15,12 +16,14 @@
     <td>{{ event.artistName }}</td>
     <td>{{ event.name }}</td>
     <td>{{ event.category }}</td>
-    <td>{{ event.startDate | date:'short' }}</td>
-    <td>{{ event.endDate | date:'short' }}</td>
+    <td>{{ event.startDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+    <td>{{ event.endDate | date:'dd/MM/yyyy hh:mm a' }}</td>
     <td>{{ event.venueName }}</td>
     <td>{{ event.eventHallName }}</td>
     <td>
-      <button type="button" class="btn btn-primary" (click)="getTicketsClicked(event)">Get tickets</button>
+      <button type="button" class="btn btn-primary" (click)="getTicketsClicked(event)">
+        <i class="bi bi-ticket-perforated-fill me-2"></i>Get tickets
+      </button>
     </td>
   </tr>
   </tbody>
@@ -36,8 +39,8 @@
 
   <select class="form-select" style="width: auto" [(ngModel)]="this.pagedEventsDefault.pageSize"
           (ngModelChange)="refreshEvents()">
-    <option [ngValue]="2">2 items per page</option>
-    <option [ngValue]="5">5 items per page</option>
-    <option [ngValue]="10">10 items per page</option>
+    <option [ngValue]="25">25 Items</option>
+    <option [ngValue]="50">50 Items</option>
+    <option [ngValue]="100">100 Items</option>
   </select>
 </div>

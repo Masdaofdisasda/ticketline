@@ -14,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.TicketCancellationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.SeatRepository;
@@ -25,18 +26,14 @@ import at.ac.tuwien.sepm.groupphase.backend.service.TicketValidationService;
 import com.google.zxing.WriterException;
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,7 +48,6 @@ import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.RESE
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private final UserRepository userRepository;
   private final BookingMapper bookingMapper;
   private final CreatePdfService pdfService;
@@ -62,21 +58,6 @@ public class BookingServiceImpl implements BookingService {
   private final TicketValidationService validationService;
 
   private final SeatMapper seatMapper;
-
-  private static Booking getLatestBooking(ApplicationUser user) {
-    List<Booking> bookings = user.getBookings();
-
-    LocalDateTime latestDate = bookings.stream()
-      .map(Booking::getCreatedDate)
-      .toList().stream().max(Comparator.naturalOrder())
-      .orElseThrow(NotFoundException::new);
-
-    Optional<Booking> latestBooking = bookings.stream()
-      .filter(booking -> booking.getCreatedDate().equals(latestDate))
-      .findFirst();
-
-    return latestBooking.orElseThrow(NotFoundException::new);
-  }
 
   private static String getEmail() {
     return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -94,15 +75,15 @@ public class BookingServiceImpl implements BookingService {
       new NotFoundException("No booking with id " + bookingId + " found for current user")
     );
 
+    booking.calculateTotal();
     return bookingMapper.map(booking, getEmail());
   }
 
   @Override
   public List<BookingItemDto> fetchBookings() {
     ApplicationUser user = userRepository.findUserByEmail(getEmail());
-    List<Booking> bookings = user.getBookings();
 
-    return bookingMapper.map(bookings);
+    return bookingMapper.map(bookingRepository.getBookingByUserId(user.getId()));
   }
 
   @Override
@@ -118,22 +99,37 @@ public class BookingServiceImpl implements BookingService {
       new NotFoundException("No booking with id " + bookingId + " found for current user")
     );
 
-
-    List<Booking> bookings = user.getBookings();
-    for (Booking b : bookings) {
-      if (b.equals(booking)) {
-        if (booking.getBookingType() == PURCHASE) {
-          b.cancel();
-        } else {
-          b.revoke();
-        }
-        break;
-      }
+    List<Ticket> expired = booking.getTickets()
+      .stream()
+      .filter((t) -> t.getPerformance().getStartDate().isBefore(LocalDateTime.now())).toList();
+    if (expired.size() != 0) {
+      throw new TicketCancellationException("Tickets %s cannot be cancelled because Performance has already started"
+        .formatted(expired
+          .stream()
+          .map(t -> t.getId().toString())
+          .reduce("", (whole, single) -> whole + ", #" + single)));
     }
 
-    user.setBookings(bookings);
+    List<Ticket> used = booking.getTickets()
+      .stream()
+      .filter(Ticket::isUsed)
+      .toList();
 
-    userRepository.save(user);
+    if (used.size() != 0) {
+      throw new TicketCancellationException("Tickets %s cannot be cancelled because it was already used"
+        .formatted(used
+          .stream()
+          .map(t -> t.getId().toString())
+          .reduce("", (whole, single) -> whole + ", #" + single)));
+    }
+
+    if (booking.getBookingType() == PURCHASE) {
+      booking.cancel();
+    } else {
+      booking.revoke();
+    }
+
+    bookingRepository.save(booking);
   }
 
   @Override
@@ -165,17 +161,17 @@ public class BookingServiceImpl implements BookingService {
     ensureSeatsAreAvailable(tickets);
 
     Booking booking = createBookingFromTickets(tickets, type);
-    ApplicationUser user = attachBookingToUser(booking);
+    attachBookingToUser(booking);
 
     return bookingMapper.map(booking, getEmail());
   }
 
-  private ApplicationUser attachBookingToUser(Booking booking) {
+  private void attachBookingToUser(Booking booking) {
     ApplicationUser user = userRepository.findUserByEmail(getEmail());
     user.addBooking(booking);
     booking.setUser(user);
     bookingRepository.save(booking);
-    return userRepository.save(user);
+    userRepository.save(user);
   }
 
   private Booking createBookingFromTickets(Collection<TicketBookingDto> tickets, BookingType type) {
@@ -187,31 +183,15 @@ public class BookingServiceImpl implements BookingService {
 
     List<Ticket> ticketList = tickets
       .stream()
-      .map(ticketDto -> Ticket.builder()
-        .performance(performanceRepository.findById(ticketDto.getPerformanceId())
-          .orElseThrow(() -> new NotFoundException("Performance with id " + ticketDto.getPerformanceId() + " not found")))
-        .seat(seatRepository.findById(ticketDto.getSeat().getId())
-          .orElseThrow(() -> new NotFoundException("Seat with id " + ticketDto.getPerformanceId() + " not found")))
-        .booking(booking)
-        .price(seatRepository.findById(ticketDto.getSeat().getId())
-          .orElseThrow(() -> new NotFoundException("Seat with id " + ticketDto.getSeat().getId() + " could not be found"))
-          .getSector().getPriceCategory().getPricingList()
-          .stream()
-          .filter(pc -> pc.getPerformance().getId().equals(ticketDto.getPerformanceId()))
-          .findFirst()
-          .orElseThrow(() ->
-            new NotFoundException("No pricing information for performance with id " + ticketDto.getPerformanceId()))
-          .getPricing())
-        .build())
+      .map(ticketDto -> ticketRepository.findBySeatAndPerformanceId(ticketDto.getSeat().getId(), ticketDto.getPerformanceId()).toBuilder().booking(booking).build())
       .toList();
-
-    ticketRepository.saveAll(ticketList);
 
     ticketList.forEach((ticket) -> {
       ticket.setValidationHash(validationService.generateTicketValidationHash(ticket));
       booking.addTicket(ticket);
     });
 
+    ticketRepository.saveAll(ticketList);
     return booking;
   }
 

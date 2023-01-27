@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryAddDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDtoSimple;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.PriceCategoryMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.PriceCategoryService;
 import org.slf4j.Logger;
@@ -67,8 +68,8 @@ public class PriceCategoryEndpoint {
   @PermitAll
   @GetMapping("room/{id}")
   @Transactional(readOnly = true)
-  public List<PriceCategoryDto> getPriceCategoriesForRoom(@PathVariable long id) {
+  public List<PriceCategoryDtoSimple> getPriceCategoriesForRoom(@PathVariable long id) {
     LOGGER.info("getPriceCategories({})", id);
-    return this.mapper.priceCategoriesToPriceCategoryDtos(service.getByRoomId(id));
+    return this.mapper.priceCategoriesToPriceCategorySimpleDtos(service.getByRoomId(id));
   }
 }

@@ -57,7 +57,8 @@ public class TicketValidationServiceImpl implements TicketValidationService {
   }
 
   @Override
-  public TicketValidationResult validateTicket(byte[] validationHash) {
+  public TicketValidationResult validateTicket(byte[] validationHash) throws InterruptedException {
+    Thread.sleep(500);
     String decryptedString;
     try {
       Cipher cipher = Cipher.getInstance("AES");
@@ -71,16 +72,16 @@ public class TicketValidationServiceImpl implements TicketValidationService {
     String ticketId = split[0];
     String bookingId = split[1];
 
-    Optional<Ticket> ticket = ticketRepository.findById(Long.valueOf(ticketId));
+    Optional<Ticket> ticket = ticketRepository.findTicketById(Long.valueOf(ticketId));
     if (ticket.isEmpty()) {
       return TicketValidationResult.TICKET_NOT_FOUND;
     }
 
-    if (ticket.get().getUsed()) {
+    if (ticket.get().isUsed()) {
       return TicketValidationResult.TICKET_ALREADY_USED;
     }
 
-    Optional<Booking> booking = bookingRepository.findById(Long.valueOf(bookingId));
+    Optional<Booking> booking = bookingRepository.findBookingById(Long.valueOf(bookingId));
 
     if (booking.isEmpty()) {
       return TicketValidationResult.NO_BOOKING_FOUND;

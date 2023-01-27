@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.service.VenueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
@@ -42,6 +44,7 @@ public class VenueEndpoint {
    * @param toAdd The location to add
    * @return The location that was added
    */
+  @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
   @Secured("ROLE_ADMIN")
   public VenueDto addVenue(@RequestBody VenueAddDto toAdd) throws ValidationException {
@@ -57,13 +60,12 @@ public class VenueEndpoint {
    * Delete a location from persistence.
    *
    * @param id The id of the location to delete
-   * @return The location that was deleted
    */
   @DeleteMapping("{id}")
   @Secured("ROLE_ADMIN")
-  public VenueDto deleteVenue(@PathVariable long id) throws NotFoundException {
+  public void deleteVenue(@PathVariable long id) throws NotFoundException {
     LOGGER.info("deleteVenue({})", id);
-    return this.mapper.venueToVenueDto(service.deleteVenue(id));
+    service.deleteVenue(id);
   }
 
   /**
@@ -77,7 +79,7 @@ public class VenueEndpoint {
   @Secured("ROLE_ADMIN")
   public VenueDto editVenue(@PathVariable long id, @RequestBody VenueEditDto toEdit) throws NotFoundException, ValidationException {
     LOGGER.info("editVenue({},{})", id, toEdit);
-    return mapper.venueToVenueDto(service.editVenue(id, toEdit));
+    return mapper.simpleVenueToVenueDto(service.editVenue(id, toEdit));
   }
 
   /**
@@ -89,10 +91,8 @@ public class VenueEndpoint {
   @PermitAll
   public Stream<VenueDto> getAllVenues() {
     LOGGER.info("getAllVenues()");
-    return (service
-      .getAllVenues()
-      .stream()
-      .map(mapper::venueToVenueDto));
+    return service.getAllVenues().stream()
+      .map(mapper::simpleVenueToVenueDto);
   }
 
   /**

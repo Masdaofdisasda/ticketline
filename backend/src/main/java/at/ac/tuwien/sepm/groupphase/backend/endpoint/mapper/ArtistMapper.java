@@ -5,11 +5,13 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ArtistMapper {
 
   ArtistMapper INSTANCE = Mappers.getMapper(ArtistMapper.class);
@@ -18,7 +20,7 @@ public interface ArtistMapper {
   Artist artistDtoToArtist(ArtistDto artistDto);
 
   @IterableMapping(qualifiedByName = "artistDtoToArtist")
-  List<Artist> artistDtoToArtist(List<ArtistDto> artistDtos);
+  Set<Artist> artistDtoToArtist(List<ArtistDto> artistDtos);
 
   @Named("artistToArtistDto")
   ArtistDto artistToArtistDto(Artist artist);

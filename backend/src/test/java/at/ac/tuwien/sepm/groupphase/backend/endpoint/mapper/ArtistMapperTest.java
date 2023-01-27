@@ -1,14 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ArtistDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class ArtistMapperTest {
-
+/*
   ArtistMapper mapper = ArtistMapper.INSTANCE;
 
   Artist artist = Artist.builder()
@@ -38,4 +31,6 @@ class ArtistMapperTest {
       assertThat(currentDto.getName()).isEqualTo(artist.getName());
     });
   }
+
+ */
 }

@@ -1,14 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { EventSearchRequest } from '../../../dto/event-search-request';
-import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
-import { EventService } from '../../../services/event.service';
+import {Component, EventEmitter, OnDestroy, OnInit, Output,} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {EventSearchRequest} from '../../../dto/event-search-request';
+import {debounceTime, Observable, Subject, takeUntil} from 'rxjs';
+import {EventService} from '../../../services/event.service';
 
 @Component({
   selector: 'app-event-search',
@@ -58,10 +52,12 @@ export class EventSearchComponent implements OnInit, OnDestroy {
       category: [''],
       nameOfEvent: [''],
     });
+    this.searchFormGroup.get('startTime').setValue(new Date());
     this.clearDate.emit(true);
     this.searchRequest.emit(this.getEventSearchRequestFromFormGroup());
     this.listenToFormGroupChange();
   }
+
 
   setDate(tonight: boolean): void {
     const today = new Date();

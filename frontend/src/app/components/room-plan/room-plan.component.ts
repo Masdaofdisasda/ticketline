@@ -85,8 +85,8 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     this.panzoom.nativeElement.style.top = -this.height * this.scaleMultiplier * 0.45 + 'px';
     this.panzoom.nativeElement.style.left = -this.width * this.scaleMultiplier * 0.45 + 25 + 'px';
 
-    this.seatGrid = Array.from({length: this.room.columnSize}, () =>
-      Array.from({length: this.room.rowSize}, () => null)
+    this.seatGrid = Array.from({length: this.room.rowSize}, () =>
+      Array.from({length: this.room.columnSize}, () => null)
     );
 
     // check if all possible seats should be drawn or only already existing ones
@@ -102,7 +102,7 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
         // draw all existing seats in their corresponding color
         this.room.sectors?.forEach(sector => {
           sector.seats?.forEach(seat => {
-            this.addSeat(seat, sector.priceCategory.color);
+            this.addSeat(seat, sector.priceCategory.color, sector.priceCategory.pricing);
           });
         });
       }, 0);
@@ -135,10 +135,15 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
       }
     }, {passive: true});
 
-    this.svgRoot.nativeElement.addEventListener('mouseleave', () => {
+    this.svgRoot.nativeElement.parentElement.addEventListener('mouseleave', () => {
       this.mouseOver = false;
       if (this.mouseDown) {
         this.mouseDown = null;
+        this.multiSelectChange.emit({
+          added: [],
+          removed: this.selected,
+          all: []
+        });
         this.multiSelectEnd.emit([]);
         this.selected = [];
       }
@@ -190,8 +195,9 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     document.querySelector(`rect[row="${row}"][column="${column}"]`).removeAttribute('stroke');
   }
 
-  addSeat(seat: Seat, color?: string) {
-    // TODO: make the svg more performant by scaling it up
+  addSeat(seat: Seat, color?: string, pricing?: number) {
+    seat.color = color;
+    seat.pricing = pricing;
     this.seatGrid[seat.colNumber][seat.rowNumber] = seat;
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute('x', Math.round(((this.seatSize + this.padding * this.seatSize) * seat.colNumber)).toString());
@@ -251,5 +257,9 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     }
     // add created rect to element
     this.svgRoot.nativeElement.appendChild(rect);
+  }
+
+  public getSeat(col: number, row: number) {
+    return this.seatGrid[col][row];
   }
 }
