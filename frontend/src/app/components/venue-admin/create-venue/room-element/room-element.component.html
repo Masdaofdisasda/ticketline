@@ -24,8 +24,9 @@
                                            [ngStyle]="{ color: '#' + sector.priceCategory.color }"></i> {{ sector.name }}
                         </p>
                     </div>
-                    <button class="btn btn-outline-danger btn-sm" (click)="deleteSectorClicked($event, sector)"><i
-                            class="bi bi-trash"></i></button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="deleteSectorClicked($event, sector, index)">
+                      <i
+                        class="bi bi-trash"></i></button>
                 </div>
             </div>
         </div>

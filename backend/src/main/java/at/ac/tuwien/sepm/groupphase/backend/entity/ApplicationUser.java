@@ -72,7 +72,7 @@ public class ApplicationUser {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private PasswordResetToken passwordToken;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<Booking> bookings = new LinkedHashSet<>();
 
   @Builder.Default

@@ -1,5 +1,5 @@
 
-<div class="card">
+<div class="card" [ngClass]="{hoverable: hoverable}">
   <div class="card-body">
     <div class="card-text" [ngClass]="{'text-muted': muted}">Sector: {{ticket.sector}}</div>
     <div class="card-text" [ngClass]="{'text-muted': muted}">Seat: {{ticket.seatNumber}}</div>
