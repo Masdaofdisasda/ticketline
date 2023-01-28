@@ -38,7 +38,7 @@ public class PriceCategory {
   @Column(name = "NAME")
   private String name;
 
-  @OneToMany(mappedBy = "pricecategory")
+  @OneToMany(mappedBy = "priceCategory")
   private Set<Pricing> pricings = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "priceCategory")

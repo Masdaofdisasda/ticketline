@@ -60,6 +60,9 @@ export class NewsCreateComponent implements OnInit {
       summary: this.createFormGroup.get('messageSummary').value,
       text: this.createFormGroup.get('messageText').value,
       fileName: generatedFileName
-    } as NewsCreateDto).subscribe(() => this.router.navigate(['/news']));
+    } as NewsCreateDto).subscribe(() => {
+      this.notification.success('news entry was created');
+      this.router.navigate(['/news']);
+    });
   }
 }

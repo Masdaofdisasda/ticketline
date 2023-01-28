@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {ShoppingCartService} from '../../services/shopping-cart.service';
+import {Observable} from 'rxjs';
+import {Ticket} from '../../dto/ticket';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +10,13 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(public authService: AuthService) {}
+  tickets$: Observable<Ticket[]>;
 
-  ngOnInit() {}
+  constructor(public authService: AuthService,
+              private shoppingCartService: ShoppingCartService,) {
+  }
+
+  ngOnInit() {
+    this.tickets$ = this.shoppingCartService.tickets$;
+  }
 }

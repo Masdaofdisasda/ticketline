@@ -1,18 +1,47 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UpdateUserLockedDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class UserEndpointTest implements TestData {
-  /*
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -34,7 +63,7 @@ public class UserEndpointTest implements TestData {
   @Autowired
   private UserMapper userMapper;
 
-  private UserLoginDto adminDto = UserLoginDto.builder()
+  private final UserLoginDto adminDto = UserLoginDto.builder()
     .email("admin@email.com")
     .password("12345678")
     .build();
@@ -60,7 +89,7 @@ public class UserEndpointTest implements TestData {
         .lastName("Vergesslich")
         .admin(false)
         .accountNonLocked(false)
-        .lockTime(new Date())
+        .lockTime(LocalDateTime.now().minusHours(1))
         .password(
           passwordEncoder.encode("12345678")
         ).build();
@@ -141,7 +170,7 @@ public class UserEndpointTest implements TestData {
 
   @Test
   public void unlockUserWithAdmin() throws Exception {
-    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com");
+    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com").orElseThrow();
     MvcResult mvcResult =
       this.mockMvc
         .perform(
@@ -162,7 +191,7 @@ public class UserEndpointTest implements TestData {
 
   @Test
   public void unlockUserFailsWithoutAdminAccess() throws Exception {
-    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com");
+    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com").orElseThrow();
     MvcResult mvcResult =
       this.mockMvc
         .perform(
@@ -179,7 +208,7 @@ public class UserEndpointTest implements TestData {
 
   @Test
   void AdminCannotUpdateUserData() throws Exception {
-    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com");
+    ApplicationUser user = userRepository.findUserByEmail("viktor@email.com").orElseThrow();
 
     MvcResult mvcResult =
       this.mockMvc
@@ -217,7 +246,7 @@ public class UserEndpointTest implements TestData {
     MockHttpServletResponse response = mvcResult.getResponse();
 
     assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-    ApplicationUser createdUser = userRepository.findUserByEmail(userDto.getEmail());
+    ApplicationUser createdUser = userRepository.findUserByEmail(userDto.getEmail()).orElseThrow();
     assertEquals(createdUser.getEmail(), userMapper.userCreationDtoToApplicationUser(userDto).getEmail());
   }
 
@@ -388,6 +417,4 @@ public class UserEndpointTest implements TestData {
 
     assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
   }
-
-   */
 }

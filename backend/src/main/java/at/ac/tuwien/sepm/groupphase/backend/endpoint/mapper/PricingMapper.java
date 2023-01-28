@@ -16,7 +16,7 @@ public interface PricingMapper {
 
   @Named("pricingToPricingDto")
   @Mapping(target = "performanceId", source = "performance.id")
-  @Mapping(target = "categoryId", source = "pricecategory.id")
+  @Mapping(target = "categoryId", source = "priceCategory.id")
   PricingDto pricingToPricingDto(Pricing pricing);
 
   @IterableMapping(qualifiedByName = "pricingToPricingDto")

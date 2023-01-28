@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,6 +93,7 @@ public class UserEndpoint {
 
   @Secured({"ROLE_ADMIN", "ROLE_USER"})
   @DeleteMapping(value = "{userId}")
+  @Transactional
   public void deleteUser(@PathVariable Long userId) throws ValidationException {
     LOGGER.info("GET /api/v1/user/{}", userId);
     userService.deleteUser(userId);

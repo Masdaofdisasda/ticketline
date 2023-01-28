@@ -31,16 +31,19 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
+import org.apache.commons.io.FileUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -80,7 +83,6 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
   private final TicketRepository ticketRepository;
   private final BookingRepository bookingRepository;
 
-
   /**
    * This event is executed as late as conceivably possible to indicate that
    * the application is ready to service requests.
@@ -89,9 +91,11 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
   public void onApplicationEvent(final ApplicationReadyEvent applicationReadyEvent) {
 
     System.out.println("----------------------------------------------------Drop of old data----------------------------------------------------");
+    /*
     ResourceDatabasePopulator resourceDatabasePopulator =
-      new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
+    new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
     resourceDatabasePopulator.execute(dataSource);
+     */
 
     System.out.println("------------------------------------------------Starting data generation------------------------------------------------");
     List<ApplicationUser> users = new ArrayList<>();
@@ -154,11 +158,21 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
     System.out.println("----------------------------------------------------Venue generation----------------------------------------------------");
     //25 venues generation
     for (int i = 0; i < 25; i++) {
-      net.datafaker.providers.base.Address address = faker.address();
 
       artists.add(Artist.builder()
         .name(faker.artist().name())
         .build());
+
+      final String fileName = "news" + i + ".jpg";
+
+      try {
+        saveUrlToFile(new URL("https://fastly.picsum.photos/id/393/200/300.jpg?hmac=zh8LVueWlQFz83Gn-9g49laZIMmCg_NC6jLkrQq0h5U"),
+          new File(new URL(getClass().getClassLoader().getResource("."), fileName).toURI()));
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
 
       news.add(News.builder()
         .fileName(faker.file().fileName())
@@ -166,8 +180,10 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
         .summary(faker.yoda().quote())
         .text(String.join("", faker.lorem().sentences(20)))
         .publishedAt(getMapOfRandomStartAndEndDate().get("startDate"))
-        .fileName("http://source.unsplash.com/random/500x500?starwars")
+        .fileName(fileName)
         .build());
+
+      net.datafaker.providers.base.Address address = faker.address();
 
       Venue venue = venueRepository.save(Venue.builder()
         .name(faker.pokemon().location())
@@ -275,7 +291,7 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
         Pricing pricing = pricingRepository.save(Pricing.builder()
           .pricing(BigDecimal.valueOf(faker.number().numberBetween(15 * (j + 1), 30 * (j + 1))))
           .performance(performance)
-          .pricecategory(priceCategories.get(j))
+          .priceCategory(priceCategories.get(j))
           .build());
 
         priceCategories.get(j).setPricings(Set.of(pricing));
@@ -349,5 +365,23 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
     }
     System.out.println("Out of Bound for current:" + current + " divider:" + divider + " max:" + max);
     return 0;
+  }
+
+  private void saveUrlToFile(URL url, File file) throws IOException {
+    /*
+    Files.copy(new URL("https://picsum.photos/300/200").openStream(),
+      new File(getClass().getClassLoader().getResource(".").getFile() + "/" + fileName).toPath());
+    */
+    FileUtils.copyURLToFile(url, file);
+
+    /*
+    BufferedInputStream in = new BufferedInputStream(new URL(url).openStream();
+    FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+    byte[] dataBuffer = new byte[1024];
+    int bytesRead;
+    while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+      fileOutputStream.write(dataBuffer, 0, bytesRead);
+    }
+    */
   }
 }

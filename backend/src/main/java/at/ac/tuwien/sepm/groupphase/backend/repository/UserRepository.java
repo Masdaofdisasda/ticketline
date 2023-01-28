@@ -8,21 +8,23 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<ApplicationUser, Long> {
-  public ApplicationUser findUserByEmail(String email);
+
+  Optional<ApplicationUser> findUserByEmail(String email);
 
   @Query("SELECT u from ApplicationUser u LEFT JOIN FETCH u.news WHERE u.id = ?1")
-  public ApplicationUser findUserById(Long id);
+  ApplicationUser findUserById(Long id);
 
   @Query("UPDATE ApplicationUser u SET u.failedAttempt = ?1 WHERE u.email = ?2")
   @Modifying
   @Transactional
-  public void updateFailedAttempts(int failAttempts, String email);
+  void updateFailedAttempts(int failAttempts, String email);
 
   @Query("SELECT u from ApplicationUser u WHERE u.accountNonLocked = false")
-  public List<ApplicationUser> getLockedUsers();
+  List<ApplicationUser> getLockedUsers();
 
-  public List<ApplicationUser> findAll();
+  List<ApplicationUser> findAll();
 }

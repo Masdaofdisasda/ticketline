@@ -91,6 +91,8 @@ public class TicketValidationServiceImpl implements TicketValidationService {
       return TicketValidationResult.BOOKING_CANCELED;
     }
 
+    ticketRepository.save(ticket.get().toBuilder().used(true).build());
+
     return TicketValidationResult.VALID;
   }
 

@@ -9,12 +9,6 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.PasswordResetTokenReposit
 import at.ac.tuwien.sepm.groupphase.backend.service.EmailService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserSecurityService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
-
-import java.util.Optional;
-import java.util.UUID;
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -65,7 +64,6 @@ public class PasswordForgotEndpoint {
   @PostMapping("/user/savePassword")
   public GenericResponse savePassword(@RequestBody PasswordDto passwordDto)
     throws ValidationException {
-
     final String result = userSecurityService.validatePasswordResetToken(passwordDto.getToken());
 
     if (result != null) {

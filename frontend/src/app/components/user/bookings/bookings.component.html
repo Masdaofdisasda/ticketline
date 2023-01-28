@@ -22,7 +22,7 @@
     <tbody>
     <tr *ngFor="let booking of bookings">
       <th scope="row">{{ booking.id }}</th>
-      <td>{{ booking.bookedOn | date:'short'}}</td>
+      <td>{{ booking.bookedOn | date:'mediumDate'}}</td>
       <td class="align-middle">
         <span *ngIf="booking.type==='RESERVATION'" class="badge badge-pill bg-primary">reserved</span>
         <span *ngIf="booking.type==='PURCHASE'" class="badge badge-pill bg-success">purchased</span>
@@ -31,8 +31,8 @@
       <td>{{ booking.orderTotal }} €</td>
       <td>
         <div class="btn-group btn-group-sm" role="group">
-          <button type="button" [class]="booking.type==='RESERVATION' ? 'btn btn-outline-primary btn-sm' : 'btn btn-outline-secondary btn-sm'" [disabled]="booking.type!=='RESERVATION'"
-                  (click)="purchaseReservation(booking.id)"
+          <button type="button" [class]="booking.type==='RESERVATION' ? 'btn btn-outline-primary btn-sm' : 'btn btn-outline-secondary btn-sm'"
+                  [disabled]="booking.type!=='RESERVATION'" [routerLink]="['/user/bookings/', booking.id]"
           >
             <i class="bi bi-wallet2 me-2"></i>Purchase
           </button>

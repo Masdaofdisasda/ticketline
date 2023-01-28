@@ -46,6 +46,19 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     + " ORDER BY n.publishedAt desc")
   Page<News> findAllUnreadPagable(Long userId, Pageable pageable);
 
+  /**
+   * findAllPagable return news by descending publishing date that have been released.
+   *
+   * @param pageable holds page information like index and pagesize
+   * @return page with unread news
+   */
+  @Query("SELECT n FROM News n"
+    + " WHERE NOT EXISTS ("
+    + " SELECT b from n.hasSeen b where b.id = ?1)"
+    + " AND n.publishedAt < CURRENT_DATE"
+    + " ORDER BY n.publishedAt desc")
+  Page<News> findAllReleasedUnreadPagable(Long userId, Pageable pageable);
+
   @Query("SELECT n FROM News n LEFT JOIN FETCH n.hasSeen WHERE n.id = :id")
   Optional<News> findNewsById(@Param("id") Long id);
 }

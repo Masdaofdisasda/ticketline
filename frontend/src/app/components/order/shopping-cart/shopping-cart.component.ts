@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {map, Observable, toArray} from 'rxjs';
 import {BookingService} from '../../../services/booking.service';
 import {Ticket} from '../../../dto/ticket';
 import {AuthService} from '../../../services/auth.service';
@@ -13,7 +13,7 @@ import {ToastrService} from 'ngx-toastr';
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss']
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, AfterViewInit {
 
   @Input()
   checkoutMode = false;
@@ -24,18 +24,27 @@ export class ShoppingCartComponent implements OnInit {
   hoverEnd = new EventEmitter<Ticket>();
 
   tickets$: Observable<Ticket[]>;
+  performanceId: number;
 
   constructor(
-      private shoppingCartService: ShoppingCartService,
-      private bookingService: BookingService,
-      private router: Router,
-      public authService: AuthService,
-      private toastr: ToastrService
+    private shoppingCartService: ShoppingCartService,
+    private bookingService: BookingService,
+    private router: Router,
+    public authService: AuthService,
+    private toastr: ToastrService
   ) {
   }
 
   ngOnInit(): void {
-    this.tickets$ = this.shoppingCartService.tickets$;
+    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
+      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
+        ...arr.filter(t => t.performanceId !== this.performanceId)])));
+  }
+
+  ngAfterViewInit(): void {
+    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
+      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
+        ...arr.filter(t => t.performanceId !== this.performanceId)])));
   }
 
   isEmpty(): boolean {
@@ -44,20 +53,20 @@ export class ShoppingCartComponent implements OnInit {
 
   getHeader(): string {
     if (this.checkoutMode) {
-      return 'Your order:';
+      return 'Your Order:';
     }
 
     if (this.isEmpty()) {
-      return 'Please select seats';
+      return 'Please select Seats';
     } else {
-      return 'Your tickets:';
+      return 'Your Tickets:';
     }
   }
 
   getTotalAmount(): string {
     const total = this.shoppingCartService.calculateTotal();
-    const amount = total === 0 ? '0.00' : String(total);
-    return 'Total: ' + amount + ' EUR';
+    const amount = total === 0 ? '0.00' : String(total.toFixed(2));
+    return 'Total: ' + amount + ' €';
   }
 
   clearCart(): void {
@@ -68,8 +77,8 @@ export class ShoppingCartComponent implements OnInit {
     this.bookingService.reserveTickets(this.shoppingCartService.getItems())
       .subscribe({
         next: data => {
-          this.toastr.success('Your reservation was successfully completed, you can find it under your bookings', 'Reservation successful');
-          const orderId = data;
+          const orderId = data.bookingId;
+          this.toastr.success('Reservation successful');
           this.clearCart();
           this.router.navigate(['order', orderId]);
         }
@@ -81,6 +90,7 @@ export class ShoppingCartComponent implements OnInit {
       .subscribe({
         next: data => {
           const orderId = data.bookingId;
+          this.toastr.success('Purchase successful');
           this.clearCart();
           this.download(data.bookingId);
           this.router.navigate(['order', orderId]);
@@ -91,7 +101,7 @@ export class ShoppingCartComponent implements OnInit {
   download(bookingId): void {
     this.bookingService.downloadAndSave(
       this.bookingService.downloadTickets(bookingId),
-      'tickets for booking ' + bookingId
+      'tickets_booking_' + bookingId
     );
   }
 
