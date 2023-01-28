@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {BookingService} from '../../../services/booking.service';
 import {Ticket} from '../../../dto/ticket';
 import {AuthService} from '../../../services/auth.service';
@@ -36,12 +36,24 @@ export class ShoppingCartComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.shoppingCartService.getItems();
-    this.tickets$ = this.shoppingCartService.tickets$;
+    this.loadCart();
   }
 
   ngAfterViewInit(): void {
+    this.loadCart();
+  }
 
+  loadCart() {
+    this.shoppingCartService.getItems();
+    this.tickets$ = this.shoppingCartService.tickets$.pipe(
+      map(arr => {
+        if (this.performanceId) {
+          return [...arr.filter(t => t.performanceId === this.performanceId),
+            ...arr.filter(t => t.performanceId !== this.performanceId)];
+        } else {
+          return arr;
+        }
+      }));
   }
 
   isEmpty(): boolean {
