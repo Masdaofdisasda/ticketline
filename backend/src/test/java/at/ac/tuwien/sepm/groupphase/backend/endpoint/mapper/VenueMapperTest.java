@@ -1,5 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 class VenueMapperTest {
 /*
   VenueMapper mapper = VenueMapper.INSTANCE;

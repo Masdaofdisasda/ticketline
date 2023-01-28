@@ -34,6 +34,7 @@ import net.datafaker.Faker;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,6 +63,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Weitere Anforderungen an Performance sollen Sie selbst ausarbeiten.
  */
 @Component
+@Profile("!test")
 @RequiredArgsConstructor
 public class TestDataGenerator implements ApplicationListener<ApplicationReadyEvent> {
   private final DataSource dataSource;
