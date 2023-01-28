@@ -34,7 +34,8 @@ import net.datafaker.Faker;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -60,7 +61,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * Dieses umfasst mindestens 1000 Kunden, 1000 Verkäufe sowie 200 Veranstaltungen an mindestens 25 Orten. (Die Testdaten müssen dabei keine „sinnvollen" Daten sein.)
  * Weitere Anforderungen an Performance sollen Sie selbst ausarbeiten.
  */
-@Profile("generateData")
 @Component
 @RequiredArgsConstructor
 public class TestDataGenerator implements ApplicationListener<ApplicationReadyEvent> {
@@ -91,11 +91,9 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
   public void onApplicationEvent(final ApplicationReadyEvent applicationReadyEvent) {
 
     System.out.println("----------------------------------------------------Drop of old data----------------------------------------------------");
-    /*
     ResourceDatabasePopulator resourceDatabasePopulator =
-    new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
+      new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("sql/create_tables.sql"));
     resourceDatabasePopulator.execute(dataSource);
-     */
 
     System.out.println("------------------------------------------------Starting data generation------------------------------------------------");
     List<ApplicationUser> users = new ArrayList<>();
@@ -266,14 +264,6 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
       Venue venue = venues.get(faker.number().numberBetween(0, venues.size() - 1));
       Room room = venue.getRooms().stream().toList().get(faker.number().numberBetween(0, venue.getRooms().size() - 1));
 
-
-      //int numberOfArtists = faker.number().numberBetween(1, 2);
-      //Set<Artist> artistsForPerformance = new HashSet<>();
-      //while(numberOfArtists > 0){
-      //  Artist artistToAdd = artists.get(faker.number().numberBetween(0, artists.size()-1));
-      //  artistsForPerformance.add(!artists.contains(artistToAdd) ? artistToAdd : artistToAdd.getId() == artists.size() - 1 ? artists.get(0) : artists.get( ) );
-      //  numberOfArtists--;
-      //}
       Set<Artist> artistsForPerformance = new HashSet<>();
       ThreadLocalRandom.current().ints(0, artists.size()).distinct().limit(faker.number().numberBetween(1, 4)).forEach(randindex -> {
         artistsForPerformance.add(artists.get(randindex));
@@ -368,20 +358,6 @@ public class TestDataGenerator implements ApplicationListener<ApplicationReadyEv
   }
 
   private void saveUrlToFile(URL url, File file) throws IOException {
-    /*
-    Files.copy(new URL("https://picsum.photos/300/200").openStream(),
-      new File(getClass().getClassLoader().getResource(".").getFile() + "/" + fileName).toPath());
-    */
     FileUtils.copyURLToFile(url, file);
-
-    /*
-    BufferedInputStream in = new BufferedInputStream(new URL(url).openStream();
-    FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-    byte[] dataBuffer = new byte[1024];
-    int bytesRead;
-    while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-      fileOutputStream.write(dataBuffer, 0, bytesRead);
-    }
-    */
   }
 }

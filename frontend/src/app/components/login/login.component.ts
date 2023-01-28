@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {Location} from '@angular/common';
 import {AuthRequest} from '../../dto/auth-request';
-import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-login',

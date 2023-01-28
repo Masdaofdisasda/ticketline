@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingCartService} from '../../../services/shopping-cart.service';
 import {Router} from '@angular/router';
-import {map, Observable, toArray} from 'rxjs';
+import {Observable} from 'rxjs';
 import {BookingService} from '../../../services/booking.service';
 import {Ticket} from '../../../dto/ticket';
 import {AuthService} from '../../../services/auth.service';
 import {ToastrService} from 'ngx-toastr';
+import {of} from 'rxjs/internal/observable/of';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ShoppingCartComponent implements OnInit, AfterViewInit {
   @Output()
   hoverEnd = new EventEmitter<Ticket>();
 
-  tickets$: Observable<Ticket[]>;
+  tickets$: Observable<Ticket[]> = of([]);
   performanceId: number;
 
   constructor(
@@ -31,20 +32,16 @@ export class ShoppingCartComponent implements OnInit, AfterViewInit {
     private bookingService: BookingService,
     private router: Router,
     public authService: AuthService,
-    private toastr: ToastrService
-  ) {
+    private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
-    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
-      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
-        ...arr.filter(t => t.performanceId !== this.performanceId)])));
+    this.shoppingCartService.getItems();
+    this.tickets$ = this.shoppingCartService.tickets$;
   }
 
   ngAfterViewInit(): void {
-    this.tickets$ = this.shoppingCartService.tickets$.pipe((toArray(),
-      map(arr => [...arr.filter(t => t.performanceId === this.performanceId),
-        ...arr.filter(t => t.performanceId !== this.performanceId)])));
+
   }
 
   isEmpty(): boolean {

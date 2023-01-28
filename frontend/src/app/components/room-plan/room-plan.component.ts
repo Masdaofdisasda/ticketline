@@ -193,7 +193,7 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
   }
 
   removeOutline(column: number, row: number) {
-    document.querySelector(`rect[row="${row}"][column="${column}"]`).removeAttribute('stroke');
+    document.querySelector(`rect[row="${row}"][column="${column}"]`)?.removeAttribute('stroke');
   }
 
   addSeat(seat: Seat, color?: string, pricing?: number) {
