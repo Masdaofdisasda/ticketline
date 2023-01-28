@@ -61,4 +61,8 @@ public class Venue {
   public void addRoom(Room room) {
     rooms.add(room);
   }
+
+  public String getAddress() {
+    return String.join(", ", street, houseNumber, city, zipCode);
+  }
 }

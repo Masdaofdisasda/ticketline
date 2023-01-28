@@ -27,6 +27,7 @@ import { SelectPerformanceComponent } from './components/event/select-performanc
 import { NewsCreateComponent } from './components/news/news-create/news-create.component';
 import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
 import {NewsDetailsComponent} from './components/news/news-details/news-details.component';
+import {ReservationComponent} from './components/user/reservation/reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/event', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
   { path: 'recover', component: PasswordForgotComponent },
   { path: 'user', component: UserComponent },
   { path: 'user/bookings', component: BookingsComponent },
+  { path: 'user/bookings/:bookingId', component: ReservationComponent },
   { path: 'user/changePassword', component: ChangePasswordComponent },
   {
     path: 'user/create',

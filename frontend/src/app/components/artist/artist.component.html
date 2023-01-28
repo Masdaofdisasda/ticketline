@@ -10,19 +10,28 @@
   <br>
 </div>
 
-<div class="d-flex justify-content-center">
-  <table class="table table-light w-50">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let artist of artists">
-      <th scope="row">{{ artist.id }}</th>
-      <td>{{ artist.name }}</td>
-    </tr>
-    </tbody>
-  </table>
+
+<div *ngIf="artists.length === 0"  class="container loading-skeleton">
+  <div class="row">
+    <div class="col-3 p-2" *ngFor="let item of [].constructor(20); let i = index">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row card-group">
+  <div class="col-3 p-2" *ngFor="let artist of artists">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{artist.name}}</h5>
+      </div>
+    </div>
+  </div>
 </div>

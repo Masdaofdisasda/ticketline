@@ -12,6 +12,12 @@ export class TicketItemComponent implements OnInit {
   @Input()
   ticket: Ticket;
 
+  @Input()
+  muted: boolean;
+
+  @Input()
+  hoverable: boolean;
+
   @Output()
   delete = new EventEmitter<void>();
 
@@ -23,13 +29,8 @@ export class TicketItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  formatTicketInfo(): string {
-    return '1x Sector: ' + this.ticket.sector
-    + ', Seat: ' + this.ticket.seatNumber;
-  }
-
   formatTicketPrice(): string {
-    return String(this.ticket.price) + ' EUR';
+    return String(this.ticket.price.toFixed(2)) + ' €';
   }
 
   removeItem() {

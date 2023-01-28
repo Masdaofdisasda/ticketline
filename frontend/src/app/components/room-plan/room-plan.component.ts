@@ -186,7 +186,8 @@ export class RoomPlanComponent implements OnInit, AfterViewInit {
     document.querySelector(`rect[row="${row}"][column="${column}"]`).setAttribute('fill', '#' + color.replace('#', ''));
   }
 
-  setOutline(color: string, strength: number, column: number, row: number) {
+  setOutline(color: string, column: number, row: number, strength?: number) {
+    strength = strength || this.seatSize * .2;
     document.querySelector(`rect[row="${row}"][column="${column}"]`).setAttribute('stroke', '#' + color.replace('#', ''));
     document.querySelector(`rect[row="${row}"][column="${column}"]`).setAttribute('stroke-width', strength.toString());
   }

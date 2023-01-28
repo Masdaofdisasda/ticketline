@@ -9,7 +9,9 @@
     <ul class="overflow-auto list-group list-group-flush flex-grow-1">
       <li *ngFor="let ticket of tickets$ | async" class="list-group-item" (mouseenter)="onHoverStart(ticket)"
           (mouseleave)="onHoverEnd(ticket)">
-        <app-ticket-item [ticket]="ticket" (delete)="onHoverEnd(ticket)"></app-ticket-item>
+        <app-ticket-item [muted]="performanceId && performanceId !== ticket.performanceId"
+                         [hoverable]="performanceId && performanceId === ticket.performanceId" [ticket]="ticket"
+                         (delete)="onHoverEnd(ticket)"></app-ticket-item>
       </li>
     </ul>
     <div class="fw-normal text-end pt-4 pe-4">
@@ -23,8 +25,8 @@
   </span>
 
   <span *ngIf="(tickets$ | async).length !== 0 && checkoutMode && authService.isLoggedIn()" class="d-flex justify-content-center">
-    <button type="button" (click)="reserveTickets()" class="btn btn-light me-4">Reserve tickets</button>
-    <button type="button" (click)="purchaseTickets()" class="btn btn-primary">Purchase tickets</button>
+    <button type="button" (click)="reserveTickets()" class="btn btn-light me-4">Reserve Tickets</button>
+    <button type="button" (click)="purchaseTickets()" class="btn btn-primary">Purchase Tickets</button>
   </span>
 
 </div>

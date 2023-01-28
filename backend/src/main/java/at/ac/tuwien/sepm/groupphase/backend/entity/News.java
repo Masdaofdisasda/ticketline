@@ -57,7 +57,7 @@ public class News {
   private String title;
 
   @Builder.Default
-  @ManyToMany(cascade = CascadeType.PERSIST)
+  @ManyToMany(mappedBy = "news", cascade = CascadeType.PERSIST)
   private Set<ApplicationUser> hasSeen = new LinkedHashSet<>();
 
   public void add(ApplicationUser user) {

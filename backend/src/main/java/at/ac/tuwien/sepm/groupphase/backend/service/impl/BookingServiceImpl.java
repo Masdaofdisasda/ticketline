@@ -1,12 +1,17 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingDetailDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.BookingItemDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketBookingDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TicketFullDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.BookingMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.PerformanceMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.SeatMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TicketMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
@@ -15,6 +20,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.enums.DocumentType;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.SeatNotAvailableException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.TicketCancellationException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.BookingRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.PerformanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.SeatRepository;
@@ -34,9 +40,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.CANCELLATION;
 import static at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType.PURCHASE;
@@ -58,6 +67,8 @@ public class BookingServiceImpl implements BookingService {
   private final TicketValidationService validationService;
 
   private final SeatMapper seatMapper;
+  private final PerformanceMapper performanceMapper;
+  private final TicketMapper ticketMapper;
 
   private static String getEmail() {
     return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -65,7 +76,8 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   public BookingDetailDto fetchBookingDetails(Long bookingId) {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
     Optional<Booking> matchingBooking = user.getBookings()
       .stream()
       .filter(booking -> Objects.equals(booking.getId(), bookingId))
@@ -81,7 +93,8 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   public List<BookingItemDto> fetchBookings() {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
 
     return bookingMapper.map(bookingRepository.getBookingByUserId(user.getId()));
   }
@@ -89,7 +102,8 @@ public class BookingServiceImpl implements BookingService {
   @Override
   @Transactional
   public void cancelBooking(Long bookingId) {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
     Optional<Booking> matchingBooking = user.getBookings()
       .stream()
       .filter(booking -> Objects.equals(booking.getId(), bookingId))
@@ -103,11 +117,11 @@ public class BookingServiceImpl implements BookingService {
       .stream()
       .filter((t) -> t.getPerformance().getStartDate().isBefore(LocalDateTime.now())).toList();
     if (expired.size() != 0) {
-      throw new TicketCancellationException("Tickets %s cannot be cancelled because Performance has already started"
+      throw new TicketCancellationException("Tickets #%s cannot be cancelled because Performance has already started"
         .formatted(expired
           .stream()
           .map(t -> t.getId().toString())
-          .reduce("", (whole, single) -> whole + ", #" + single)));
+          .collect(Collectors.joining(", #"))));
     }
 
     List<Ticket> used = booking.getTickets()
@@ -116,11 +130,11 @@ public class BookingServiceImpl implements BookingService {
       .toList();
 
     if (used.size() != 0) {
-      throw new TicketCancellationException("Tickets %s cannot be cancelled because it was already used"
+      throw new TicketCancellationException("Tickets #%s cannot be cancelled because it was already used"
         .formatted(used
           .stream()
           .map(t -> t.getId().toString())
-          .reduce("", (whole, single) -> whole + ", #" + single)));
+          .collect(Collectors.joining(", #"))));
     }
 
     if (booking.getBookingType() == PURCHASE) {
@@ -134,17 +148,52 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   @Transactional
-  public void purchaseReservation(Long bookingId) {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+  public void purchaseReservation(Long bookingId, List<TicketFullDto> tickets) throws ValidationException {
     Booking booking = getBookingFromCurrentUser(bookingId);
 
+    Set<Ticket> allTickets = booking.getTickets();
+    Set<Ticket> removedTickets = new HashSet<>();
+
+    List<Ticket> expired = allTickets.stream()
+      .filter(t -> LocalDateTime.now().isAfter(t.getPerformance().getStartDate().minusMinutes(30)))
+      .toList();
+
+    if (!expired.isEmpty()) {
+      throw new ValidationException("Reservation is already expired",
+        expired.stream().map(ticket -> "Ticket for Performance by "
+          + ticket.getPerformance().getArtists().stream().map(Artist::getName).collect(Collectors.joining(", "))
+          + " is expired"
+        ).toList());
+    }
+    for (Ticket ticket : allTickets) {
+      Long ticketId = ticket.getId();
+      if (!containsTicket(ticketId, tickets)) {
+        removedTickets.add(ticket);
+      }
+    }
+    removedTickets.forEach(booking::removeTicket);
+
+
     booking.setBookingType(PURCHASE);
+
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
 
     userRepository.save(user);
   }
 
+  private boolean containsTicket(Long ticketId, List<TicketFullDto> tickets) {
+    for (var ticket : tickets) {
+      if (Objects.equals(ticket.getTicketId(), ticketId)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private Booking getBookingFromCurrentUser(Long bookingId) {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
     Optional<Booking> matchingBooking = user.getBookings()
       .stream()
       .filter(booking -> Objects.equals(booking.getId(), bookingId))
@@ -167,7 +216,8 @@ public class BookingServiceImpl implements BookingService {
   }
 
   private void attachBookingToUser(Booking booking) {
-    ApplicationUser user = userRepository.findUserByEmail(getEmail());
+    ApplicationUser user = userRepository.findUserByEmail(getEmail())
+      .orElseThrow(() -> new NotFoundException("User with email " + getEmail() + " not found"));
     user.addBooking(booking);
     booking.setUser(user);
     bookingRepository.save(booking);
@@ -183,7 +233,8 @@ public class BookingServiceImpl implements BookingService {
 
     List<Ticket> ticketList = tickets
       .stream()
-      .map(ticketDto -> ticketRepository.findBySeatAndPerformanceId(ticketDto.getSeat().getId(), ticketDto.getPerformanceId()).toBuilder().booking(booking).build())
+      .map(ticketDto -> ticketRepository.findBySeatAndPerformanceId(ticketDto.getSeat().getId(), ticketDto.getPerformanceId()).toBuilder().booking(booking)
+        .build())
       .toList();
 
     ticketList.forEach((ticket) -> {
@@ -243,6 +294,26 @@ public class BookingServiceImpl implements BookingService {
   public Booking getById(long id) throws NotFoundException {
     return bookingRepository.findById(id)
       .orElseThrow(() -> new NotFoundException("Booking with the id " + id + " could not be found"));
+  }
+
+  @Override
+  public BookingFullDto fetchBookingFull(Long bookingId) {
+    Booking booking = getBookingFromCurrentUser(bookingId);
+    if (booking.getBookingType() != RESERVATION) {
+      throw new IllegalStateException("Only for reservations");
+    }
+
+    return BookingFullDto.builder()
+      .bookingId(booking.getId())
+      .tickets(booking.getTickets().stream().map(ticket ->
+        TicketFullDto.builder()
+          .ticketId(ticket.getId())
+          .price(ticket.getPrice())
+          .performance(performanceMapper.performanceToPerformanceDto(ticket.getPerformance()))
+          .seat(seatMapper.seatToSeatDto(ticket.getSeat()))
+          .build()
+      ).toList())
+      .build();
   }
 
 }

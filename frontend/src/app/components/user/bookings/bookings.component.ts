@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BookingService} from '../../../services/booking.service';
 import {BookingItem} from '../../../dto/bookingItem';
-import {tap} from 'rxjs/operators';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-bookings',
@@ -14,6 +14,7 @@ export class BookingsComponent implements OnInit {
 
   constructor(
     private bookingService: BookingService,
+    private toastr: ToastrService,
   ) {
   }
 
@@ -28,37 +29,30 @@ export class BookingsComponent implements OnInit {
 
   cancelBooking(bookingId: number): void {
     this.bookingService.cancelBooking(bookingId)
-      .pipe(tap(data => console.log(data)))
-      .subscribe(() => this.ngOnInit());
-  }
-
-  purchaseReservation(bookingId: number): void {
-    this.bookingService.purchaseReservation(bookingId)
-      .subscribe({
-        next: () => {
-          this.ngOnInit();
-        }
+      .subscribe(() => {
+        this.toastr.success('Booking ' + bookingId + ' was canceled');
+        this.ngOnInit();
       });
   }
 
   downloadTicket(bookingId): void {
     this.bookingService.downloadAndSave(
       this.bookingService.downloadTickets(bookingId),
-      'tickets for booking ' + bookingId
+      'tickets_booking_' + bookingId
     );
   }
 
   downloadReceipt(bookingId): void {
     this.bookingService.downloadAndSave(
       this.bookingService.downloadReceipt(bookingId),
-      'receipt for booking ' + bookingId
+      'receipt_booking_' + bookingId
     );
   }
 
   downloadCancellation(bookingId): void {
     this.bookingService.downloadAndSave(
       this.bookingService.downloadCancellation(bookingId),
-      'cancellation for booking ' + bookingId
+      'cancellation_booking_' + bookingId
     );
   }
 

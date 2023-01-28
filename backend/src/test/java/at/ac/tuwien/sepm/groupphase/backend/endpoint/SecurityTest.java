@@ -1,11 +1,57 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.BackendApplication;
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.NewsCreationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NewsMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.News;
+import at.ac.tuwien.sepm.groupphase.backend.repository.NewsRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * Security is a cross-cutting concern, however for the sake of simplicity it is tested against the message endpoint
@@ -15,7 +61,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class SecurityTest implements TestData {
-/*
+
   private static final List<Class<?>> mappingAnnotations = Lists.list(
     RequestMapping.class,
     GetMapping.class,
@@ -61,6 +107,8 @@ public class SecurityTest implements TestData {
     .text(TEST_NEWS_TEXT)
     .publishedAt(TEST_NEWS_PUBLISHED_AT)
     .build();
+  @Autowired
+  private UserRepository userRepository;
 
   @BeforeEach
   public void beforeEach() {
@@ -78,7 +126,6 @@ public class SecurityTest implements TestData {
    * It is very easy to forget securing one method causing a security vulnerability.
    * Feel free to remove / disable / adapt if you do not use Method Security (e.g. if you prefer Web Security to define who may perform which actions) or want to use Method Security on the service layer.
    */
-  /*
   @Test
   public void ensureSecurityAnnotationPresentForEveryEndpoint() {
     List<ImmutablePair<Class<?>, Method>> notSecured = components.stream()
@@ -98,6 +145,13 @@ public class SecurityTest implements TestData {
 
   @Test
   public void givenUserLoggedIn_whenFindAll_then200() throws Exception {
+    userRepository.save(ApplicationUser.builder()
+      .firstName("Harald")
+      .lastName("Harder")
+      .email(DEFAULT_USER)
+      .password("password")
+      .build());
+
     LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
     requestParams.add("pageIndex", "0");
     requestParams.add("pageSize", "10");
@@ -173,7 +227,5 @@ public class SecurityTest implements TestData {
 
     assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
   }
-
-   */
 
 }

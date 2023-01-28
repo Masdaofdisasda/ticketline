@@ -34,9 +34,21 @@ public class SimpleNewsService implements NewsService {
   }
 
   @Override
+  public Page<News> findAllReleasedNewsPaginated(PageDto pageDto) {
+    LOGGER.debug("Find all news paginated");
+    return newsRepository.findAllReleasedNewsPagable(PageRequest.of(pageDto.pageIndex(), pageDto.pageSize()));
+  }
+
+  @Override
   public Page<News> findAllUnreadPaginated(Long userId, PageDto pageDto) {
     LOGGER.debug("Find all unread news paginated");
     return newsRepository.findAllUnreadPagable(userId, PageRequest.of(pageDto.pageIndex(), pageDto.pageSize()));
+  }
+
+  @Override
+  public Page<News> findAllReleasedUnreadPaginated(Long userId, PageDto pageDto) {
+    LOGGER.debug("Find all unread news paginated");
+    return newsRepository.findAllReleasedUnreadPagable(userId, PageRequest.of(pageDto.pageIndex(), pageDto.pageSize()));
   }
 
   @Override
@@ -53,7 +65,7 @@ public class SimpleNewsService implements NewsService {
     if (!news.getHasSeen().contains(user)) {
       user.addHasSeen(news);
       news.add(user);
-      newsRepository.save(news);
+      userRepository.save(user);
     }
   }
 

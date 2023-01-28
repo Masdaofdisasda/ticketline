@@ -38,7 +38,7 @@ export class OrderCompleteComponent implements OnInit {
   download(bookingId): void {
     this.bookingService.downloadAndSave(
       this.bookingService.downloadTickets(bookingId),
-      'tickets for booking ' + bookingId
+      'tickets_booking_' + bookingId
     );
   }
 

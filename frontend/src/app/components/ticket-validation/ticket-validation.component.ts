@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TicketService} from '../../services/ticket.service';
 import {Observable} from 'rxjs';
 import {TicketValidationDto} from '../../dto/ticketValidation.dto';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-ticket-validation',
@@ -14,13 +15,13 @@ export class TicketValidationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ticketService: TicketService
-  ) {
+    private ticketService: TicketService,
+    private spinnerService: NgxSpinnerService) {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(() => {
+    this.spinnerService.show().then(() => this.route.params.subscribe(() => {
       this.validationTicket$ = this.ticketService.checkTicketValidation(this.route.snapshot.queryParamMap.get('hash'));
-    });
+    }));
   }
 }

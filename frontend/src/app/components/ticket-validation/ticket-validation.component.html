@@ -1,4 +1,4 @@
-<div style="height: 3rem"></div>
+<div style="height: 15rem"></div>
 <div *ngIf="validationTicket$ | async as obs; else loading">
   <div *ngIf="obs.status === 'VALID'">
     <h1 class="bi-check2-circle text-center validIcon"></h1>
@@ -11,8 +11,8 @@
 </div>
 
 <ng-template #loading>
-  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p
-    style="color: black"> Loading... </p></ngx-spinner>
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="line-scale" [fullScreen]="false"><p
+    style="color: white"> Loading... </p></ngx-spinner>
 </ng-template>
 
 

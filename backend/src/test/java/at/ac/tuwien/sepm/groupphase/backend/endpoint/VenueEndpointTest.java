@@ -2,12 +2,57 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.PriceCategoryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomAddDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatAddDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorAddDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueAddDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.PriceCategory;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Pricing;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
+import at.ac.tuwien.sepm.groupphase.backend.repository.PriceCategoryRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.VenueRepository;
+import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.core.util.Json;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -15,7 +60,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class VenueEndpointTest implements TestData {
-  /*
+
   final String name = "testName",
     editName = "editName",
     street = "testStreet",
@@ -42,7 +87,7 @@ public class VenueEndpointTest implements TestData {
     rowSize = 3,
     editRowSize = 10,
 
-    columnNumber = 1,
+  columnNumber = 1,
     editColumnNumber = 6,
     rowNumber = 2,
     editRowNumber = 8,
@@ -145,7 +190,7 @@ public class VenueEndpointTest implements TestData {
 
     MockHttpServletResponse response = mvcResult.getResponse();
 
-    assertEquals(HttpStatus.OK.value(), response.getStatus());
+    assertEquals(HttpStatus.CREATED.value(), response.getStatus());
     assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
     VenueDto venueResponse = objectMapper.readValue(response.getContentAsByteArray(), VenueDto.class);
@@ -180,7 +225,8 @@ public class VenueEndpointTest implements TestData {
   }
 
   @Test
-  void findAll_shouldReturnOneLocation() throws Exception{
+  @Transactional
+  void findAll_shouldReturnOneLocation() throws Exception {
     final PriceCategory addedPriceCategory = priceCategoryRepository.save(PriceCategory.builder()
       .color(color)
       .name(priceCategoryName)
@@ -194,13 +240,13 @@ public class VenueEndpointTest implements TestData {
       .city(city)
       .zipCode(zipCode)
       .country(country)
-      .rooms(List.of(
+      .rooms(Set.of(
         Room.builder()
           .id(roomID)
           .columnSize(columnSize)
           .rowSize(rowSize)
           .name(roomName)
-          .sectors(List.of(
+          .sectors(Set.of(
             Sector.builder()
               .id(sectorID)
               .name(sectorName)
@@ -209,7 +255,7 @@ public class VenueEndpointTest implements TestData {
                 .color(color)
                 .name(priceCategoryName)
                 .build())
-              .seats(List.of(
+              .seats(Set.of(
                 Seat.builder()
                   .id(seatID0)
                   .colNumber(columnNumber)
@@ -249,7 +295,8 @@ public class VenueEndpointTest implements TestData {
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-    List<VenueDto> locationListResponse = objectMapper.readValue(response.getContentAsString(), new TypeReference<List<VenueDto>>(){});
+    List<VenueDto> locationListResponse = objectMapper.readValue(response.getContentAsString(), new TypeReference<>() {
+    });
 
     // --- Venue ---
     VenueDto venueDto = locationListResponse.get(0);
@@ -261,35 +308,6 @@ public class VenueEndpointTest implements TestData {
     assertEquals(city, venueDto.getCity());
     assertEquals(zipCode, venueDto.getZipCode());
     assertEquals(country, venueDto.getCountry());
-    assertEquals(1, venueDto.getRooms().size());
-
-    // --- Room ---
-    final RoomDto room = venueDto.getRooms().get(0);
-    assertEquals(roomName, room.getName());
-    assertEquals(columnSize, room.getColumnSize());
-    assertEquals(rowSize, room.getRowSize());
-    assertEquals(1, room.getSectors().size());
-
-    // --- Sector ---
-    final SectorDto sector = room.getSectors().get(0);
-    assertEquals(sectorName, sector.getName());
-
-    // --- PriceCategory ---
-    final PriceCategoryDto priceCategory = sector.getPriceCategory();
-    assertNotNull(priceCategory);
-    assertEquals(priceCategoryName, priceCategory.getName());
-    assertEquals(color, priceCategory.getColor());
-
-    // --- Seats ---
-    assertEquals(2, sector.getSeats().size());
-
-    final SeatDto seat = sector.getSeats().get(0);
-    assertEquals(columnNumber, seat.getColNumber());
-    assertEquals(rowNumber, seat.getRowNumber());
-
-    final SeatDto seat1 = sector.getSeats().get(1);
-    assertEquals(columnNumber1, seat1.getColNumber());
-    assertEquals(rowNumber1, seat1.getRowNumber());
   }
 
   @Test
@@ -306,13 +324,13 @@ public class VenueEndpointTest implements TestData {
       .city(city)
       .zipCode(zipCode)
       .country(country)
-      .rooms(List.of(
+      .rooms(Set.of(
         Room.builder()
           .id(roomID)
           .columnSize(columnSize)
           .rowSize(rowSize)
           .name(roomName)
-          .sectors(List.of(
+          .sectors(Set.of(
             Sector.builder()
               .id(sectorID)
               .name(sectorName)
@@ -321,7 +339,7 @@ public class VenueEndpointTest implements TestData {
                 .color(color)
                 .name(priceCategoryName)
                 .build())
-              .seats(List.of(
+              .seats(Set.of(
                 Seat.builder()
                   .id(seatID0)
                   .colNumber(columnNumber)
@@ -366,7 +384,7 @@ public class VenueEndpointTest implements TestData {
           .seats(List.of(SeatEditDto.builder()
               .rowNumber(editRowNumber)
               .colNumber(editColumnNumber)
-            .build(),
+              .build(),
             SeatEditDto.builder()
               .rowNumber(editRowNumber1)
               .colNumber(editColumnNumber1)
@@ -383,6 +401,4 @@ public class VenueEndpointTest implements TestData {
       .andDo(print())
       .andReturn();
   }
-
-   */
 }

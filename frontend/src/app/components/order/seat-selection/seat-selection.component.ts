@@ -28,7 +28,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   performance: PerformanceDto;
 
   private performanceId: number;
-  private readonly selectionOutlineColor = 'b8a';
   private readonly highlightColor = 'ffffff87';
 
   constructor(
@@ -45,10 +44,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     return visualViewport.height - document.querySelector('app-shopping-cart').getBoundingClientRect().y - 20;
   }
 
-  private get selectionOutlineStrength() {
-    return this.roomPlan.height * this.roomPlan.height * .0005;
-  }
-
   ngOnInit(): void {
     this.spinner.show('room-plan-spinner');
     this.route.params.subscribe(() => {
@@ -60,6 +55,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
         next: data => {
           this.performance = data;
           this.spinner.hide('room-plan-spinner');
+          setTimeout(() => this.highlightInCart(this.shoppingCartService.getItems()), 10);
         },
         error: err => console.error(err)
       });
@@ -68,12 +64,22 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.shoppingCart.performanceId = this.performanceId;
     this.shoppingCart.tickets$.subscribe((tickets) => {
-      this.resetSelected();
-      tickets.forEach(ticket => {
+      if (this.performance) {
+        this.highlightInCart(tickets);
+      }
+    });
+  }
+
+
+  highlightInCart(tickets: Ticket[]): void {
+    this.resetSelected();
+    tickets.forEach(ticket => {
+      if (ticket.performanceId === this.performanceId) {
         this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, 110),
-          this.selectionOutlineStrength, ticket.column, ticket.row);
-      });
+          ticket.column, ticket.row);
+      }
     });
   }
 
@@ -89,11 +95,15 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   shoppingCartHoverStart(ticket: Ticket) {
-    this.roomPlan.setColor(this.highlightColor, ticket.column, ticket.row);
+    if (ticket.performanceId === this.performanceId) {
+      this.roomPlan.setColor(this.highlightColor, ticket.column, ticket.row);
+    }
   }
 
   shoppingCardHoverEnd(ticket: Ticket) {
-    this.roomPlan.setColor(this.getSectorOfSeat(ticket.seat).priceCategory.color, ticket.column, ticket.row);
+    if (ticket.performanceId === this.performanceId) {
+      this.roomPlan.setColor(this.roomPlan.getSeat(ticket.seat.colNumber, ticket.seat.rowNumber).color, ticket.column, ticket.row);
+    }
   }
 
   private getSectorOfSeat(seat: Seat): Sector {
@@ -127,7 +137,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     }
 
     const filtered = this.shoppingCartService.getItems().filter((ticket: Ticket) =>
-      ticket.row === seat.rowNumber && ticket.column === seat.colNumber)[0];
+        ticket.row === seat.rowNumber && ticket.column === seat.colNumber && this.performanceId === ticket.performanceId)[0];
     if (!filtered) {
       this.addSeatToCart(seat);
     } else {
@@ -140,6 +150,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
       return;
     }
     this.roomPlan.setOutline(this.colors.offsetHue(this.roomPlan.getSeat(seat.colNumber, seat.rowNumber).color, 110) + 'aa',
-      this.selectionOutlineStrength, seat.colNumber, seat.rowNumber);
+      seat.colNumber, seat.rowNumber);
   }
 }

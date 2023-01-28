@@ -10,7 +10,6 @@ import at.ac.tuwien.sepm.groupphase.backend.security.PasswordResetToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,9 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,11 +27,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.Date;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -141,7 +138,8 @@ public class PasswordForgotEndpointTest implements TestData {
   @Test
   public void savePasswordSucceedsWhenTokenIsFound() throws Exception {
     String token = "31fc366d-7c1c-41dc-9384-09f2537e7c48";
-    passwordResetTokenRepository.save(new PasswordResetToken(token, user));
+    user.setPasswordToken(new PasswordResetToken(token, user));
+    userRepository.save(user);
     PasswordDto passwordDto = PasswordDto.builder()
       .newPassword("password")
       .token(token)
@@ -158,7 +156,7 @@ public class PasswordForgotEndpointTest implements TestData {
 
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertNotNull(response.getContentAsString());
-    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com");
+    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com").orElseThrow();
     assertTrue(passwordEncoder.matches("password", user1.getPassword()));
   }
 
@@ -187,7 +185,7 @@ public class PasswordForgotEndpointTest implements TestData {
     assertEquals("invalid token", genericResponse.getError());
     assertNotNull(response.getContentAsString());
 
-    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com");
+    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com").orElseThrow();
     assertFalse(passwordEncoder.matches("password", user1.getPassword()));
   }
 
@@ -224,7 +222,7 @@ public class PasswordForgotEndpointTest implements TestData {
     assertEquals("expired token", genericResponse.getError());
     assertNotNull(response.getContentAsString());
 
-    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com");
+    ApplicationUser user1 = userRepository.findUserByEmail("test@test.com").orElseThrow();
     assertFalse(passwordEncoder.matches("password", user1.getPassword()));
   }
 }
