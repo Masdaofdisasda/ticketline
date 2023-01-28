@@ -80,6 +80,7 @@ public class VenueEndpoint {
    */
   @PatchMapping("{id}")
   @Secured("ROLE_ADMIN")
+  @Transactional
   public VenueDto editVenue(@PathVariable long id, @RequestBody VenueEditDto toEdit) throws NotFoundException, ValidationException {
     LOGGER.info("editVenue({},{})", id, toEdit);
     return mapper.simpleVenueToVenueDto(service.editVenue(id, toEdit));

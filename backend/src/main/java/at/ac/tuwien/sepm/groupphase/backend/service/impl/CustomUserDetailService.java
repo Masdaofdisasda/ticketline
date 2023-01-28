@@ -238,6 +238,13 @@ public class CustomUserDetailService implements UserService {
   @Override
   public void deleteUser(Long userId) throws ValidationException {
     customUserValidator.validateForDelete(userId);
+
+    userRepository.findById(userId)
+      .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"))
+      .getBookings()
+      .forEach(booking -> booking.getTickets()
+        .forEach(ticket -> ticket.setBooking(null)));
+
     userRepository.deleteById(userId);
   }
 

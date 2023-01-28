@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.RoomEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SeatEditDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SectorEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.VenueEditDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RoomMapper;
@@ -12,7 +11,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.VenueMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Room;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
-import at.ac.tuwien.sepm.groupphase.backend.entity.SeatingPlan;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Sector;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Venue;
 import at.ac.tuwien.sepm.groupphase.backend.exception.ConflictException;
@@ -29,7 +27,6 @@ import at.ac.tuwien.sepm.groupphase.backend.service.validator.VenueValidator;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class VenueServiceImpl implements VenueService {
@@ -168,12 +164,14 @@ public class VenueServiceImpl implements VenueService {
       venue.setCountry(edit.getCountry());
     }
 
-    List<String> errors = new ArrayList<>();
+    venue.getRooms().forEach(room -> {
+      room.setVenue(null);
+    });
+    roomRepository.saveAll(venue.getRooms());
     venue.setRooms(new HashSet<>());
 
     if (edit.getRooms() != null) {
-      List<RoomEditDto> newRooms = edit.getRooms().stream().filter(room -> room.getId() == null).toList();
-      for (RoomEditDto newRoom : newRooms) {
+      for (RoomEditDto newRoom : edit.getRooms()) {
         Room room = roomMapper.roomEditDtoToRoom(newRoom);
         if (room.getSectors() != null) {
           for (Sector sector : room.getSectors()) {
@@ -189,6 +187,8 @@ public class VenueServiceImpl implements VenueService {
         venue.getRooms().add(roomRepository.save(room));
       }
 
+
+      /*
       List<RoomEditDto> editRooms = edit.getRooms().stream().filter(room -> room.getId() != null).toList();
       for (RoomEditDto editRoom : editRooms) {
         try {
@@ -200,11 +200,14 @@ public class VenueServiceImpl implements VenueService {
           errors.add("Failed to delete or update room " + editRoom.getName() + " because a performance is taking place in this room.");
         }
       }
+       */
+
     }
 
     venueValidator.validateVenue(venue);
 
     venue = venueRepository.save(venue);
+    List<String> errors = new ArrayList<>();
 
     if (!errors.isEmpty()) {
       throw new ValidationException("Failed to edit some or all rooms", errors);

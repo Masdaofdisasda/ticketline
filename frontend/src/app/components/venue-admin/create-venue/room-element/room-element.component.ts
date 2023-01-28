@@ -195,12 +195,15 @@ export class RoomElementComponent implements OnInit, AfterViewInit, AfterContent
     this.update();
   }
 
-  deleteSectorClicked(event: MouseEvent, sector: Sector) {
+  deleteSectorClicked(event: MouseEvent, sector: Sector, index: number) {
     event.stopPropagation();
     this.confirmDelete.open('Sector', sector.name).then(result => {
       if (result) {
-        this.room.sectors.splice(this.room.sectors.indexOf(sector), 1);
-        this.update();
+        sector.seats.forEach(seat => {
+          this.roomPlan.setColor(this.unselectedColor, seat.colNumber, seat.rowNumber);
+        });
+        this.room.sectors.splice(index, 1);
+        this.updated.emit();
       }
     });
   }

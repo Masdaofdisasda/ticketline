@@ -15,6 +15,9 @@ export class TicketItemComponent implements OnInit {
   @Input()
   muted: boolean;
 
+  @Input()
+  hoverable: boolean;
+
   @Output()
   delete = new EventEmitter<void>();
 
