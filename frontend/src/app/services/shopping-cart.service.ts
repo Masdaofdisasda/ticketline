@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Ticket} from '../dto/ticket';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,37 +11,36 @@ export class ShoppingCartService {
   ticketsSubject: BehaviorSubject<Ticket[]> = new BehaviorSubject<Ticket[]>([]);
   tickets$: Observable<Ticket[]> = this.ticketsSubject.asObservable();
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
   async addToCart(ticket: Ticket) {
     const tickets = this.getItems();
     tickets.push(ticket);
+    localStorage.setItem(this.authService.getUserEmail() + '-cart', JSON.stringify(this.getItems()));
     this.ticketsSubject.next(tickets);
-    localStorage.setItem('cart', JSON.stringify(this.getItems()));
   }
 
   removeItem(ticket: Ticket) {
     const tickets = this.getItems();
     const newTickets = tickets.filter(ele => ele !== ticket);
     this.ticketsSubject.next(newTickets);
-    localStorage.setItem('cart', JSON.stringify(newTickets));
+    localStorage.setItem(this.authService.getUserEmail() + '-cart', JSON.stringify(newTickets));
   }
 
   getItems(): Ticket[] {
-    if (this.ticketsSubject.getValue().length===0) {
-      const retrievedObject = localStorage.getItem('cart');
+    if (this.ticketsSubject.getValue().length === 0) {
+      const retrievedObject = localStorage.getItem(this.authService.getUserEmail() + '-cart');
       if (retrievedObject) {
         this.ticketsSubject.next(JSON.parse(retrievedObject));
       }
     }
-
     return this.ticketsSubject.getValue();
   }
 
   clearCart() {
     this.ticketsSubject.next([]);
-    localStorage.removeItem('cart');
+    localStorage.removeItem(this.authService.getUserEmail() + '-cart');
   }
 
   isEmpty(): boolean {

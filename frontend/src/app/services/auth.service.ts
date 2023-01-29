@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
-import { AuthRequest } from '../dto/auth-request';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {AuthRequest} from '../dto/auth-request';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {tap} from 'rxjs/operators';
 // @ts-ignore
 import jwt_decode from 'jwt-decode';
-import { Globals } from '../global/globals';
+import {Globals} from '../global/globals';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ import { Globals } from '../global/globals';
 export class AuthService {
   private authBaseUri: string = this.globals.backendUri + '/authentication';
 
-  constructor(private httpClient: HttpClient, private globals: Globals) {}
+  constructor(private httpClient: HttpClient, private globals: Globals, private router: Router) {
+  }
 
   /**
    * Login in the user. If it was successful, a valid JWT token will be stored
@@ -22,7 +24,7 @@ export class AuthService {
    */
   loginUser(authRequest: AuthRequest): Observable<string> {
     return this.httpClient
-      .post(this.authBaseUri, authRequest, { responseType: 'text' })
+      .post(this.authBaseUri, authRequest, {responseType: 'text'})
       .pipe(tap((authResponse: string) => this.setToken(authResponse)));
   }
 
@@ -33,7 +35,7 @@ export class AuthService {
     return (
       !!this.getToken() &&
       this.getTokenExpirationDate(this.getToken()).valueOf() >
-        new Date().valueOf()
+      new Date().valueOf()
     );
   }
 
@@ -49,6 +51,7 @@ export class AuthService {
    */
   logoutUser(): void {
     localStorage.removeItem('authToken');
+    this.router.navigate(['/']).then(() => window.location.reload());
   }
 
   getToken(): string {
@@ -85,6 +88,10 @@ export class AuthService {
 
   private setToken(authResponse: string) {
     localStorage.setItem('authToken', authResponse);
+    if (localStorage.getItem('-cart')) {
+      localStorage.setItem(this.getUserEmail() + '-cart', localStorage.getItem('-cart'));
+      localStorage.removeItem('-cart');
+    }
   }
 
   private getTokenExpirationDate(token: string): Date {

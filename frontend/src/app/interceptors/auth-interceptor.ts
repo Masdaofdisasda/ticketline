@@ -49,7 +49,7 @@ export class AuthInterceptor implements HttpInterceptor {
           if (error.status === 403) {
             // remove token
             localStorage.removeItem('authToken');
-            console.log(localStorage.getItem('authToken'));
+            localStorage.removeItem('email');
             errorMsg = `Error Code: ${error.status} \n Message: Invalid credentials`;
           }
         }

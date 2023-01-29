@@ -128,7 +128,7 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
 
   private resetSelected() {
     this.performance?.room?.sectors?.forEach(sector =>
-      sector.seats.forEach(seat => this.roomPlan.removeOutline(seat.colNumber, seat.rowNumber)));
+      sector.seats.forEach(seat => this.roomPlan?.removeOutline(seat.colNumber, seat.rowNumber)));
   }
 
   private toggle(seat: Seat) {
