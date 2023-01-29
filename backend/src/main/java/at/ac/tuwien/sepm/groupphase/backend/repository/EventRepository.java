@@ -39,7 +39,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
       + " AND (coalesce(:#{#eventSearchRequest.city},'')='' OR lower(v.city) like concat('%',lower(:#{#eventSearchRequest.city}),'%'))"
       + " AND (coalesce(:#{#eventSearchRequest.street},'')='' OR lower(v.street) like concat('%',lower(:#{#eventSearchRequest.street}),'%'))"
       + " AND (coalesce(:#{#eventSearchRequest.artistName},'')='' OR lower(art.name) like concat('%',lower(:#{#eventSearchRequest.artistName}),'%'))"
-      + " AND (coalesce(:#{#eventSearchRequest.category},'')='' OR lower(ev.category) like concat('%',lower(:#{#eventSearchRequest.category}),'%'))")
+      + " AND (coalesce(:#{#eventSearchRequest.category},'')='' OR lower(ev.category) like concat('%',lower(:#{#eventSearchRequest.category}),'%'))"
+      + " ORDER BY ev.startDate")
   Page<Event> findForFilter(@Param("eventSearchRequest") EventSearchRequest eventSearchRequest, Pageable pageable);
 
   /**
@@ -48,11 +49,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    * @param pageable holds page information like index and pagesize
    * @return page with matching events
    */
-  @Query("select pf.event FROM Performance pf"
-    + " LEFT join Ticket t ON t.performance = pf"
-    + " AND Month(pf.event.startDate) = Month(CURRENT_DATE)"
+  @Query("SELECT pf.event FROM Performance pf"
+    + " LEFT JOIN Ticket t ON t.performance = pf"
+    + " WHERE pf.event.startDate >= CURRENT_DATE AND t.booking IS NOT NULL"
     + " GROUP BY pf.event"
-    + " ORDER BY COUNT(distinct(COALESCE(t.booking, 0))) desc")
+    + " ORDER BY COUNT(COALESCE(t.booking, 0)) DESC, pf.event.startDate")
   Page<Event> findTopOfMonth(Pageable pageable);
 
 
