@@ -3,7 +3,7 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '
 import {ArtistService} from '../../../services/artist.service';
 import {VenueService} from '../../../services/venue.service';
 import {PriceCategoryService} from '../../../services/price-category.service';
-import {combineLatestWith, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {PriceCategory, Room, Seat, Sector} from '../../../dto/venue';
 import {RoomService} from '../../../services/room.service';
 import {MultiselectEvent} from '../../room-plan/multiselect-event';
@@ -94,7 +94,9 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.form.controls.blockedSeatsControl.value) {
-      this.selectedRoom$.pipe(combineLatestWith(this.rooms)).subscribe(() => this.updateRoomPlan());
+      this.selectedRoom$.pipe().subscribe(() => {
+        setTimeout(() => this.updateRoomPlan(), 50);
+      });
     }
   }
 
