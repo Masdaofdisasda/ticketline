@@ -86,6 +86,10 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
       this.performanceFormGroup.get('roomControl').setValue(null);
       this.rooms = this.roomService.getByVenueId(venue.id);
     });
+
+    if (this.form.controls.venueControl.value) {
+      this.rooms = this.roomService.getByVenueId(this.form.controls.venueControl.value.id);
+    }
   }
 
   ngAfterViewInit(): void {
