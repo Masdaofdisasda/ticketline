@@ -51,7 +51,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    */
   @Query("SELECT pf.event FROM Performance pf"
     + " LEFT JOIN Ticket t ON t.performance = pf"
-    + " WHERE pf.event.startDate >= CURRENT_DATE AND t.booking IS NOT NULL"
+    + " WHERE t.booking IS NOT NULL AND MONTH(t.booking.createdDate) = MONTH(CURRENT DATE)"
     + " GROUP BY pf.event"
     + " ORDER BY COUNT(COALESCE(t.booking, 0)) DESC, pf.event.startDate")
   Page<Event> findTopOfMonth(Pageable pageable);
