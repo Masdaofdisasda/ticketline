@@ -1,7 +1,8 @@
 <div class="form-group row" [formGroup]="form">
     <div class="col-sm-3">
         <label for="artists">Artists</label>
-        <ng-select id="artists" [multiple]="true" formControlName="artistsControl" [items]="artists |async"
+        <ng-select id="artists" [multiple]="true" [closeOnSelect]="false" formControlName="artistsControl"
+                   [items]="artists |async"
                    bindLabel="name">
         </ng-select>
     </div>
