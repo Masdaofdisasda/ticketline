@@ -55,7 +55,6 @@ public class Ticket {
   @JoinColumn(name = "SEAT_ID")
   private Seat seat;
 
-<<<<<<< Updated upstream
   @ManyToMany(mappedBy = "canceledTickets")
   private Set<Booking> canceledBookings = new LinkedHashSet<>();
 
@@ -66,11 +65,4 @@ public class Ticket {
     canceledBookings.add(booking);
     booking.addCanceledTicket(this);
   }
-=======
-  @ManyToMany
-  @JoinTable(name = "BOOKING_CANCELED_TICKETS",
-      joinColumns = @JoinColumn(name = "CANCELED_TICKETS_ID"),
-      inverseJoinColumns = @JoinColumn(name = "CANCELED_BOOKINGS_ID"))
-  private Set<Booking> bookings = new LinkedHashSet<>();
->>>>>>> Stashed changes
 }
