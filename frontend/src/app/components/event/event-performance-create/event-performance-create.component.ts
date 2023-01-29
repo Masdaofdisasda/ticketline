@@ -73,7 +73,10 @@ export class EventPerformanceCreateComponent implements OnInit, AfterViewInit {
         this.selectedRoom = room;
       });
     };
-    this.form.controls.roomControl.valueChanges.subscribe(roomSelected);
+    this.form.controls.roomControl.valueChanges.subscribe((room) => {
+      this.form.controls.blockedSeatsControl.setValue([]);
+      roomSelected(room);
+    });
     if (this.form.controls.roomControl.value) {
       roomSelected(this.form.controls.roomControl.value);
     }
