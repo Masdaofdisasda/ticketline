@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {EventService} from '../../../services/event.service';
 import {Router} from '@angular/router';
@@ -6,6 +6,7 @@ import {ToastrService} from 'ngx-toastr';
 import {ArtistService} from '../../../services/artist.service';
 import {EventDto} from '../../../dto/event.dto';
 import {PerformanceDto} from '../../../dto/performance.dto';
+import {NgbAccordion} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-event-create',
@@ -13,6 +14,8 @@ import {PerformanceDto} from '../../../dto/performance.dto';
   styleUrls: ['./event-create.component.scss'],
 })
 export class EventCreateComponent implements OnInit {
+  @ViewChild(NgbAccordion)
+  accordion: NgbAccordion;
   createFormGroup: FormGroup;
 
   constructor(
@@ -77,6 +80,7 @@ export class EventCreateComponent implements OnInit {
   }
 
   addPerformance(): void {
+    this.accordion.collapseAll();
     const performances = this.createFormGroup.get('performances') as FormArray;
     const roomControl = new FormControl(null, Validators.required);
     const pricingsGroup = new FormGroup({});
