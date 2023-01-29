@@ -27,8 +27,8 @@
     <td>{{ event.artistName }}</td>
     <td>{{ event.name }}</td>
     <td>{{ event.category }}</td>
-    <td>{{ event.startDate | date:'d.M.yy H:mm' }}</td>
-    <td>{{ event.endDate | date:'d.M.yy H:mm' }}</td>
+    <td>{{ event.startDate | date:'dd.MM.yy H:mm' }}</td>
+    <td>{{ event.endDate | date:'dd.MM.yy H:mm' }}</td>
     <td>{{ event.venueName }}</td>
     <td>{{ event.eventHallName }}</td>
     <td *ngIf="!auth.isAdmin()">

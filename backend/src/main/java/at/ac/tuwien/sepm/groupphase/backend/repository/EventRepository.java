@@ -48,11 +48,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
    * @param pageable holds page information like index and pagesize
    * @return page with matching events
    */
-  @Query("select pf.event FROM Performance pf"
-    + " LEFT join Ticket t ON t.performance = pf"
-    + " AND Month(pf.event.startDate) = Month(CURRENT_DATE)"
+  @Query("SELECT pf.event FROM Performance pf"
+    + " LEFT JOIN Ticket t ON t.performance = pf"
+    + " AND Month(pf.event.startDate) = Month(CURRENT_DATE) AND t.booking IS NOT NULL"
     + " GROUP BY pf.event"
-    + " ORDER BY COUNT(distinct(COALESCE(t.booking, 0))) desc")
+    + " ORDER BY COUNT(distinct(COALESCE(t.booking, 0))) DESC, pf.startDate DESC")
   Page<Event> findTopOfMonth(Pageable pageable);
 
 
