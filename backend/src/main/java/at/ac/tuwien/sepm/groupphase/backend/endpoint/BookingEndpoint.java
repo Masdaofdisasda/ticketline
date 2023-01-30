@@ -53,7 +53,7 @@ public class BookingEndpoint {
   @PostMapping(value = "/reservations")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public BookingDetailDto reserveTickets(@RequestBody List<TicketBookingDto> tickets) {
+  public BookingDetailDto reserveTickets(@RequestBody List<TicketBookingDto> tickets) throws ValidationException {
     LOGGER.info("POST /api/v1/booking/reservations: reserveTickets({})", tickets);
 
     return bookingService.makeBooking(tickets, BookingType.RESERVATION);
@@ -107,7 +107,7 @@ public class BookingEndpoint {
   @PostMapping(value = "/purchases")
   @Secured("ROLE_USER")
   @Operation(security = @SecurityRequirement(name = "apiKey"))
-  public BookingDetailDto purchaseTickets(@RequestBody List<TicketBookingDto> tickets) {
+  public BookingDetailDto purchaseTickets(@RequestBody List<TicketBookingDto> tickets) throws ValidationException {
     LOGGER.info("POST /api/v1/booking/purchases: makeBooking({})", tickets);
     return bookingService.makeBooking(tickets, BookingType.PURCHASE);
   }

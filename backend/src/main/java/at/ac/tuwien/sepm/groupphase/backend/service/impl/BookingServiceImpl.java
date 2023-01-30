@@ -13,6 +13,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TicketMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Artist;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Booking;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Performance;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Seat;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Ticket;
 import at.ac.tuwien.sepm.groupphase.backend.entity.enums.BookingType;
@@ -206,8 +207,21 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   @Transactional
-  public BookingDetailDto makeBooking(Collection<TicketBookingDto> tickets, BookingType type) {
+  public BookingDetailDto makeBooking(Collection<TicketBookingDto> tickets, BookingType type) throws ValidationException {
     ensureSeatsAreAvailable(tickets);
+
+    List<Performance> inPast = tickets.stream()
+      .map(ticketBookingDto -> performanceRepository.findById(ticketBookingDto.getPerformanceId())
+        .orElseThrow(() -> new NotFoundException("Performance with id " + ticketBookingDto.getPerformanceId() + " could not be found")))
+      .filter(performance -> performance.getEndDate().isBefore(LocalDateTime.now())).toList();
+
+    if (inPast.size() > 0) {
+      throw new ValidationException("Booking contains performances in the past",
+        inPast.stream().map(performance -> "Performance " + performance.getId() + " by " + performance.getArtists()
+          .stream()
+          .map(Artist::getName)
+          .collect(Collectors.joining(", ")) + " is already over!").distinct().toList());
+    }
 
     Booking booking = createBookingFromTickets(tickets, type);
     attachBookingToUser(booking);

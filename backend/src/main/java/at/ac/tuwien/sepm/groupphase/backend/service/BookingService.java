@@ -27,7 +27,7 @@ public interface BookingService {
    * @param tickets for the seats the user wants to purchase
    * @return Order id for the purchase
    */
-  BookingDetailDto makeBooking(Collection<TicketBookingDto> tickets, BookingType type);
+  BookingDetailDto makeBooking(Collection<TicketBookingDto> tickets, BookingType type) throws ValidationException;
 
   /**
    * Fetches information about a completed booking. Only bookings made by the user can be fetched

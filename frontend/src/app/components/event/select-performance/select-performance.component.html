@@ -2,9 +2,17 @@
 <div class="performanceList">
   <ul class="performance list-group">
     <li class="list-group-item d-flex" *ngFor="let performance of performances">
-      <p class="title flex-grow-1">{{artistNames(performance)}} on {{performance.startDate | date:'medium' }}</p>
-      <button class="btn btn-primary" [routerLink]="['/event', 'performance', performance.id, 'seats']">Buy ticket!
-      </button>
+      <div class="title flex-grow-1">
+        <p>{{artistNames(performance)}} on {{performance.startDate | date:'medium' }} - {{performance.endDate | date:'medium' }}</p>
+        <p *ngIf="!isInFuture(performance.startDate) && isInFuture(performance.endDate)" class="text-info"><i class="bi bi-info-circle"></i> Performance has already started!</p>
+      </div>
+      <div>
+        <button *ngIf="isInFuture(performance.endDate); else inFuture" class="btn btn-primary" [routerLink]="['/event', 'performance', performance.id, 'seats']">Buy ticket!
+        </button>
+        <ng-template #inFuture>
+          <p class="text-muted text-center">Performance is over!</p>
+        </ng-template>
+      </div>
     </li>
   </ul>
 </div>

@@ -32,9 +32,14 @@
     <td>{{ event.venueName }}</td>
     <td>{{ event.eventHallName }}</td>
     <td *ngIf="!auth.isAdmin()">
-      <button type="button" class="btn btn-primary" (click)="getTicketsClicked(event)">
-        <i class="bi bi-ticket-perforated-fill me-2"></i>Get Tickets
-      </button>
+      <ng-container *ngIf="isInFuture(event.endDate); else eventPast">
+        <button type="button" class="btn btn-primary" (click)="getTicketsClicked(event)">
+          <i class="bi bi-ticket-perforated-fill me-2"></i>Get Tickets
+        </button>
+      </ng-container>
+      <ng-template #eventPast>
+        <p class="text-muted text-center">Event is over!</p>
+      </ng-template>
     </td>
   </tr>
   </tbody>

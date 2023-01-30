@@ -5,6 +5,7 @@ import {ExtendedEventDto} from '../../../dto/extended-event.dto';
 import {Router} from '@angular/router';
 import {EventDto} from '../../../dto/event.dto';
 import {AuthService} from '../../../services/auth.service';
+import * as events from 'events';
 
 @Component({
   selector: 'app-event-search-result',
@@ -42,5 +43,9 @@ export class EventSearchResultComponent implements OnChanges {
     } else {
       this.router.navigateByUrl(`event/${event.id}/performances`);
     }
+  }
+
+  isInFuture(eventDate: Date): boolean {
+    return new Date(eventDate) >= new Date();
   }
 }
