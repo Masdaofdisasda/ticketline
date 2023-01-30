@@ -59,7 +59,7 @@ export class DateTimePickerComponent
 
   public ngControl: NgControl;
 
-  inputDatetimeFormat = 'dd/MM/yyyy hh:mm a';
+  inputDatetimeFormat = 'dd.MM.yy H:mm';
 
   dateStruct: NgbDateStruct;
   timeStruct: NgbTimeStruct;
