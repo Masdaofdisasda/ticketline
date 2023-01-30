@@ -7,27 +7,15 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-} from '@angular/forms';
-import { DatePipe } from '@angular/common';
-import {
-  NgbDatepicker,
-  NgbDateStruct,
-  NgbPopover,
-  NgbPopoverConfig,
-  NgbTimeStruct,
-} from '@ng-bootstrap/ng-bootstrap';
-import { noop } from 'rxjs';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
+import {DatePipe} from '@angular/common';
+import {NgbDatepicker, NgbDateStruct, NgbPopover, NgbPopoverConfig, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {noop} from 'rxjs';
 import * as moment from 'moment/moment';
-import { isNaN } from 'lodash';
-import { ToastrService } from 'ngx-toastr';
+import {ToastrService} from 'ngx-toastr';
 
 /*
  * is an extern module from npm, couldn't load over npm i because this library was
@@ -59,7 +47,7 @@ export class DateTimePickerComponent
 
   public ngControl: NgControl;
 
-  inputDatetimeFormat = 'dd.MM.yy H:mm';
+  inputDatetimeFormat = 'dd.MM.yyyy H:mm';
 
   dateStruct: NgbDateStruct;
   timeStruct: NgbTimeStruct;
@@ -130,48 +118,9 @@ export class DateTimePickerComponent
 
   parseDate(input: string) {
     input = input.trim();
-    if (input.length !== this.inputDatetimeFormat.length + 1) {
-      return null;
-    }
-    const day = parseInt(input.substring(0, 2), 10);
-    if (isNaN(day)) {
-      console.error('day is not a number');
-      return null;
-    }
-    const month = parseInt(input.substring(3, 5), 10);
-    if (isNaN(month)) {
-      console.error('month is not a number');
-      return null;
-    }
-    const year = parseInt(input.substring(6, 10), 10);
-    if (isNaN(year)) {
-      console.error('month is not a number');
-      return null;
-    }
-    let hours = parseInt(input.substring(11, 13), 10);
-    if (isNaN(hours)) {
-      console.error('hours is not a number');
-      return null;
-    }
-    const minutes = parseInt(input.substring(14, 16), 10);
-    if (isNaN(minutes)) {
-      console.error('hours is not a number');
-      return null;
-    }
-    const a = input.substring(17, 19);
-    if (a !== 'AM' && a !== 'PM') {
-      console.error('AM or PM could not be parsed');
-    }
-    if (a === 'PM') {
-      hours += 12;
-    }
-    let date: Date;
-    try {
-      date = new Date(year, month - 1, day, hours, minutes);
-    } catch (error) {
-      date = null;
-    }
-    return date;
+    const pattern = /(\d{2})\.(\d{2})\.(\d{4})\s(\d{2}):(\d{2})/;
+    const replaced = input.replace(pattern, '$3-$2-$1T$4:$5Z');
+    return new Date(replaced);
   }
 
   onInputChange($event: any) {
