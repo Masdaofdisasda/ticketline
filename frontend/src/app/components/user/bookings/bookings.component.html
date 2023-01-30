@@ -22,7 +22,7 @@
     <tbody>
     <tr *ngFor="let booking of bookings">
       <th scope="row">{{ booking.id }}</th>
-      <td>{{ booking.bookedOn | date:'mediumDate'}}</td>
+      <td>{{ booking.bookedOn | date:'dd.MM.yy H:mm'}}</td>
       <td class="align-middle">
         <span *ngIf="booking.type==='RESERVATION'" class="badge badge-pill bg-primary">reserved</span>
         <span *ngIf="booking.type==='PURCHASE'" class="badge badge-pill bg-success">purchased</span>

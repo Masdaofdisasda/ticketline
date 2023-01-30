@@ -3,7 +3,7 @@
   <ul class="performance list-group">
     <li class="list-group-item d-flex" *ngFor="let performance of performances">
       <div class="title flex-grow-1">
-        <p>{{artistNames(performance)}} on {{performance.startDate | date:'medium' }} - {{performance.endDate | date:'medium' }}</p>
+        <p>{{artistNames(performance)}} on {{performance.startDate | date:'dd.MM.yy H:mm' }} - {{performance.endDate | date:'dd.MM.yy H:mm' }}</p>
         <p *ngIf="!isInFuture(performance.startDate) && isInFuture(performance.endDate)" class="text-info"><i class="bi bi-info-circle"></i> Performance has already started!</p>
       </div>
       <div>
